@@ -28,6 +28,7 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import ui.theme.AppTheme
+import ui.theme.AppTypography
 
 data class DisclaimerScreen(
     val wrapContent: Boolean = false
@@ -52,7 +53,7 @@ data class DisclaimerScreen(
 //                        Row(verticalAlignment = Alignment.CenterVertically){
                         Text(
                             text = "Disclaimer",
-                            fontSize = 30.sp,
+                            fontSize = AppTypography.h1.fontSize,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -68,7 +69,7 @@ data class DisclaimerScreen(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    fontSize = 15.sp,
+                    fontSize = AppTypography.body1.fontSize,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
                         append("This decision aid is created for research purposes by a team of health care professionals comprising oncologists and pharmacists from the National Cancer Centre Singapore. The decision aid is ")

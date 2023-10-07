@@ -83,7 +83,9 @@ data class DecisionAidScreen(
 
                     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                         Button(
-                            onClick = {}, modifier = Modifier.padding(4.dp),
+                            onClick = {
+                                navigator.push(DisclaimerScreen())
+                            }, modifier = Modifier.padding(4.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(
                                     208,
@@ -95,7 +97,6 @@ data class DecisionAidScreen(
 
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-
                                 contentDescription = "previous page arrow icon "
                             )
                             Text(

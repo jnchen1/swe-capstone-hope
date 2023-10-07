@@ -10,11 +10,9 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -41,13 +39,14 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.theme.AppTypography
 
-data class DecisionAidScreen(
+data class WhoIsThisForScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "Decision Aid"
+    private val screenTitle = "Who is this for?"
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -110,20 +109,18 @@ data class DecisionAidScreen(
                             selectedIndex.value = 0
                         }, icon = { Icon(imageVector = Icons.Default.Home, "home button") },
                             selected = (selectedIndex.value == 0),
-                            label = { Text(text = "Home")
-                            }
+                            modifier = Modifier.alpha(0f),
+                            label = { Text(text = "Home") }
                         )
 
                         Button(
-                            onClick = {
-                                navigator.push(WhoIsThisForScreen())
-                            }, modifier = Modifier.padding(4.dp),
+                            onClick = {}, modifier = Modifier.padding(4.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(
                                     208,
                                     150,
                                     131
-                                ),
+                                )
                             )
                         ) {
                             Icon(
@@ -143,54 +140,38 @@ data class DecisionAidScreen(
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
+//                Text(
+//                    text = "What is this?",
+//                    fontSize = 25.sp,
+//                    textAlign = TextAlign.Center,
+//                    color = Color(93, 83, 94)
+//                )
                 Text(
-                    text = "What is this?",
-                    fontSize = 25.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color(93, 83, 94)
-                )
-                Text(
-                    fontSize = 15.sp,
+                    fontSize = AppTypography.body1.fontSize,
                     color = Color(93, 83, 94),
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("A tool to help readers learn more about the importance of ")
+
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("cancer follow-up care")
+                            append("Breast cancer survivors")
                         }
-                        append(" and to understand the currently ")
+
+                        append(" who are ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("available options")
+                            append("at least 3 years")
                         }
-                        append(" in Singapore.")
+                        append(" out of initial treatment phase.")
                     }
                 )
                 Image(
-                    painter = painterResource("thinking_decisionaid.png"),
-                    contentDescription = "Image of thinking person",
+                    painter = painterResource("whoIsThisFor.png"),
+                    contentDescription = "Image of Who This is for",
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Text(
-                    text = "How to Navigate?",
-                    fontSize = 25.sp,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    color = Color(93, 83, 94)
-                )
-                Text(
-                    fontSize = 15.sp,
-                    text = "Clickable parts indicated by a '' symbol.",
-                    color = Color(93, 83, 94)
-                )
 
-                Button(
-                    onClick = {
-                    },
-                    shape = CutCornerShape(5),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(208, 150, 131))
-                ) {
-                    Text("Click here for navigation guide", color = Color.White)
-                }
+
+
 
             }
 

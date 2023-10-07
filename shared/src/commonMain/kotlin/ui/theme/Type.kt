@@ -10,7 +10,7 @@ val AppTypography = Typography(
     h1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W600,
-        fontSize = 30.sp
+        fontSize = 28.sp
     ),
     h2 = TextStyle(
         fontFamily = FontFamily.Default,
@@ -43,6 +43,7 @@ val AppTypography = Typography(
     ),
     button = TextStyle(
         fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp
     ),
 

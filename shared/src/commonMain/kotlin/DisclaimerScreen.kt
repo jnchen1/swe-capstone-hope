@@ -12,7 +12,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -20,14 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import ui.theme.AppTheme
 import ui.theme.AppTypography
 
 data class DisclaimerScreen(
@@ -38,7 +35,7 @@ data class DisclaimerScreen(
 
     @Composable
     override fun Content() {
-        val screenTitle = "Disclaimer"
+        val screenTitle = "DISCLAIMER"
         LifecycleEffect(
             onStarted = { println("Navigator: Start screen $screenTitle") },
             onDisposed = { println("Navigator: Dispose screen $screenTitle") }
@@ -50,18 +47,14 @@ data class DisclaimerScreen(
             topBar = {
                 TopAppBar(
                     title = {
-//                        Row(verticalAlignment = Alignment.CenterVertically){
                         Text(
-                            text = "Disclaimer",
+                            text = screenTitle,
                             fontSize = AppTypography.h1.fontSize,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
-//                        }
-
                     }
                 )
-
             }
         ) {
             Column(
@@ -89,7 +82,7 @@ data class DisclaimerScreen(
                     }
                 )
                 Button(
-                    onClick = { navigator.push(DecisionAidScreen()) },
+                    onClick = { navigator.replace(DecisionAidScreen()) },
                     shape = CutCornerShape(5),
                     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
                     modifier = Modifier.padding(10.dp)
@@ -99,10 +92,7 @@ data class DisclaimerScreen(
                         color = MaterialTheme.colors.onSecondary
                     )
                 }
-
             }
-
         }
-
     }
 }

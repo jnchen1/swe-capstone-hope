@@ -38,6 +38,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.theme.AppTypography
 
 data class DecisionAidScreen(
     val wrapContent: Boolean = false
@@ -65,7 +66,7 @@ data class DecisionAidScreen(
                     title = {
                         Text(
                             text = screenTitle,
-                            fontSize = 30.sp,
+                            fontSize = AppTypography.h1.fontSize,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -99,7 +100,7 @@ data class DecisionAidScreen(
                             )
                             Text(
                                 text = "Back",
-                                fontSize = 18.sp,
+                                fontSize = AppTypography.button.fontSize,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -126,7 +127,7 @@ data class DecisionAidScreen(
                             )
                             Text(
                                 text = "Next",
-                                fontSize = 18.sp,
+                                fontSize = AppTypography.button.fontSize,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -139,12 +140,12 @@ data class DecisionAidScreen(
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(
                     text = "What is this?",
-                    fontSize = 25.sp,
+                    fontSize = AppTypography.h2.fontSize,
                     textAlign = TextAlign.Center,
                     color = Color(93, 83, 94)
                 )
                 Text(
-                    fontSize = 15.sp,
+                    fontSize = AppTypography.body1.fontSize,
                     color = Color(93, 83, 94),
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
@@ -167,12 +168,12 @@ data class DecisionAidScreen(
                 )
                 Text(
                     text = "How to Navigate?",
-                    fontSize = 25.sp,
+                    fontSize = AppTypography.h2.fontSize,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                     color = Color(93, 83, 94)
                 )
                 Text(
-                    fontSize = 15.sp,
+                    fontSize = AppTypography.body1.fontSize,
                     text = "Clickable parts indicated by a '' symbol.",
                     color = Color(93, 83, 94)
                 )
@@ -183,7 +184,9 @@ data class DecisionAidScreen(
                     shape = CutCornerShape(5),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(208, 150, 131))
                 ) {
-                    Text("Click here for navigation guide", color = Color.White)
+                    Text("Click here for navigation guide", color = Color.White,
+                        fontSize = AppTypography.button.fontSize
+                    )
                 }
 
             }

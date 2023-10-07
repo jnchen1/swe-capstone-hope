@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -109,6 +110,7 @@ data class DecisionAidScreen(
                             selectedIndex.value = 0
                         }, icon = { Icon(imageVector = Icons.Default.Home, "home button") },
                             selected = (selectedIndex.value == 0),
+                            modifier = Modifier.alpha(0f),
                             label = { Text(text = "Home") }
                         )
 

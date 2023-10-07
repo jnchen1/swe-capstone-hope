@@ -84,7 +84,9 @@ data class WhoIsThisForScreen(
 
                     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                         Button(
-                            onClick = {}, modifier = Modifier.padding(4.dp),
+                            onClick = {
+                                navigator.push(DecisionAidScreen())
+                            }, modifier = Modifier.padding(4.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(
                                     208,
@@ -96,7 +98,6 @@ data class WhoIsThisForScreen(
 
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-
                                 contentDescription = "previous page arrow icon "
                             )
                             Text(
@@ -114,7 +115,9 @@ data class WhoIsThisForScreen(
                         )
 
                         Button(
-                            onClick = {}, modifier = Modifier.padding(4.dp),
+                            onClick = {
+                                navigator.push(HomeScreen())
+                            }, modifier = Modifier.padding(4.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(
                                     208,
@@ -140,12 +143,6 @@ data class WhoIsThisForScreen(
         ) {
 
             Column(modifier = Modifier.padding(8.dp)) {
-//                Text(
-//                    text = "What is this?",
-//                    fontSize = 25.sp,
-//                    textAlign = TextAlign.Center,
-//                    color = Color(93, 83, 94)
-//                )
                 Text(
                     fontSize = AppTypography.body1.fontSize,
                     color = Color(93, 83, 94),
@@ -155,7 +152,6 @@ data class WhoIsThisForScreen(
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("Breast cancer survivors")
                         }
-
                         append(" who are ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("at least 3 years")
@@ -169,9 +165,6 @@ data class WhoIsThisForScreen(
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth()
                 )
-
-
-
 
             }
 

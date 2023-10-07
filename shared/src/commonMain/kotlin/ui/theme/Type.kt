@@ -1,6 +1,7 @@
 package ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -14,7 +15,7 @@ val AppTypography = Typography(
     ),
     h2 = TextStyle(
         fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W600,
+        fontWeight = FontWeight.W700,
         fontSize = 24.sp
     ),
     h3 = TextStyle(
@@ -35,7 +36,8 @@ val AppTypography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        color = Color(93, 83, 94)
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.Default,
@@ -44,7 +46,7 @@ val AppTypography = Typography(
     button = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp
-    ),
-
+        fontSize = 16.sp,
+        color = Color.White
+    )
 )

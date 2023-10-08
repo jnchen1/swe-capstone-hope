@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -15,8 +18,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -70,7 +71,8 @@ data class DecisionAidScreen(
                 BottomAppBar(contentColor = Color.White) {
                     Row(
                         horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
                         Button(
                             onClick = { navigator.push(WhoIsThisForScreen()) },
@@ -87,10 +89,14 @@ data class DecisionAidScreen(
                 }
             }
         ) {
-            Column(modifier = Modifier.padding(it).padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Text(
                     text = "What is this?",
                     style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
 
                 Text(
@@ -113,7 +119,7 @@ data class DecisionAidScreen(
                     painter = painterResource("thinking_decisionaid.png"),
                     contentDescription = "Image of thinking person",
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth(.8f).align(Alignment.CenterHorizontally)
+                    modifier = Modifier.width(300.dp).align(Alignment.CenterHorizontally)
                 )
 
                 Text(
@@ -130,7 +136,10 @@ data class DecisionAidScreen(
 
                 Button(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary, disabledBackgroundColor = MaterialTheme.colors.secondary),
+                    colors = ButtonDefaults.buttonColors(
+                        MaterialTheme.colors.secondary,
+                        disabledBackgroundColor = MaterialTheme.colors.secondary
+                    ),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     enabled = false
                 ) {

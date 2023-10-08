@@ -3,6 +3,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -60,11 +63,12 @@ data class DisclaimerScreen(
                 )
             }
         ) {
-            Column(modifier = Modifier.fillMaxSize().padding(it).padding(8.dp)) {
-                Column(modifier = Modifier.weight(1f, true)) {
+            Column(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)) {
+                Column(modifier = Modifier.weight(1f, true).verticalScroll(rememberScrollState())) {
                     Image(
                         painter = painterResource("app_logo.png"), contentDescription = "app logo",
-                        modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(.5f),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(300.dp)
+                            .padding(top = 4.dp),
                         contentScale = ContentScale.FillWidth
                     )
 
@@ -93,7 +97,8 @@ data class DisclaimerScreen(
                 Button(
                     onClick = { navigator.replace(DecisionAidScreen()) },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                        .padding(bottom = 8.dp)
                 ) {
                     Text("Click to acknowledge that I have read & understood the above")
                 }

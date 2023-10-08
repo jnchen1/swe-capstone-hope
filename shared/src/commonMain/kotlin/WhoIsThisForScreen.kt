@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -99,7 +101,10 @@ data class WhoIsThisForScreen(
                 }
             }
         ) {
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Text(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
@@ -119,7 +124,7 @@ data class WhoIsThisForScreen(
                     painter = painterResource("whoIsThisFor.png"),
                     contentDescription = "Image of Who This is for",
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
                 )
             }
         }

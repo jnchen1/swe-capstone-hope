@@ -1,9 +1,11 @@
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -11,7 +13,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +29,8 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import ui.theme.AppTypography
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
 data class DisclaimerScreen(
     val wrapContent: Boolean = false
@@ -33,6 +38,7 @@ data class DisclaimerScreen(
 
     override val key: ScreenKey = uniqueScreenKey
 
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         val screenTitle = "DISCLAIMER"
@@ -49,7 +55,7 @@ data class DisclaimerScreen(
                     title = {
                         Text(
                             text = screenTitle,
-                            fontSize = AppTypography.h1.fontSize,
+                            style = MaterialTheme.typography.h1,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -57,40 +63,44 @@ data class DisclaimerScreen(
                 )
             }
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(10.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    fontSize = AppTypography.body1.fontSize,
-                    modifier = Modifier.padding(8.dp),
-                    text = buildAnnotatedString {
-                        append("This decision aid is created for research purposes by a team of health care professionals comprising oncologists and pharmacists from the National Cancer Centre Singapore. The decision aid is ")
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                textDecoration = TextDecoration.Underline
-                            )
-                        ) {
-                            append("not official yet.")
+            Column(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)) {
+                Column(modifier = Modifier.weight(1f, true).verticalScroll(rememberScrollState())) {
+                    Image(
+                        painter = painterResource("app_logo.png"), contentDescription = "app logo",
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(300.dp)
+                            .padding(top = 4.dp),
+                        contentScale = ContentScale.FillWidth
+                    )
+
+                    Text(
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(8.dp).padding(top = 8.dp),
+                        text = buildAnnotatedString {
+                            append("This decision aid is created for research purposes by a team of health care professionals comprising oncologists and pharmacists from the National Cancer Centre Singapore. The decision aid is ")
+                            withStyle(
+                                style = SpanStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    textDecoration = TextDecoration.Underline
+                                )
+                            ) {
+                                append("not official yet.")
+                            }
+                            append("\n\n")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("PLEASE NOTE")
+                            }
+                            append(": This decision aid does not replace the medical advice, diagnosis or treatment provided by your doctors. If you have any questions, you may contact the Principal Investigator, Dr Fok Wai Yee Rose, at 64368000.")
                         }
-                        append("\n\n")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("PLEASE NOTE")
-                        }
-                        append(": This decision aid does not replace the medical advice, diagnosis or treatment provided by your doctors. If you have any questions, you may contact the Principal Investigator, Dr Fok Wai Yee Rose, at 64368000.")
-                    }
-                )
+                    )
+                }
+
                 Button(
                     onClick = { navigator.replace(DecisionAidScreen()) },
-                    shape = CutCornerShape(5),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
-                    modifier = Modifier.padding(10.dp)
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                        .padding(bottom = 8.dp)
                 ) {
-                    Text(
-                        "Click to acknowledge that I have read & understood the above",
-                        color = MaterialTheme.colors.onSecondary
-                    )
+                    Text("Click to acknowledge that I have read & understood the above")
                 }
             }
         }

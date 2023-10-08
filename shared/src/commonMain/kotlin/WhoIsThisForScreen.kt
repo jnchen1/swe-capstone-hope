@@ -2,27 +2,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -30,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -39,14 +35,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.theme.AppTypography
 
 data class WhoIsThisForScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "Who is this for?"
+    private val screenTitle = "WHO IS THIS FOR?"
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -58,97 +53,62 @@ data class WhoIsThisForScreen(
 
         val navigator = LocalNavigator.currentOrThrow
 
-        val selectedIndex = remember { mutableStateOf(0) }
         Scaffold(
-//        modifier = Modifier.nestedScroll(scrollBeh)
             topBar = {
-
                 TopAppBar(
                     title = {
                         Text(
                             text = screenTitle,
-                            fontSize = 30.sp,
+                            style = MaterialTheme.typography.h1,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
-
                     }
                 )
-
             },
             bottomBar = {
-                BottomAppBar(
-                    backgroundColor = Color(48, 48, 47),
-                    contentColor = Color.White
-                ) {
-
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                BottomAppBar {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
+                    ) {
                         Button(
-                            onClick = {
-                                navigator.push(DecisionAidScreen())
-                            }, modifier = Modifier.padding(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    208,
-                                    150,
-                                    131
-                                )
-                            )
+                            onClick = { navigator.pop() },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
                         ) {
-
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "previous page arrow icon "
+                                contentDescription = "previous page arrow"
                             )
-                            Text(
-                                text = "Back",
-                                fontSize = 18.sp,
-                                textAlign = TextAlign.Center
-                            )
+                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
                         }
-                        BottomNavigationItem(onClick = {
-                            selectedIndex.value = 0
-                        }, icon = { Icon(imageVector = Icons.Default.Home, "home button") },
-                            selected = (selectedIndex.value == 0),
-                            modifier = Modifier.alpha(0f),
-                            label = { Text(text = "Home") }
-                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
 
                         Button(
-                            onClick = {
-                                navigator.push(HomeScreen())
-                            }, modifier = Modifier.padding(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    208,
-                                    150,
-                                    131
-                                )
-                            )
+                            onClick = { navigator.push(HomeScreen()) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
                         ) {
+                            Text(text = "Next")
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
-                                contentDescription = "next page arrow icon "
-                            )
-                            Text(
-                                text = "Next",
-                                fontSize = 18.sp,
-                                textAlign = TextAlign.Center
+                                contentDescription = "next page arrow",
+                                modifier = Modifier.padding(start = 4.dp)
                             )
                         }
                     }
-
                 }
             }
         ) {
-
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Text(
-                    fontSize = AppTypography.body1.fontSize,
-                    color = Color(93, 83, 94),
+                    style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("Breast cancer survivors")
                         }
@@ -159,15 +119,14 @@ data class WhoIsThisForScreen(
                         append(" out of initial treatment phase.")
                     }
                 )
+
                 Image(
                     painter = painterResource("whoIsThisFor.png"),
                     contentDescription = "Image of Who This is for",
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
                 )
-
             }
-
         }
     }
 }

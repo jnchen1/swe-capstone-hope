@@ -4,9 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -14,16 +15,11 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -32,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -41,14 +36,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.theme.AppTypography
 
 data class DecisionAidScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "Decision Aid"
+    private val screenTitle = "DECISION AID"
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -60,100 +54,53 @@ data class DecisionAidScreen(
 
         val navigator = LocalNavigator.currentOrThrow
 
-        val selectedIndex = remember { mutableStateOf(0) }
         Scaffold(
-//        modifier = Modifier.nestedScroll(scrollBeh)
             topBar = {
-
                 TopAppBar(
                     title = {
                         Text(
                             text = screenTitle,
-                            fontSize = AppTypography.h1.fontSize,
+                            style = MaterialTheme.typography.h1,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
-
                     }
                 )
-
             },
             bottomBar = {
-                BottomAppBar(
-                    backgroundColor = Color(48, 48, 47),
-                    contentColor = Color.White
-                ) {
-
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                BottomAppBar(contentColor = Color.White) {
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
+                    ) {
                         Button(
-                            onClick = {
-                                navigator.push(DisclaimerScreen())
-                            }, modifier = Modifier.padding(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    208,
-                                    150,
-                                    131
-                                )
-                            )
+                            onClick = { navigator.push(WhoIsThisForScreen()) },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
                         ) {
-
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "previous page arrow icon "
-                            )
-                            Text(
-                                text = "Back",
-                                fontSize = AppTypography.button.fontSize,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                        BottomNavigationItem(onClick = {
-                            selectedIndex.value = 0
-                        }, icon = { Icon(imageVector = Icons.Default.Home, "home button") },
-                            selected = (selectedIndex.value == 0),
-                            modifier = Modifier.alpha(0f),
-                            label = { Text(text = "Home") }
-                        )
-
-                        Button(
-                            onClick = {
-                                navigator.push(WhoIsThisForScreen())
-                            }, modifier = Modifier.padding(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    208,
-                                    150,
-                                    131
-                                ),
-                            )
-                        ) {
+                            Text(text = "Next")
                             Icon(
                                 imageVector = Icons.Default.ArrowForward,
-                                contentDescription = "next page arrow icon "
-                            )
-                            Text(
-                                text = "Next",
-                                fontSize = AppTypography.button.fontSize,
-                                textAlign = TextAlign.Center
+                                contentDescription = "next page arrow",
+                                modifier = Modifier.padding(start = 4.dp)
                             )
                         }
                     }
-
                 }
             }
         ) {
-
-            Column(modifier = Modifier.padding(8.dp)) {
+            Column(
+                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
                 Text(
                     text = "What is this?",
-                    fontSize = AppTypography.h2.fontSize,
-                    textAlign = TextAlign.Center,
-                    color = Color(93, 83, 94)
+                    style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
+
                 Text(
-                    fontSize = AppTypography.body1.fontSize,
-                    color = Color(93, 83, 94),
+                    style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
                         append("A tool to help readers learn more about the importance of ")
@@ -167,37 +114,38 @@ data class DecisionAidScreen(
                         append(" in Singapore.")
                     }
                 )
+
                 Image(
                     painter = painterResource("thinking_decisionaid.png"),
                     contentDescription = "Image of thinking person",
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.width(300.dp).align(Alignment.CenterHorizontally)
                 )
+
                 Text(
                     text = "How to Navigate?",
-                    fontSize = AppTypography.h2.fontSize,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                    color = Color(93, 83, 94)
+                    style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(top = 16.dp)
                 )
+
                 Text(
-                    fontSize = AppTypography.body1.fontSize,
-                    text = "Clickable parts indicated by a '' symbol.",
-                    color = Color(93, 83, 94)
+                    style = MaterialTheme.typography.body1,
+                    text = "Clickable parts indicated by",
+                    modifier = Modifier.padding(horizontal = 8.dp).padding(vertical = 4.dp)
                 )
 
                 Button(
-                    onClick = {
-                    },
-                    shape = CutCornerShape(5),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(208, 150, 131))
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(
+                        MaterialTheme.colors.secondary,
+                        disabledBackgroundColor = MaterialTheme.colors.secondary
+                    ),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    enabled = false
                 ) {
-                    Text("Click here for navigation guide", color = Color.White,
-                        fontSize = AppTypography.button.fontSize
-                    )
+                    Text("Click here for navigation guide")
                 }
-
             }
-
         }
     }
 }

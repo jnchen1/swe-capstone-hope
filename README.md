@@ -1,28 +1,16 @@
-[![official project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-# [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) mobile application
+# Cancer Survivorship Decision Aid
 
 > **Note**
 > Compose Multiplatform for iOS is in Alpha. It may change incompatibly and require manual migration in the future.
-> We would appreciate your feedback on it in the public Slack channel [#compose-ios](https://kotlinlang.slack.com/archives/C0346LWVBJ4/p1678888063176359).
-> If you have any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
 
-You can use this template to start developing your own [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform#readme) mobile application targeting Android and iOS.
-Follow our tutorial below to get your first Compose Multiplatform app up and running.
-The result will be a [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) project that uses the Compose Multiplatform UI framework.
 
-![](readme_images/banner.png)
-
-If you want to create an application targeting desktop platforms – Windows, macOS, or Linux –
-use the [Compose Multiplatform desktop application template](https://github.com/JetBrains/compose-multiplatform-desktop-template#readme).
-
-## Set up the environment
+## Environment Setup
 
 > **Warning**
 > You need a Mac with macOS to write and run iOS-specific code on simulated or real devices.
 > This is an Apple requirement.
 
-To work with this template, you need the following:
+To work with this project, you need the following:
 
 * A machine running a recent version of macOS
 * [Xcode](https://apps.apple.com/us/app/xcode/id497799835)
@@ -62,7 +50,7 @@ Before you start, use the [KDoctor](https://github.com/Kotlin/kdoctor) tool to e
 
 Otherwise, KDoctor will highlight which parts of your setup still need to be configured and will suggest a way to fix them.
 
-## Examine the project structure
+## Project Structure
 
 Open the project in Android Studio and switch the view from **Android** to **Project** to see all the files and targets belonging to the project:
 
@@ -138,10 +126,6 @@ To do so, you'll need the following:
 * The `TEAM_ID` associated with your [Apple ID](https://support.apple.com/en-us/HT204316)
 * The iOS device registered in Xcode
 
-> **Note**
-> Before you continue, we suggest creating a simple "Hello, world!" project in Xcode to ensure you can successfully run apps on your device.
-> You can follow the instructions below or watch this [Stanford CS193P lecture recording](https://youtu.be/bqu6BquVi2M?start=716&end=1399).
-
 <details>
 <summary>How to create and run a simple project in Xcode</summary>
 
@@ -186,99 +170,3 @@ To run the application, set the `TEAM_ID`:
 1. In the template, navigate to the `iosApp/Configuration/Config.xcconfig` file.
 2. Set your `TEAM_ID`.
 3. Re-open the project in Android Studio. It should show the registered iOS device in the `iosApp` run configuration.
-
-## Make your first changes
-
-You can now make some changes in the code and check that they are visible in both the iOS and Android applications at the same time:
-
-1. In Android Studio, navigate to the `shared/src/commonMain/kotlin/App.kt` file.
-   This is the common entry point for your Compose Multiplatform app.
-
-   Here, you see the code responsible for rendering the "Hello, World!" button and the animated Compose Multiplatform logo:
-
-   ```kotlin
-   @OptIn(ExperimentalResourceApi::class)
-   @Composable
-   fun App() {
-       MaterialTheme {
-           var greetingText by remember { mutableStateOf("Hello, World!") }
-           var showImage by remember { mutableStateOf(false) }
-           Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-               Button(onClick = {
-                   greetingText = "Hello, ${getPlatformName()}"
-                   showImage = !showImage
-               }) {
-                   Text(greetingText)
-               }
-               AnimatedVisibility(showImage) {
-                   Image(
-                       painterResource("compose-multiplatform.xml"),
-                       null
-                   )
-               }
-           }
-       }
-   }
-   ```
-
-2. Update the shared code by adding a text field that will update the name displayed on the button:
-
-   ```diff
-   @OptIn(ExperimentalResourceApi::class)
-   @Composable
-   fun App() {
-       MaterialTheme {
-           var greetingText by remember { mutableStateOf("Hello, World!") }
-           var showImage by remember { mutableStateOf(false) }
-           Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-               Button(onClick = {
-                   greetingText = "Hello, ${getPlatformName()}"
-                   showImage = !showImage
-               }) {
-                   Text(greetingText)
-               }
-   +           TextField(greetingText, onValueChange = { greetingText = it })
-               AnimatedVisibility(showImage) {
-                   Image(
-                       painterResource("compose-multiplatform.xml"),
-                       null
-                   )
-               }
-           }
-       }
-   }
-   ```
-
-3. Re-run both the `androidApp` and `iosApp` configurations. You'll see this change reflected in both the Android and iOS apps:
-
-   <img src="readme_images/text_field_added.png" height="200px">
-
-## How to configure the iOS application
-
-To get a better understanding of this template's setup and learn how to configure the basic properties of your iOS app without Xcode,
-open the `iosApp/Configuration/Config.xcconfig` file in Android Studio. The configuration file contains:
-
-* `APP_NAME`, a target executable and an application bundle name.
-* `BUNDLE_ID`, which [uniquely identifies the app throughout the system](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier#discussion).
-* `TEAM_ID`, [a unique identifier generated by Apple that's assigned to your team](https://developer.apple.com/help/account/manage-your-team/locate-your-team-id/#:~:text=A%20Team%20ID%20is%20a,developer%20in%20App%20Store%20Connect).
-
-To configure the `APP_NAME` option, open `Config.xcconfig` in any text editor *before opening* the project in Android Studio, and then set the desired name.
-
-If you need to change this option after you open the project in Android Studio, do the following:
-
-1. Close the project in Android Studio.
-2. Run `./cleanup.sh` in your terminal.
-3. Change the setting.
-4. Open the project in Android Studio again.
-
-To configure advanced settings, use Xcode. After opening the project in Android Studio,
-open the `iosApp/iosApp.xcworkspace` file in Xcode and make changes there.
-
-## Next steps
-
-We encourage you to explore Compose Multiplatform further and try out more projects:
-
-* [Learn about other cases for using the Compose Multiplatform UI framework](https://github.com/JetBrains/compose-multiplatform#readme)
-* [Create an application targeting Windows, macOS, and Linux with Compose Multiplatform for Desktop](https://github.com/JetBrains/compose-multiplatform-desktop-template#readme)
-* [Complete more Compose Multiplatform tutorials](https://github.com/JetBrains/compose-multiplatform/blob/master/tutorials/README.md)
-* [Explore some more advanced Compose Multiplatform example projects](https://github.com/JetBrains/compose-multiplatform/blob/master/examples/README.md)

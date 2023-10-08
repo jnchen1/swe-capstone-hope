@@ -65,13 +65,6 @@ data class DisclaimerScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)) {
                 Column(modifier = Modifier.weight(1f, true).verticalScroll(rememberScrollState())) {
-                    Image(
-                        painter = painterResource("app_logo.png"), contentDescription = "app logo",
-                        modifier = Modifier.align(Alignment.CenterHorizontally).width(300.dp)
-                            .padding(top = 4.dp),
-                        contentScale = ContentScale.FillWidth
-                    )
-
                     Text(
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(8.dp).padding(top = 8.dp),
@@ -91,6 +84,13 @@ data class DisclaimerScreen(
                             }
                             append(": This decision aid does not replace the medical advice, diagnosis or treatment provided by your doctors. If you have any questions, you may contact the Principal Investigator, Dr Fok Wai Yee Rose, at 64368000.")
                         }
+                    )
+
+                    Image(
+                        painter = painterResource("app_logo.png"), contentDescription = "app logo",
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(240.dp)
+                            .padding(top = 4.dp),
+                        contentScale = ContentScale.FillWidth
                     )
                 }
 

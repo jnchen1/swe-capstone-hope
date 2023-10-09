@@ -1,3 +1,4 @@
+import HomeOptions.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -123,16 +124,25 @@ data class HomeScreen(
                     }
                 )
 
-                homeOptions.forEach { (text, color) ->
+                entries.forEach { option ->
                     Card(
-                        backgroundColor = color,
+                        backgroundColor = option.color,
                         shape = RoundedCornerShape(12.dp),
                         elevation = 4.dp,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).clickable {
-                            /* TODO: Navigate to other screen */
+                            when (option) {
+                                WHAT_IS_SURVIVORSHIP -> navigator.push(DisclaimerScreen())
+                                PHYSICAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                FOLLOWUP_CARE -> navigator.push(DisclaimerScreen())
+                                COMPARE_CARE -> navigator.push(DisclaimerScreen())
+                                WHAT_MATTERS -> navigator.push(DisclaimerScreen())
+                                CONCLUSION -> navigator.push(DisclaimerScreen())
+                                RESOURCES -> navigator.push(DisclaimerScreen())
+                            }
                         }
                     ) {
-                        Text(text, color = Color.Black, modifier = Modifier.padding(12.dp))
+                        Text(option.text, color = Color.Black, modifier = Modifier.padding(12.dp))
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -142,13 +152,13 @@ data class HomeScreen(
     }
 }
 
-private val homeOptions = listOf(
-    Pair("1. What is cancer survivorship?", Color(0xFFFF7E79)),
-    Pair("2. Physical effects", Color(0xFFF4B183)),
-    Pair("3. Emotional effects", Color(0xFFFFE699)),
-    Pair("4. Follow-up care options", Color(0xFFC6E0B5)),
-    Pair("5. Comparing options", Color(0xFFA0E6E3)),
-    Pair("6. Finding out what matters to you", Color(0xFF9DC3E6)),
-    Pair("7. Conclusion", Color(0xFFBCBBE7)),
-    Pair("Other online resources", Color(0xFFEBACEF))
-)
+private enum class HomeOptions(val text: String, val color: Color) {
+    WHAT_IS_SURVIVORSHIP("1. What is cancer survivorship?", Color(0xFFFF7E79)),
+    PHYSICAL_EFFECT("2. Physical effects", Color(0xFFF4B183)),
+    EMOTIONAL_EFFECT("3. Emotional effects", Color(0xFFFFE699)),
+    FOLLOWUP_CARE("4. Follow-up care options", Color(0xFFC6E0B5)),
+    COMPARE_CARE("5. Comparing options", Color(0xFFA0E6E3)),
+    WHAT_MATTERS("6. Finding out what matters to you", Color(0xFF9DC3E6)),
+    CONCLUSION("7. Conclusion", Color(0xFFBCBBE7)),
+    RESOURCES("Other online resources", Color(0xFFEBACEF))
+}

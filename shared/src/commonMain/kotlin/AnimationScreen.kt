@@ -1,5 +1,7 @@
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,10 +9,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -36,9 +41,14 @@ import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
@@ -58,9 +68,9 @@ data class AnimationScreen(
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "TEST"
+    private val screenTitle = "PHYSICAL EFFECT"
 
-    @OptIn(ExperimentalResourceApi::class)
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -69,8 +79,8 @@ data class AnimationScreen(
         )
 
         val navigator = LocalNavigator.currentOrThrow
-        var shouldShowLongTermEffect by remember { mutableStateOf(false) }
-        var shouldShowLateEffect by remember { mutableStateOf(false) }
+        var shouldShowLongTermAnimation by remember { mutableStateOf(false) }
+        var shouldShowLateAnimation by remember { mutableStateOf(false) }
 
         Scaffold(
             topBar = {
@@ -111,36 +121,116 @@ data class AnimationScreen(
                 modifier = Modifier.padding(it).padding(horizontal = 8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 8.dp),
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Cancer treatment(s)")
+                        }
+                        append(" can cause ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("mild to severe")
+                        }
+                        append(" physical side effects. There are ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("2 types")
+                        }
+                        append(" of side effects that may affect you now, click on each button below to see the animation.")
+                    }
+                )
+
+                var shouldShowLongTermText by remember { mutableStateOf(false) }
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = 4.dp,
+                    backgroundColor = Color(0xFF426E86),
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    onClick = {
+                        shouldShowLongTermText = true
+                        shouldShowLongTermAnimation = true
+                        shouldShowLateAnimation = false
+                    }
                 ) {
-                    Button(onClick = {
-                        shouldShowLongTermEffect = true
-                        shouldShowLateEffect = false
-                    }) {
-                        Text("Long Effect")
-                    }
-                    Button(onClick = {
-                        shouldShowLongTermEffect = false
-                        shouldShowLateEffect = true
-                    }) {
-                        Text("Late Effect")
-                    }
+                    Text(
+                        "Long-term effects",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(12.dp)
+                    )
                 }
 
-                if (shouldShowLongTermEffect) {
+                val density = LocalDensity.current
+                AnimatedVisibility(
+                    visible = shouldShowLongTermText,
+                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
+                ) {
+                    Text(
+                        buildAnnotatedString {
+                            append("These effects appear ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("during")
+                            }
+                            append(" treatment and ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("continue")
+                            }
+                            append(" even after finishing treatment(s).")
+                        },
+                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                    )
+                }
+
+                var shouldShowLateText by remember { mutableStateOf(false) }
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = 4.dp,
+                    backgroundColor = Color(0xFF5B7065),
+                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                    onClick = {
+                        shouldShowLateText = true
+                        shouldShowLongTermAnimation = false
+                        shouldShowLateAnimation = true
+                    }
+                ) {
+                    Text(
+                        "Late effects",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = shouldShowLateText,
+                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
+                ) {
+                    Text(
+                        buildAnnotatedString {
+                            append("These effects appear ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("after")
+                            }
+                            append(" treatment is completed.")
+                        }, Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                    )
+                }
+
+                if (shouldShowLongTermAnimation) {
                     EffectAnimation(
-                        shouldShowLongTermEffect,
+                        shouldShowLongTermAnimation,
                         false,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
+                    )
+                } else if (shouldShowLateAnimation) {
+                    EffectAnimation(
+                        false,
+                        shouldShowLateAnimation,
+                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
                     )
                 } else {
-                    EffectAnimation(
-                        false,
-                        shouldShowLateEffect,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    EffectAnimation(modifier = Modifier.padding(top = 12.dp).fillMaxWidth())
                 }
             }
         }
@@ -148,7 +238,7 @@ data class AnimationScreen(
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
-    fun EffectAnimation(
+    private fun EffectAnimation(
         shouldShowLongTermEffect: Boolean = false,
         shouldShowLateEffect: Boolean = false,
         modifier: Modifier = Modifier
@@ -237,24 +327,37 @@ data class AnimationScreen(
                 lineColor, height * .055f,
                 center = Offset(endOffSet.x + ovalSize.center.x, horizontalLineY)
             )
+            textLayoutSize = textMeasurer.measure(
+                "6 - 12 months",
+                softWrap = true,
+                style = ts.copy(fontSize = ts.fontSize * size.width * .0009f),
+            )
+            drawText(
+                textLayoutSize,
+                topLeft = Offset(
+                    endOffSet.x + ovalSize.center.x - textLayoutSize.size.width * .5f,
+                    horizontalLineY + height * .05f
+                )
+            )
 
             val iconSize = (height * .3f).let {
                 val iconRatio =
                     iconPainter.intrinsicSize.height / iconPainter.intrinsicSize.width
                 Size(it, it * iconRatio)
             }
+            val textSize = ts.fontSize * iconSize.height * 0.0125f
 
             if (shouldShowLongTermEffect) {
                 textLayoutSize = textMeasurer.measure(
                     "Long term effect",
-                    ts.copy(Color.White, fontSize = ts.fontSize * size.width * .00085f)
+                    ts.copy(Color.White, fontSize = textSize)
                 )
 
                 drawRect(
                     Color(0xFF426E86),
                     topLeft = Offset(
                         size.width * .15f + iconSize.center.x,
-                        height * .625f - iconSize.center.y * .9f
+                        height * .625f - iconSize.height * .45f
                     ),
                     size = Size(
                         (size.width * .52f) * arrowBody.value,
@@ -263,7 +366,7 @@ data class AnimationScreen(
                 )
 
                 val centerY =
-                    height * .625f - iconSize.center.y * .9f + textLayoutSize.size.center.y.toFloat()
+                    height * .625f - iconSize.height * .45f + textLayoutSize.size.center.y.toFloat()
                 path.apply {
                     val startX = size.width * .669f + iconSize.width * .5f
                     reset()
@@ -277,8 +380,8 @@ data class AnimationScreen(
                 drawText(
                     textLayoutSize,
                     topLeft = Offset(
-                        size.width * .36f,
-                        height * .625f - iconSize.center.y * .9f
+                        size.width * .15f + iconSize.width * 1.1f,
+                        height * .625f - iconSize.height * .45f
                     )
                 )
 
@@ -296,15 +399,14 @@ data class AnimationScreen(
 
             if (shouldShowLateEffect) {
                 textLayoutSize = textMeasurer.measure(
-                    "Late effect",
-                    ts.copy(Color.White, fontSize = ts.fontSize * size.width * .00085f)
+                    "Late effect", ts.copy(Color.White, fontSize = textSize)
                 )
 
                 drawRect(
                     Color(0xFF5B7065),
                     topLeft = Offset(
                         size.width * .55f + iconSize.center.x,
-                        height * .625f - iconSize.center.y * .9f
+                        height * .625f - iconSize.height * .45f
                     ),
                     size = Size(
                         (size.width * .3f) * arrowBody.value,
@@ -313,7 +415,7 @@ data class AnimationScreen(
                 )
 
                 val centerY =
-                    height * .625f - iconSize.center.y * .9f + textLayoutSize.size.center.y.toFloat()
+                    height * .625f - iconSize.height * .45f + textLayoutSize.size.center.y.toFloat()
                 path.apply {
                     val startX = size.width * .84f + iconSize.center.x
                     reset()
@@ -327,7 +429,7 @@ data class AnimationScreen(
                 drawText(
                     textLayoutSize,
                     topLeft = Offset(
-                        iconSize.center.x + size.width * .655f - textLayoutSize.size.center.y,
+                        size.width * .55f + iconSize.width * 1.1f,
                         height * .625f - iconSize.center.y * .9f
                     )
                 )
@@ -349,8 +451,7 @@ data class AnimationScreen(
 
 private fun Modifier.autoWrapHeight() = this then object : LayoutModifier {
     override fun MeasureScope.measure(
-        measurable: Measurable,
-        constraints: Constraints
+        measurable: Measurable, constraints: Constraints
     ): MeasureResult {
         val placeable = measurable.measure(constraints.copy(minHeight = constraints.minHeight))
         val maxWidth = placeable.width

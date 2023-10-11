@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomAppBar
@@ -39,12 +40,13 @@ import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
+import cafe.adriel.voyager.core.stack.popUntil
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-data class WhatIsSurvivorshipFirstScreen(
+data class WhatIsSurvivorshipSecondScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
@@ -82,23 +84,18 @@ data class WhatIsSurvivorshipFirstScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
-//                        Button(
-//                            onClick = { navigator.pop() },
-//                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
-//                        ) {
-//                            Icon(
-//                                imageVector = Icons.Default.ArrowBack,
-//                                contentDescription = "previous page arrow"
-//                            )
-//                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
-//                        }
-
-
-//                        Spacer(modifier = Modifier.weight(1f))
-//                        Spacer(modifier = Modifier.weight(0.5f))
+                        Button(
+                            onClick = { navigator.pop() },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "previous page arrow"
+                            )
+                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
+                        }
                         IconButton(
-                            onClick = {navigator.pop()},
-                            modifier = Modifier.weight(1f)
+                            onClick = {navigator.popUntil { it is HomeScreen }}
 
                             ){
                             Icon(
@@ -108,9 +105,8 @@ data class WhatIsSurvivorshipFirstScreen(
                             )
                         }
 
-
                         Button(
-                            onClick = { navigator.push(WhatIsSurvivorshipSecondScreen()) },
+                            onClick = { navigator.push(HomeScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
                         ) {
                             Text(text = "Next")
@@ -128,24 +124,49 @@ data class WhatIsSurvivorshipFirstScreen(
                 modifier = Modifier.padding(it).padding(horizontal = 8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly){
+                    Image(
+                        painter = painterResource("physical_effects_survivorship.png"),
+                        contentDescription = "Physical effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+                    )
+                    Image(
+                        painter = painterResource("emotional_effects_survivorship.png"),
+                        contentDescription = "Emotional Effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+
+                    )
+                }
+                Text(
+                    style = MaterialTheme.typography.h1,
+                    modifier = Modifier.padding(8.dp),
+                    text = "Why is survivorship care important?"
+                )
                 Text(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("Cancer survivorship ")
+                        append("After cancer diagnosis and treatment, breast cancer survivors may experience a ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("starts")
+                            append("broad range of effects")
                         }
-                        append(" from the moment you are diagnosed with cancer and continues even after treatment to the end of life.")
+                        append(" years after treatment.\n\n")
+                        append("Survivorship care ensures that all survivors receive the ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("medical and psychosocial support")
+                        }
+                        append(" they need through the ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("prevention, assessment and management")
+                        }
+                        append(" of such effects.")
                     }
                 )
 
-                Image(
-                    painter = painterResource("we_are_all_survivors_survivorship.png"),
-                    contentDescription = "Survivorship infographic",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
-                )
+
             }
         }
     }

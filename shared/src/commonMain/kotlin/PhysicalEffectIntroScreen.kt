@@ -111,7 +111,9 @@ data class PhysicalEffectIntroScreen(
                         var readyToDraw by remember { mutableStateOf(false) }
 
                         Button(
-                            onClick = { /*TODO: Add prev section*/ },
+                            onClick = {
+                                navigator.pop()
+                                      },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)

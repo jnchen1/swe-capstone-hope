@@ -46,7 +46,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-data class WhatIsSurvivorshipSecondScreen(
+data class WhatIsSurvivorshipThirdScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
@@ -106,7 +106,7 @@ data class WhatIsSurvivorshipSecondScreen(
                         }
 
                         Button(
-                            onClick = { navigator.push(WhatIsSurvivorshipThirdScreen()) },
+                            onClick = { navigator.push(HomeScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
                         ) {
                             Text(text = "Next")
@@ -127,17 +127,10 @@ data class WhatIsSurvivorshipSecondScreen(
                 Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly){
                     Image(
-                        painter = painterResource("physical_effects_survivorship.png"),
+                        painter = painterResource("ribbon_survivorship.png"),
                         contentDescription = "Physical effects",
-                        contentScale = ContentScale.Fit,
+//                        contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
-                    )
-                    Image(
-                        painter = painterResource("emotional_effects_survivorship.png"),
-                        contentDescription = "Emotional Effects",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-
                     )
                 }
                 Text(
@@ -149,20 +142,24 @@ data class WhatIsSurvivorshipSecondScreen(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("After cancer diagnosis and treatment, breast cancer survivors may experience a ")
+                        append("Survivorship care includes ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("broad range of effects")
+                            append("regular follow-up sessions")
                         }
-                        append(" years after treatment.\n\n")
-                        append("Survivorship care ensures that all survivors receive the ")
+                        append(" to ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("medical and psychosocial support")
+                            append("prevent and monitor")
                         }
-                        append(" they need through the ")
+                        append(" for signs of returning cancers. This is because there is a ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("prevention, assessment and management")
+                            append("possibility")
                         }
-                        append(" of such effects.")
+                        append(" of the cancer ")
+
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("returning")
+                        }
+                        append(" in the breast or other parts of the body.")
                     }
                 )
 

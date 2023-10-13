@@ -68,7 +68,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-data class AnimationScreen(
+data class PhysicalEffectIntroScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
@@ -111,7 +111,7 @@ data class AnimationScreen(
                         var readyToDraw by remember { mutableStateOf(false) }
 
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { /*TODO: Add prev section*/ },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -139,14 +139,15 @@ data class AnimationScreen(
                         }
 
                         BottomNavigationItem(
-                            selected = false, onClick = {},
+                            selected = false,
+                            onClick = { navigator.popUntil { it == HomeScreen() } },
                             icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
                             label = { Text(text = "Home", color = Color.White) },
                             modifier = Modifier.weight(1f)
                         )
 
                         Button(
-                            onClick = { },
+                            onClick = { /*TODO: Add next page*/ },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {

@@ -107,7 +107,7 @@ data class PhysicalEffectIntroScreen(
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
                         val textStyleButton = MaterialTheme.typography.button
-                        var textStyle by remember { mutableStateOf(textStyleButton) }
+                        var textSize by remember { mutableStateOf(textStyleButton.fontSize) }
                         var readyToDraw by remember { mutableStateOf(false) }
 
                         Button(
@@ -122,18 +122,18 @@ data class PhysicalEffectIntroScreen(
                             )
                             Text(
                                 text = "Previous section",
-                                style = textStyle,
+                                fontSize = textSize,
                                 overflow = TextOverflow.Clip,
                                 modifier = Modifier.padding(start = 4.dp).drawWithContent {
                                     if (readyToDraw) drawContent()
                                 },
                                 onTextLayout = { textLayoutResult ->
-                                    if (textLayoutResult.didOverflowWidth || textLayoutResult.didOverflowHeight) {
-                                        textStyle =
-                                            textStyle.copy(fontSize = textStyle.fontSize * 0.9)
-                                    } else {
-                                        readyToDraw = true
+                                    if (!readyToDraw && textLayoutResult.hasVisualOverflow) {
+                                        textSize *= .85
+                                    } else if (!readyToDraw && !textLayoutResult.hasVisualOverflow) {
+                                        textSize = textStyleButton.fontSize
                                     }
+                                    readyToDraw = true
                                 }
                             )
                         }

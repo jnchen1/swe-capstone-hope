@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -67,7 +67,7 @@ data class WhoIsThisForScreen(
                 )
             },
             bottomBar = {
-                BottomAppBar {
+                BottomNavigation {
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         modifier = Modifier.fillMaxWidth()
@@ -75,7 +75,8 @@ data class WhoIsThisForScreen(
                     ) {
                         Button(
                             onClick = { navigator.pop() },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -88,7 +89,8 @@ data class WhoIsThisForScreen(
 
                         Button(
                             onClick = { navigator.push(HomeScreen()) },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f)
                         ) {
                             Text(text = "Next")
                             Icon(

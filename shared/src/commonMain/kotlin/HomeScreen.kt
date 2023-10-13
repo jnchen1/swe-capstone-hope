@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -74,7 +74,7 @@ data class HomeScreen(
                 )
             },
             bottomBar = {
-                BottomAppBar {
+                BottomNavigation {
                     Row(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth()
@@ -82,7 +82,8 @@ data class HomeScreen(
                     ) {
                         Button(
                             onClick = { navigator.pop() },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -91,6 +92,8 @@ data class HomeScreen(
 
                             Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
                         }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -132,7 +135,7 @@ data class HomeScreen(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).clickable {
                             when (option) {
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(WhatIsSurvivorshipFirstScreen())
-                                PHYSICAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
                                 EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
                                 FOLLOWUP_CARE -> navigator.push(DisclaimerScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())

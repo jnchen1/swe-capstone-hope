@@ -132,7 +132,7 @@ data class HomeScreen(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp).clickable {
                             when (option) {
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(DisclaimerScreen())
-                                PHYSICAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
                                 EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
                                 FOLLOWUP_CARE -> navigator.push(DisclaimerScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())

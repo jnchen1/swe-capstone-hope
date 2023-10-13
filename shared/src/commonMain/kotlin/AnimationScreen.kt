@@ -3,15 +3,17 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -22,7 +24,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +33,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
@@ -48,6 +52,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.center
@@ -70,7 +75,7 @@ data class AnimationScreen(
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "PHYSICAL EFFECT"
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -96,22 +101,61 @@ data class AnimationScreen(
                 )
             },
             bottomBar = {
-                BottomAppBar {
+                BottomNavigation {
                     Row(
-                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
+                        val textStyleButton = MaterialTheme.typography.button
+                        var textStyle by remember { mutableStateOf(textStyleButton) }
+                        var readyToDraw by remember { mutableStateOf(false) }
+
                         Button(
-                            onClick = { navigator.popUntilRoot() },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary)
+                            onClick = { /*TODO*/ },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "previous page arrow"
+                                painterResource("previous_section.png"),
+                                contentDescription = "Previous section"
                             )
+                            Text(
+                                text = "Previous section",
+                                style = textStyle,
+                                overflow = TextOverflow.Clip,
+                                modifier = Modifier.padding(start = 4.dp).drawWithContent {
+                                    if (readyToDraw) drawContent()
+                                },
+                                onTextLayout = { textLayoutResult ->
+                                    if (textLayoutResult.didOverflowWidth || textLayoutResult.didOverflowHeight) {
+                                        textStyle =
+                                            textStyle.copy(fontSize = textStyle.fontSize * 0.9)
+                                    } else {
+                                        readyToDraw = true
+                                    }
+                                }
+                            )
+                        }
 
-                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
+                        BottomNavigationItem(
+                            selected = false, onClick = {},
+                            icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
+                            label = { Text(text = "Home", color = Color.White) },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        Button(
+                            onClick = { },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f).fillMaxHeight()
+                        ) {
+                            Text(text = "Next")
+
+                            Icon(
+                                Icons.Rounded.ArrowForward, "Next page",
+                                Modifier.padding(start = 4.dp)
+                            )
                         }
                     }
                 }
@@ -223,14 +267,12 @@ data class AnimationScreen(
                         false,
                         modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
                     )
-                } else if (shouldShowLateAnimation) {
+                } else {
                     EffectAnimation(
                         false,
                         shouldShowLateAnimation,
                         modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
                     )
-                } else {
-                    EffectAnimation(modifier = Modifier.padding(top = 12.dp).fillMaxWidth())
                 }
             }
         }

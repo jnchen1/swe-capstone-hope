@@ -16,11 +16,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -79,7 +80,7 @@ data class WhoIsThisForScreen(
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.Rounded.ArrowBack,
                                 contentDescription = "previous page arrow"
                             )
                             Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
@@ -94,7 +95,7 @@ data class WhoIsThisForScreen(
                         ) {
                             Text(text = "Next")
                             Icon(
-                                imageVector = Icons.Default.ArrowForward,
+                                imageVector = Icons.Rounded.ArrowForward,
                                 contentDescription = "next page arrow",
                                 modifier = Modifier.padding(start = 4.dp)
                             )

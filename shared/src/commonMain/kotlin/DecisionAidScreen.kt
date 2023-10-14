@@ -17,7 +17,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,7 +83,7 @@ data class DecisionAidScreen(
                         ) {
                             Text(text = "Next")
                             Icon(
-                                imageVector = Icons.Default.ArrowForward,
+                                imageVector = Icons.Rounded.ArrowForward,
                                 contentDescription = "next page arrow",
                                 modifier = Modifier.padding(start = 4.dp)
                             )

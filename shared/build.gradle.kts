@@ -26,6 +26,7 @@ kotlin {
                 implementation(compose.material)
                 implementation(compose.animation)
                 implementation(compose.ui)
+                implementation(compose.materialIconsExtended)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
@@ -39,6 +40,8 @@ kotlin {
                 api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.appcompat:appcompat:1.6.1")
                 api("androidx.core:core-ktx:1.10.1")
+                api(compose.uiTooling)
+                api(compose.preview)
             }
         }
         val iosX64Main by getting
@@ -70,5 +73,11 @@ android {
     }
     kotlin {
         jvmToolchain(17)
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 }

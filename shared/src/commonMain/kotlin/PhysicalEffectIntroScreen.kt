@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -75,7 +76,7 @@ data class PhysicalEffectIntroScreen(
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "PHYSICAL EFFECT"
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalResourceApi::class)
+    @OptIn(ExperimentalMaterialApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -94,6 +95,7 @@ data class PhysicalEffectIntroScreen(
                         Text(
                             text = screenTitle,
                             style = MaterialTheme.typography.h1,
+                            color = Color(0xFFF4B183),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -112,21 +114,25 @@ data class PhysicalEffectIntroScreen(
 
                         Button(
                             onClick = {
-                                navigator.pop()
-                                      },
+                                if (navigator.items.contains(WhatIsSurvivorshipThirdScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(WhatIsSurvivorshipThirdScreen())
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Icon(
-                                painterResource("previous_section.png"),
+                                Icons.Rounded.FirstPage,
                                 contentDescription = "Previous section"
                             )
                             Text(
                                 text = "Previous section",
                                 fontSize = textSize,
                                 overflow = TextOverflow.Clip,
-                                modifier = Modifier.padding(start = 4.dp).drawWithContent {
+                                modifier = Modifier.padding(start = 8.dp).drawWithContent {
                                     if (readyToDraw) drawContent()
                                 },
                                 onTextLayout = { textLayoutResult ->

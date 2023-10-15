@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -174,17 +175,23 @@ data class PhysicalEffectExamplesScreen(
                     Image(
                         painterResource("physical_effect/pe_surgery.png"),
                         "surgery physical effect",
-                        modifier = Modifier.fillMaxWidth(1f / 3),
+                        modifier = Modifier.fillMaxWidth(1f / 3).clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.SURGERY))
+                        }
                     )
                     Image(
                         painterResource("physical_effect/pe_radiotherapy.png"),
                         "radiotherapy physical effect",
-                        modifier = Modifier.fillMaxWidth(1f / 2),
+                        modifier = Modifier.fillMaxWidth(1f / 2).clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.RADIOTHERAPY))
+                        }
                     )
                     Image(
                         painterResource("physical_effect/pe_chemo.png"),
                         "chemotherapy physical effect",
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.CHEMO))
+                        }
                     )
                 }
 

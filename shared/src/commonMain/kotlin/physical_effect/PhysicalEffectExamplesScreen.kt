@@ -46,6 +46,7 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import model.PhysicalEffectInfo
+import model.TherapyMedicineEffect
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -207,13 +208,15 @@ data class PhysicalEffectExamplesScreen(
                         painterResource("physical_effect/pe_her2.png"),
                         "her2+ therapy physical effect",
                         modifier = Modifier.fillMaxWidth(1f / 2).clickable {
-                            navigator.push(PhysicalEffectHer2Screen())
+                            navigator.push(PhysicalEffectMedicineScreen(TherapyMedicineEffect.HER2))
                         }
                     )
                     Image(
                         painterResource("physical_effect/pe_hormonal.png"),
                         "hormonal therapy physical effect",
-                        modifier = Modifier.fillMaxWidth(1f)
+                        modifier = Modifier.fillMaxWidth(1f).clickable {
+                            navigator.push(PhysicalEffectMedicineScreen(TherapyMedicineEffect.HORMONAL))
+                        }
                     )
                 }
             }

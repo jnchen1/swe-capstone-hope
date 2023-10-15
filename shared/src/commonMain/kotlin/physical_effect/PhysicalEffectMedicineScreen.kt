@@ -44,16 +44,18 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import model.PhysicalEffectInfo
+import model.TherapyMedicineEffect
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-data class PhysicalEffectHer2Screen(
+data class PhysicalEffectMedicineScreen(
+    val treatmentMedicine: TherapyMedicineEffect,
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "PHYSICAL EFFECT"
+    private val buttonColors = listOf(Color(0xFF426E86), Color(0xFF5B7065), Color(0xFF755248))
 
     @OptIn(ExperimentalResourceApi::class, ExperimentalMaterialApi::class)
     @Composable
@@ -79,7 +81,7 @@ data class PhysicalEffectHer2Screen(
                     },
                     navigationIcon = {
                         Image(
-                            painterResource("physical_effect/pe_her2_icon.png"),
+                            painterResource(treatmentMedicine.icon),
                             null,
                             Modifier.padding(4.dp, 8.dp)
                         )
@@ -139,58 +141,45 @@ data class PhysicalEffectHer2Screen(
                             modifier = Modifier.wrapContentSize()
                         ) {
                             Text(
-                                "HER2+ THERAPY",
+                                treatmentMedicine.therapyName,
                                 color = Color.White,
                                 style = MaterialTheme.typography.h3.copy(fontSize = 18.sp),
                                 modifier = Modifier.padding(8.dp, 4.dp).align(Alignment.Start)
                             )
                         }
 
-                        Text(buildAnnotatedString {
-                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("Click")
+                        Text(
+                            buildAnnotatedString {
+                                withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("Click")
+                                }
+                                append(" into the medicine that you have taken.")
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                                .padding(top = 16.dp, bottom = 8.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+
+                        treatmentMedicine.medicine.forEachIndexed { index, (name, info) ->
+                            Card(
+                                onClick = { navigator.push(PhysicalEffectInfoScreen(info)) },
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                                    .align(Alignment.CenterHorizontally).then(
+                                        if (index != treatmentMedicine.medicine.lastIndex)
+                                            Modifier.padding(top = 8.dp)
+                                        else
+                                            Modifier.padding(top = 8.dp, bottom = 20.dp)
+                                    ),
+                                shape = RoundedCornerShape(4.dp),
+                                backgroundColor = buttonColors[index]
+                            ) {
+                                Text(
+                                    name,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(16.dp, 8.dp)
+                                )
                             }
-                            append(" into the medicine that you have taken.")
-                        }, modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally))
-
-                        Card(
-                            onClick = { navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.HER2)) },
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
-                            shape = RoundedCornerShape(4.dp), backgroundColor = Color(0xFF426E86)
-                        ) {
-                            Text(
-                                "Trastuzumab (Herceptin®)",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(16.dp, 8.dp)
-                            )
-                        }
-
-                        Card(
-                            onClick = { navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.HER2)) },
-                            modifier = Modifier.padding(top = 16.dp)
-                                .align(Alignment.CenterHorizontally),
-                            shape = RoundedCornerShape(4.dp), backgroundColor = Color(0xFF5B7065)
-                        ) {
-                            Text(
-                                "Trastuzumab emtansine (Kadcyla®)",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(16.dp, 8.dp)
-                            )
-                        }
-
-                        Card(
-                            onClick = { navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.HER2)) },
-                            modifier = Modifier.padding(16.dp).align(Alignment.CenterHorizontally),
-                            shape = RoundedCornerShape(4.dp), backgroundColor = Color(0xFF755248)
-                        ) {
-                            Text(
-                                "Pertuzumab (Perjeta®)",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(16.dp, 8.dp)
-                            )
                         }
                     }
                 }

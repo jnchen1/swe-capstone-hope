@@ -155,7 +155,7 @@ data class PhysicalEffectIntroScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO: Add next page*/ },
+                            onClick = { navigator.push(PhysicalEffectExamplesScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {

@@ -1,4 +1,4 @@
-package physical_effect
+package ui.physical_effect
 
 import HomeScreen
 import WhatIsSurvivorshipThirdScreen

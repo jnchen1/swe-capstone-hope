@@ -1,4 +1,4 @@
-package physical_effect
+package ui.physical_effect
 
 import HomeScreen
 import androidx.compose.foundation.Image
@@ -90,7 +90,13 @@ data class PhysicalEffectExamplesScreen(
                             .padding(bottom = 4.dp)
                     ) {
                         Button(
-                            onClick = { navigator.pop() },
+                            onClick = {
+                                if (navigator.items.contains(PhysicalEffectIntroScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(PhysicalEffectIntroScreen())
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f)
                         ) {

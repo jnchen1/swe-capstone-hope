@@ -1,3 +1,6 @@
+package physical_effect
+
+import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -42,6 +45,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.PhysicalEffectInfo
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -202,8 +206,9 @@ data class PhysicalEffectExamplesScreen(
                     Image(
                         painterResource("physical_effect/pe_her2.png"),
                         "her2+ therapy physical effect",
-                        modifier = Modifier.fillMaxWidth(1f / 2)
-
+                        modifier = Modifier.fillMaxWidth(1f / 2).clickable {
+                            navigator.push(PhysicalEffectHer2Screen())
+                        }
                     )
                     Image(
                         painterResource("physical_effect/pe_hormonal.png"),

@@ -1,3 +1,7 @@
+package ui.physical_effect
+
+import HomeScreen
+import WhatIsSurvivorshipThirdScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -155,7 +159,7 @@ data class PhysicalEffectIntroScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO: Add next page*/ },
+                            onClick = { navigator.push(PhysicalEffectExamplesScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {
@@ -498,19 +502,19 @@ data class PhysicalEffectIntroScreen(
             }
         }
     }
-}
 
-private fun Modifier.autoWrapHeight() = this then object : LayoutModifier {
-    override fun MeasureScope.measure(
-        measurable: Measurable, constraints: Constraints
-    ): MeasureResult {
-        val placeable = measurable.measure(constraints.copy(minHeight = constraints.minHeight))
-        val maxWidth = placeable.width
-        var yPosition = 0
+    private fun Modifier.autoWrapHeight() = this then object : LayoutModifier {
+        override fun MeasureScope.measure(
+            measurable: Measurable, constraints: Constraints
+        ): MeasureResult {
+            val placeable = measurable.measure(constraints.copy(minHeight = constraints.minHeight))
+            val maxWidth = placeable.width
+            var yPosition = 0
 
-        return layout(maxWidth, (maxWidth * .35).toInt()) {
-            placeable.placeRelative(x = 0, y = yPosition)
-            yPosition += placeable.height
+            return layout(maxWidth, (maxWidth * .35).toInt()) {
+                placeable.placeRelative(x = 0, y = yPosition)
+                yPosition += placeable.height
+            }
         }
     }
 }

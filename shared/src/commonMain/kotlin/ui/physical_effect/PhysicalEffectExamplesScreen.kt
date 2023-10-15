@@ -1,12 +1,13 @@
+package ui.physical_effect
+
+import HomeScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
@@ -27,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
@@ -43,16 +45,17 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.PhysicalEffectInfo
+import model.TherapyMedicineEffect
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.physical_effect.PhysicalEffectIntroScreen
 
-data class WhatIsSurvivorshipThirdScreen(
+data class PhysicalEffectExamplesScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "SURVIVORSHIP"
+    private val screenTitle = "PHYSICAL EFFECT"
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -70,8 +73,8 @@ data class WhatIsSurvivorshipThirdScreen(
                     title = {
                         Text(
                             text = screenTitle,
-                            color = Color(0xFFFF7E79),
                             style = MaterialTheme.typography.h1,
+                            color = Color(0xFFF4B183),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -81,25 +84,27 @@ data class WhatIsSurvivorshipThirdScreen(
             bottomBar = {
                 BottomNavigation {
                     Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                            .padding(bottom = 4.dp)
                     ) {
                         Button(
                             onClick = {
-                                if (navigator.items.contains(WhatIsSurvivorshipSecondScreen())) {
+                                if (navigator.items.contains(PhysicalEffectIntroScreen())) {
                                     navigator.pop()
                                 } else {
-                                    navigator.replace(WhatIsSurvivorshipSecondScreen())
+                                    navigator.replace(PhysicalEffectIntroScreen())
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                            modifier = Modifier.weight(1f)
                         ) {
                             Icon(
-                                Icons.Rounded.ArrowBack, "Back page",
-                                Modifier.padding(end = 4.dp)
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = "Back"
                             )
-                            Text(text = "Back")
+                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
                         }
 
                         BottomNavigationItem(
@@ -111,7 +116,7 @@ data class WhatIsSurvivorshipThirdScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(PhysicalEffectIntroScreen()) },
+                            onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -124,9 +129,11 @@ data class WhatIsSurvivorshipThirdScreen(
                                 text = "Next section",
                                 fontSize = textSize,
                                 overflow = TextOverflow.Clip,
-                                modifier = Modifier.padding(end = 0.dp).drawWithContent {
-                                    if (readyToDraw) drawContent()
-                                },
+                                modifier = Modifier
+                                    .padding(end = 0.dp)
+                                    .drawWithContent {
+                                        if (readyToDraw) drawContent()
+                                    },
                                 onTextLayout = { textLayoutResult ->
                                     if (!readyToDraw && textLayoutResult.hasVisualOverflow) {
                                         textSize *= .85
@@ -146,49 +153,78 @@ data class WhatIsSurvivorshipThirdScreen(
             }
         ) {
             Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                modifier = Modifier
+                    .padding(it)
+                    .padding(horizontal = 8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Image(
-                        painter = painterResource("ribbon_survivorship.png"),
-                        contentDescription = "Physical effects",
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-                    )
-                }
                 Text(
-                    style = MaterialTheme.typography.h1,
-                    modifier = Modifier.padding(8.dp),
-                    text = "Why is survivorship care important?"
+                    style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = "What are some examples?"
                 )
+
                 Text(
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(8.dp),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
                     text = buildAnnotatedString {
-                        append("Survivorship care includes ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("regular follow-up sessions")
+                            append("Click")
                         }
-                        append(" to ")
+                        append(" onto each icon and button to find out the ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("prevent and monitor")
+                            append("possible long-term and late")
                         }
-                        append(" for signs of returning cancers. This is because there is a ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("possibility")
-                        }
-                        append(" of the cancer ")
-
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("returning")
-                        }
-                        append(" in the breast or other parts of the body.")
+                        append(" physical effects associated with the treatment(s) you have received.")
                     }
                 )
 
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Image(
+                        painterResource("physical_effect/pe_surgery.png"),
+                        "surgery physical effect",
+                        modifier = Modifier.fillMaxWidth(1f / 3).clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.SURGERY))
+                        }
+                    )
+                    Image(
+                        painterResource("physical_effect/pe_radiotherapy.png"),
+                        "radiotherapy physical effect",
+                        modifier = Modifier.fillMaxWidth(1f / 2).clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.RADIOTHERAPY))
+                        }
+                    )
+                    Image(
+                        painterResource("physical_effect/pe_chemo.png"),
+                        "chemotherapy physical effect",
+                        modifier = Modifier.fillMaxWidth().clickable {
+                            navigator.push(PhysicalEffectInfoScreen(PhysicalEffectInfo.CHEMO))
+                        }
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(.8f).align(Alignment.CenterHorizontally)
+                        .padding(top = 8.dp)
+                ) {
+                    Image(
+                        painterResource("physical_effect/pe_her2.png"),
+                        "her2+ therapy physical effect",
+                        modifier = Modifier.fillMaxWidth(1f / 2).clickable {
+                            navigator.push(PhysicalEffectMedicineScreen(TherapyMedicineEffect.HER2))
+                        }
+                    )
+                    Image(
+                        painterResource("physical_effect/pe_hormonal.png"),
+                        "hormonal therapy physical effect",
+                        modifier = Modifier.fillMaxWidth(1f).clickable {
+                            navigator.push(PhysicalEffectMedicineScreen(TherapyMedicineEffect.HORMONAL))
+                        }
+                    )
+                }
             }
         }
     }

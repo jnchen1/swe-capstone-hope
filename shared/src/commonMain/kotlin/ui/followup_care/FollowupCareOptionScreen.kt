@@ -65,7 +65,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -263,6 +262,9 @@ data class FollowupCareOptionScreen(
         var shouldShowOncologist by remember { mutableStateOf(false) }
         var shouldShowDoctor by remember { mutableStateOf(false) }
         var shouldShowPharmacist by remember { mutableStateOf(false) }
+        var shouldShowOncologistPuzzle by remember { mutableStateOf(false) }
+        var shouldShowDoctorPuzzle by remember { mutableStateOf(false) }
+        var shouldShowPharmacistPuzzle by remember { mutableStateOf(false) }
 
         val puzzleAnimation = remember { Animatable(0f) }
 
@@ -283,23 +285,29 @@ data class FollowupCareOptionScreen(
             shouldShowPharmacist = true
 
             LaunchedEffect(shouldShowShared) {
-                launch {
-                    puzzleAnimation.animateTo(1f, animationSpec = tween(1500))
+                (1..3).forEach { index ->
+                    delay(300)
+                    when (index) {
+                        1 -> shouldShowOncologistPuzzle = true
+                        2 -> shouldShowDoctorPuzzle = true
+                        3 -> shouldShowPharmacistPuzzle = true
+                    }
                 }
+                puzzleAnimation.animateTo(1f, animationSpec = tween(1500))
             }
         }
 
         Canvas(modifier = modifier.autoWrapHeight()) {
             val puzzleSize = size.width * .3f
 
-            val imageSize = (puzzleSize * .6f).let { height ->
+            val imageSize = (puzzleSize * .65f).let { height ->
                 val ratio =
                     oncologistImage.intrinsicSize.height / oncologistImage.intrinsicSize.width
                 Size(height / ratio, height)
             }
 
             if (shouldShowOncologist) {
-                val leftOffset = puzzleSize * .25f
+                val leftOffset = puzzleSize * .25f * puzzleAnimation.value
                 val textLayoutSize = textMeasurer.measure(
                     "Oncologist",
                     softWrap = true,
@@ -307,10 +315,10 @@ data class FollowupCareOptionScreen(
                     constraints = Constraints.fixedWidth(puzzleSize.toInt())
                 )
 
-                if (shouldShowShared) {
+                if (shouldShowOncologistPuzzle) {
                     val path = Path().apply {
                         val left = 0f + leftOffset
-                        val right = (puzzleSize + leftOffset) * puzzleAnimation.value
+                        val right = puzzleSize + leftOffset
                         moveTo(left, 0f)
                         lineTo(right, 0f)
                         lineTo(right, puzzleSize * .25f)
@@ -351,7 +359,7 @@ data class FollowupCareOptionScreen(
             }
 
             if (shouldShowDoctor) {
-                if (shouldShowShared) {
+                if (shouldShowDoctorPuzzle) {
                     val path = Path().apply {
                         val left = size.center.x - puzzleSize * .5f
                         val right = size.center.x + puzzleSize * .5f
@@ -414,11 +422,10 @@ data class FollowupCareOptionScreen(
             }
 
             if (shouldShowPharmacist) {
-                val rightOffSet = puzzleSize * .25f
-                if (shouldShowShared) {
+                val rightOffSet = puzzleSize * .25f * puzzleAnimation.value
+                if (shouldShowPharmacistPuzzle) {
                     val path = Path().apply {
-                        val left =
-                            size.width - (puzzleSize * puzzleAnimation.value) - rightOffSet
+                        val left = size.width - puzzleSize - rightOffSet
                         val right = size.width - rightOffSet
                         moveTo(left, 0f)
                         lineTo(right, 0f)

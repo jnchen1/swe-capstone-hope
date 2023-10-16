@@ -7,6 +7,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,7 +39,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
@@ -112,9 +112,12 @@ data class PhysicalEffectIntroScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
-                        val textStyleButton = MaterialTheme.typography.button
-                        var textSize by remember { mutableStateOf(textStyleButton.fontSize) }
-                        var readyToDraw by remember { mutableStateOf(false) }
+                        val textSize = MaterialTheme.typography.button.fontSize
+                        val textLayout = rememberTextMeasurer().measure(
+                            text = "Previous section",
+                            style = MaterialTheme.typography.button,
+                            overflow = TextOverflow.Clip
+                        )
 
                         Button(
                             onClick = {
@@ -132,22 +135,21 @@ data class PhysicalEffectIntroScreen(
                                 Icons.Rounded.FirstPage,
                                 contentDescription = "Previous section"
                             )
-                            Text(
-                                text = "Previous section",
-                                fontSize = textSize,
-                                overflow = TextOverflow.Clip,
-                                modifier = Modifier.padding(start = 8.dp).drawWithContent {
-                                    if (readyToDraw) drawContent()
-                                },
-                                onTextLayout = { textLayoutResult ->
-                                    if (!readyToDraw && textLayoutResult.hasVisualOverflow) {
-                                        textSize *= .85
-                                    } else if (!readyToDraw && !textLayoutResult.hasVisualOverflow) {
-                                        textSize = textStyleButton.fontSize
-                                    }
-                                    readyToDraw = true
+
+                            BoxWithConstraints {
+                                val boxScope = this
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
                                 }
-                            )
+
+                                Text(
+                                    text = "Previous section",
+                                    fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .8 else textSize,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(start = 4.dp)
+                                )
+                            }
+
                         }
 
                         BottomNavigationItem(
@@ -270,7 +272,8 @@ data class PhysicalEffectIntroScreen(
                                 append("after")
                             }
                             append(" treatment is completed.")
-                        }, Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                        },
+                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
                     )
                 }
 

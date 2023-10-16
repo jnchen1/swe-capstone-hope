@@ -42,6 +42,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.followup_care.FollowupCareIntroScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
 data class HomeScreen(
@@ -138,7 +139,7 @@ data class HomeScreen(
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(WhatIsSurvivorshipFirstScreen())
                                 PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
                                 EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
-                                FOLLOWUP_CARE -> navigator.push(DisclaimerScreen())
+                                FOLLOWUP_CARE -> navigator.push(FollowupCareIntroScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())
                                 WHAT_MATTERS -> navigator.push(DisclaimerScreen())
                                 CONCLUSION -> navigator.push(DisclaimerScreen())

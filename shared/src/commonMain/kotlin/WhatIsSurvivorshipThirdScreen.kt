@@ -23,12 +23,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -116,26 +111,11 @@ data class WhatIsSurvivorshipThirdScreen(
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            val textStyleButton = MaterialTheme.typography.button
-                            var textSize by remember { mutableStateOf(textStyleButton.fontSize) }
-                            var readyToDraw by remember { mutableStateOf(false) }
-
                             Text(
                                 text = "Next section",
-                                fontSize = textSize,
-                                overflow = TextOverflow.Clip,
-                                modifier = Modifier.padding(end = 0.dp).drawWithContent {
-                                    if (readyToDraw) drawContent()
-                                },
-                                onTextLayout = { textLayoutResult ->
-                                    if (!readyToDraw && textLayoutResult.hasVisualOverflow) {
-                                        textSize *= .85
-                                    } else if (!readyToDraw && !textLayoutResult.hasVisualOverflow) {
-                                        textSize = textStyleButton.fontSize
-                                    }
-                                    readyToDraw = true
-                                }
+                                overflow = TextOverflow.Clip
                             )
+
                             Icon(
                                 Icons.Rounded.LastPage,
                                 contentDescription = "Next section"

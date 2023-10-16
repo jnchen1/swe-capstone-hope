@@ -2,10 +2,10 @@ package ui.physical_effect
 
 import HomeScreen
 import WhatIsSurvivorshipThirdScreen
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -39,6 +39,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
@@ -219,29 +220,38 @@ data class PhysicalEffectIntroScreen(
                         modifier = Modifier.padding(12.dp)
                     )
                 }
-
-                val density = LocalDensity.current
-                AnimatedVisibility(
-                    visible = shouldShowLongTermText,
-                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
-                ) {
-                    Text(
-                        buildAnnotatedString {
-                            append("These effects appear ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("during")
-                            }
-                            append(" treatment and ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("continue")
-                            }
-                            append(" even after finishing treatment(s).")
-                        },
-                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                val longTermTextAlpha by animateFloatAsState(
+                    targetValue = if (shouldShowLongTermText) 1f else 0f,
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        easing = LinearEasing
                     )
-                }
+                )
+                Text(
+                    buildAnnotatedString {
+                        append("These effects appear ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("during")
+                        }
+                        append(" treatment and ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("continue")
+                        }
+                        append(" even after finishing treatment(s).")
+                    },
+                    Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                        .alpha(longTermTextAlpha),
+                    style = MaterialTheme.typography.body1
+                )
 
                 var shouldShowLateText by remember { mutableStateOf(false) }
+                val lateTextAlpha by animateFloatAsState(
+                    targetValue = if (shouldShowLateText) 1f else 0f,
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        easing = LinearEasing
+                    )
+                )
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     elevation = 4.dp,
@@ -261,21 +271,18 @@ data class PhysicalEffectIntroScreen(
                     )
                 }
 
-                AnimatedVisibility(
-                    visible = shouldShowLateText,
-                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
-                ) {
-                    Text(
-                        buildAnnotatedString {
-                            append("These effects appear ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("after")
-                            }
-                            append(" treatment is completed.")
-                        },
-                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
-                    )
-                }
+                Text(
+                    buildAnnotatedString {
+                        append("These effects appear ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("after")
+                        }
+                        append(" treatment is completed.")
+                    },
+                    Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                        .alpha(lateTextAlpha),
+                    style = MaterialTheme.typography.body1
+                )
 
                 if (shouldShowLongTermAnimation) {
                     EffectAnimation(

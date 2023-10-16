@@ -85,8 +85,8 @@ data class FollowupCareOptionScreen(
 
         var shouldShowUsual by remember { mutableStateOf(false) }
         var shouldShowShared by remember { mutableStateOf(false) }
-        var isUsualFirstTime = true
-        var isSharedFirstTime = true
+        var shouldShowUsualText by remember { mutableStateOf(false) }
+        var shouldShowSharedText by remember { mutableStateOf(false) }
 
         val navigator = LocalNavigator.currentOrThrow
 
@@ -175,7 +175,7 @@ data class FollowupCareOptionScreen(
                     onClick = {
                         shouldShowUsual = true
                         shouldShowShared = false
-                        isUsualFirstTime = false
+                        shouldShowUsualText = true
                     }
                 ) {
                     Text(
@@ -187,7 +187,7 @@ data class FollowupCareOptionScreen(
                 }
 
                 val usualTextAlpha by animateFloatAsState(
-                    targetValue = if (!isUsualFirstTime) 1f else 0f,
+                    targetValue = if (shouldShowUsualText) 1f else 0f,
                     animationSpec = tween(
                         durationMillis = 1000,
                         easing = LinearEasing,
@@ -213,7 +213,7 @@ data class FollowupCareOptionScreen(
                     onClick = {
                         shouldShowUsual = false
                         shouldShowShared = true
-                        isSharedFirstTime = false
+                        shouldShowSharedText = true
                     }
                 ) {
                     Text(
@@ -224,7 +224,7 @@ data class FollowupCareOptionScreen(
                     )
                 }
                 val sharedTextAlpha by animateFloatAsState(
-                    targetValue = if (!isSharedFirstTime) 1f else 0f,
+                    targetValue = if (shouldShowSharedText) 1f else 0f,
                     animationSpec = tween(
                         durationMillis = 1000,
                         easing = LinearEasing

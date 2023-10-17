@@ -6,9 +6,11 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -151,101 +153,111 @@ data class FollowupCareOptionScreen(
                 }
             }
         ) {
-            Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    text = "What are your options?",
-                    style = MaterialTheme.typography.h3,
-                    modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-                )
-
-                Text(
-                    text = "Click into each button to read more about each option.",
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-                )
-
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFFA49592),
-                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
-                    onClick = {
-                        shouldShowUsual = true
-                        shouldShowShared = false
-                        shouldShowUsualText = true
-                    }
+            BoxWithConstraints {
+                val boxScope = this
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
+
                     Text(
-                        "Usual care",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp, 8.dp)
+                        text = "What are your options?",
+                        style = MaterialTheme.typography.h3,
+                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
-                }
 
-                val usualTextAlpha by animateFloatAsState(
-                    targetValue = if (shouldShowUsualText) 1f else 0f,
-                    animationSpec = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing,
+                    Text(
+                        text = "Click into each button to read more about each option.",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
-                )
-                Text(
-                    buildAnnotatedString {
-                        append("Typically, each health care professional care for ≥1 aspect(s) of your follow-up care ")
-                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("independently")
+
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFFA49592),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        onClick = {
+                            shouldShowUsual = true
+                            shouldShowShared = false
+                            shouldShowUsualText = true
                         }
-                        append(".")
-                    },
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(start = 16.dp).alpha(usualTextAlpha)
-                )
-
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFFE99787),
-                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
-                    onClick = {
-                        shouldShowUsual = false
-                        shouldShowShared = true
-                        shouldShowSharedText = true
+                    ) {
+                        Text(
+                            "Usual care",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
                     }
-                ) {
-                    Text(
-                        "Shared care",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp, 8.dp)
-                    )
-                }
-                val sharedTextAlpha by animateFloatAsState(
-                    targetValue = if (shouldShowSharedText) 1f else 0f,
-                    animationSpec = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing
-                    )
-                )
-                Text(
-                    buildAnnotatedString {
-                        append("A care team of oncologist, polyclinic family physician, and community pharmacist, care for ≥1 aspect(s) of your follow-up care ")
-                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("together")
-                        }
-                        append(".")
-                    },
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(start = 16.dp).alpha(sharedTextAlpha)
-                )
 
-                if (shouldShowUsual) {
-                    Animation(shouldShowUsual, false, Modifier.fillMaxWidth().padding(top = 16.dp))
-                } else if (shouldShowShared) {
-                    Animation(false, shouldShowShared, Modifier.fillMaxWidth().padding(top = 16.dp))
+                    val usualTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowUsualText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing,
+                        )
+                    )
+                    Text(
+                        buildAnnotatedString {
+                            append("Typically, each health care professional care for ≥1 aspect(s) of your follow-up care ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("independently")
+                            }
+                            append(".")
+                        },
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(start = 16.dp).alpha(usualTextAlpha)
+                    )
+
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFFE99787),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        onClick = {
+                            shouldShowUsual = false
+                            shouldShowShared = true
+                            shouldShowSharedText = true
+                        }
+                    ) {
+                        Text(
+                            "Shared care",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
+                    }
+                    val sharedTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowSharedText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
+                    Text(
+                        buildAnnotatedString {
+                            append("A care team of oncologist, polyclinic family physician, and community pharmacist, care for ≥1 aspect(s) of your follow-up care ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("together")
+                            }
+                            append(".")
+                        },
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(start = 16.dp).alpha(sharedTextAlpha)
+                    )
+
+                    val animationModifier = Modifier.padding(16.dp)
+                        .align(androidx.compose.ui.Alignment.CenterHorizontally).then(
+                            if (boxScope.maxWidth > boxScope.maxHeight) Modifier.fillMaxWidth(.7f)
+                            else Modifier.fillMaxWidth()
+                        )
+
+                    if (shouldShowUsual) {
+                        Animation(shouldShowUsual, false, animationModifier)
+                    } else if (shouldShowShared) {
+                        Animation(false, shouldShowShared, animationModifier)
+                    }
                 }
             }
         }
@@ -262,11 +274,11 @@ data class FollowupCareOptionScreen(
         var shouldShowOncologist by remember { mutableStateOf(false) }
         var shouldShowDoctor by remember { mutableStateOf(false) }
         var shouldShowPharmacist by remember { mutableStateOf(false) }
-        var shouldShowOncologistPuzzle by remember { mutableStateOf(false) }
-        var shouldShowDoctorPuzzle by remember { mutableStateOf(false) }
-        var shouldShowPharmacistPuzzle by remember { mutableStateOf(false) }
 
         val puzzleAnimation = remember { Animatable(0f) }
+        val oncologistPuzzleAlpha = remember { Animatable(0f) }
+        val doctorPuzzleAlpha = remember { Animatable(0f) }
+        val pharmacistPuzzleAlpha = remember { Animatable(0f) }
 
         if (shouldShowUsual && !shouldShowShared) {
             LaunchedEffect(key1 = shouldShowUsual) {
@@ -285,14 +297,10 @@ data class FollowupCareOptionScreen(
             shouldShowPharmacist = true
 
             LaunchedEffect(shouldShowShared) {
-                (1..3).forEach { index ->
-                    delay(300)
-                    when (index) {
-                        1 -> shouldShowOncologistPuzzle = true
-                        2 -> shouldShowDoctorPuzzle = true
-                        3 -> shouldShowPharmacistPuzzle = true
-                    }
-                }
+                oncologistPuzzleAlpha.animateTo(1f, animationSpec = tween(800))
+                doctorPuzzleAlpha.animateTo(1f, animationSpec = tween(800))
+                pharmacistPuzzleAlpha.animateTo(1f, animationSpec = tween(800))
+
                 puzzleAnimation.animateTo(1f, animationSpec = tween(1500))
             }
         }
@@ -315,33 +323,31 @@ data class FollowupCareOptionScreen(
                     constraints = Constraints.fixedWidth(puzzleSize.toInt())
                 )
 
-                if (shouldShowOncologistPuzzle) {
-                    val path = Path().apply {
-                        val left = 0f + leftOffset
-                        val right = puzzleSize + leftOffset
-                        moveTo(left, 0f)
-                        lineTo(right, 0f)
-                        lineTo(right, puzzleSize * .25f)
+                val path = Path().apply {
+                    val left = 0f + leftOffset
+                    val right = puzzleSize + leftOffset
+                    moveTo(left, 0f)
+                    lineTo(right, 0f)
+                    lineTo(right, puzzleSize * .25f)
 
-                        arcTo(
-                            rect = Rect(
-                                left = puzzleSize * .75f,
-                                top = puzzleSize * .25f,
-                                right = right + puzzleSize * .25f,
-                                bottom = puzzleSize * .75f
-                            ),
-                            startAngleDegrees = -90f,
-                            sweepAngleDegrees = 180.0f,
-                            forceMoveTo = false
-                        )
+                    arcTo(
+                        rect = Rect(
+                            left = puzzleSize * .75f,
+                            top = puzzleSize * .25f,
+                            right = right + puzzleSize * .25f,
+                            bottom = puzzleSize * .75f
+                        ),
+                        startAngleDegrees = -90f,
+                        sweepAngleDegrees = 180f,
+                        forceMoveTo = false
+                    )
 
-                        lineTo(right, puzzleSize * .75f)
-                        lineTo(right, puzzleSize)
-                        lineTo(left, puzzleSize)
-                        close()
-                    }
-                    drawPath(path, Color(0xFFE6C546))
+                    lineTo(right, puzzleSize * .75f)
+                    lineTo(right, puzzleSize)
+                    lineTo(left, puzzleSize)
+                    close()
                 }
+                drawPath(path, Color(0xFFE6C546), oncologistPuzzleAlpha.value)
 
                 translate(puzzleSize * .5f - imageSize.center.x + leftOffset) {
                     with(oncologistImage) {
@@ -359,47 +365,45 @@ data class FollowupCareOptionScreen(
             }
 
             if (shouldShowDoctor) {
-                if (shouldShowDoctorPuzzle) {
-                    val path = Path().apply {
-                        val left = size.center.x - puzzleSize * .5f
-                        val right = size.center.x + puzzleSize * .5f
-                        moveTo(left, 0f)
-                        lineTo(right, 0f)
-                        lineTo(right, puzzleSize * .25f)
+                val path = Path().apply {
+                    val left = size.center.x - puzzleSize * .5f
+                    val right = size.center.x + puzzleSize * .5f
+                    moveTo(left, 0f)
+                    lineTo(right, 0f)
+                    lineTo(right, puzzleSize * .25f)
 
-                        arcTo(
-                            rect = Rect(
-                                left = right - puzzleSize * .25f,
-                                top = puzzleSize * .25f,
-                                right = right + puzzleSize * .25f,
-                                bottom = puzzleSize * .75f
-                            ),
-                            startAngleDegrees = -90f,
-                            sweepAngleDegrees = 180.0f,
-                            forceMoveTo = false
-                        )
+                    arcTo(
+                        rect = Rect(
+                            left = right - puzzleSize * .25f,
+                            top = puzzleSize * .25f,
+                            right = right + puzzleSize * .25f,
+                            bottom = puzzleSize * .75f
+                        ),
+                        startAngleDegrees = -90f,
+                        sweepAngleDegrees = 180.0f,
+                        forceMoveTo = false
+                    )
 
-                        lineTo(right, puzzleSize)
-                        lineTo(left, puzzleSize)
-                        lineTo(left, puzzleSize * .75f)
+                    lineTo(right, puzzleSize)
+                    lineTo(left, puzzleSize)
+                    lineTo(left, puzzleSize * .75f)
 
-                        arcTo(
-                            rect = Rect(
-                                left = left - puzzleSize * .25f,
-                                top = puzzleSize * .25f,
-                                right = left + puzzleSize * .25f,
-                                bottom = puzzleSize * .75f
-                            ),
-                            startAngleDegrees = 90f,
-                            sweepAngleDegrees = -180f,
-                            forceMoveTo = true
-                        )
+                    arcTo(
+                        rect = Rect(
+                            left = left - puzzleSize * .25f,
+                            top = puzzleSize * .25f,
+                            right = left + puzzleSize * .25f,
+                            bottom = puzzleSize * .75f
+                        ),
+                        startAngleDegrees = 90f,
+                        sweepAngleDegrees = -180f,
+                        forceMoveTo = true
+                    )
 
-                        lineTo(left, puzzleSize * .25f)
-                        close()
-                    }
-                    drawPath(path, Color(0xFFCB6D53))
+                    lineTo(left, puzzleSize * .25f)
+                    close()
                 }
+                drawPath(path, Color(0xFFCB6D53), doctorPuzzleAlpha.value)
 
                 translate(size.center.x - (puzzleSize * .45f - imageSize.center.x)) {
                     with(doctorImage) {
@@ -423,33 +427,31 @@ data class FollowupCareOptionScreen(
 
             if (shouldShowPharmacist) {
                 val rightOffSet = puzzleSize * .25f * puzzleAnimation.value
-                if (shouldShowPharmacistPuzzle) {
-                    val path = Path().apply {
-                        val left = size.width - puzzleSize - rightOffSet
-                        val right = size.width - rightOffSet
-                        moveTo(left, 0f)
-                        lineTo(right, 0f)
-                        lineTo(right, puzzleSize)
-                        lineTo(left, puzzleSize)
-                        lineTo(left, puzzleSize * .75f)
+                val path = Path().apply {
+                    val left = size.width - puzzleSize - rightOffSet
+                    val right = size.width - rightOffSet
+                    moveTo(left, 0f)
+                    lineTo(right, 0f)
+                    lineTo(right, puzzleSize)
+                    lineTo(left, puzzleSize)
+                    lineTo(left, puzzleSize * .75f)
 
-                        arcTo(
-                            rect = Rect(
-                                left = left - puzzleSize * .25f,
-                                top = puzzleSize * .25f,
-                                right = left + puzzleSize * .25f,
-                                bottom = puzzleSize * .75f
-                            ),
-                            startAngleDegrees = 90f,
-                            sweepAngleDegrees = -180f,
-                            forceMoveTo = false
-                        )
+                    arcTo(
+                        rect = Rect(
+                            left = left - puzzleSize * .25f,
+                            top = puzzleSize * .25f,
+                            right = left + puzzleSize * .25f,
+                            bottom = puzzleSize * .75f
+                        ),
+                        startAngleDegrees = 90f,
+                        sweepAngleDegrees = -180f,
+                        forceMoveTo = false
+                    )
 
-                        lineTo(left, puzzleSize * .25f)
-                        close()
-                    }
-                    drawPath(path, Color(0xFF7EB4B9))
+                    lineTo(left, puzzleSize * .25f)
+                    close()
                 }
+                drawPath(path, Color(0xFF7EB4B9), pharmacistPuzzleAlpha.value)
 
                 translate(size.width - puzzleSize * .5f - imageSize.width * .5f - rightOffSet) {
                     with(pharmacistImage) {

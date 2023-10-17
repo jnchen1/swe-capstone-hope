@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -38,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
@@ -177,125 +179,127 @@ data class PhysicalEffectIntroScreen(
                 }
             }
         ) {
-            Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 8.dp),
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("Cancer treatment(s)")
-                        }
-                        append(" can cause ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("mild to severe")
-                        }
-                        append(" physical side effects. There are ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("2 types")
-                        }
-                        append(" of side effects that may affect you now, click on each button below to see the animation.")
-                    }
-                )
+            BoxWithConstraints {
+                val boxScope = this
 
-                var shouldShowLongTermText by remember { mutableStateOf(false) }
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFF426E86),
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = {
-                        shouldShowLongTermText = true
-                        shouldShowLongTermAnimation = true
-                        shouldShowLateAnimation = false
-                    }
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        "Long-term effects",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
-                val longTermTextAlpha by animateFloatAsState(
-                    targetValue = if (shouldShowLongTermText) 1f else 0f,
-                    animationSpec = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing
-                    )
-                )
-                Text(
-                    buildAnnotatedString {
-                        append("These effects appear ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("during")
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 8.dp),
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Cancer treatment(s)")
+                            }
+                            append(" can cause ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("mild to severe")
+                            }
+                            append(" physical side effects. There are ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("2 types")
+                            }
+                            append(" of side effects that may affect you now, click on each button below to see the animation.")
                         }
-                        append(" treatment and ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("continue")
-                        }
-                        append(" even after finishing treatment(s).")
-                    },
-                    Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
-                        .alpha(longTermTextAlpha),
-                    style = MaterialTheme.typography.body1
-                )
+                    )
 
-                var shouldShowLateText by remember { mutableStateOf(false) }
-                val lateTextAlpha by animateFloatAsState(
-                    targetValue = if (shouldShowLateText) 1f else 0f,
-                    animationSpec = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing
-                    )
-                )
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFF5B7065),
-                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
-                    onClick = {
-                        shouldShowLateText = true
-                        shouldShowLongTermAnimation = false
-                        shouldShowLateAnimation = true
+                    var shouldShowLongTermText by remember { mutableStateOf(false) }
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFF426E86),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        onClick = {
+                            shouldShowLongTermText = true
+                            shouldShowLongTermAnimation = true
+                            shouldShowLateAnimation = false
+                        }
+                    ) {
+                        Text(
+                            "Long-term effects",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
                     }
-                ) {
+                    val longTermTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowLongTermText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
                     Text(
-                        "Late effects",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp)
+                        buildAnnotatedString {
+                            append("These effects appear ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("during")
+                            }
+                            append(" treatment and ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("continue")
+                            }
+                            append(" even after finishing treatment(s).")
+                        },
+                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                            .alpha(longTermTextAlpha),
+                        style = MaterialTheme.typography.body1
                     )
-                }
 
-                Text(
-                    buildAnnotatedString {
-                        append("These effects appear ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("after")
+                    var shouldShowLateText by remember { mutableStateOf(false) }
+                    val lateTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowLateText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFF5B7065),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        onClick = {
+                            shouldShowLateText = true
+                            shouldShowLongTermAnimation = false
+                            shouldShowLateAnimation = true
                         }
-                        append(" treatment is completed.")
-                    },
-                    Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
-                        .alpha(lateTextAlpha),
-                    style = MaterialTheme.typography.body1
-                )
+                    ) {
+                        Text(
+                            "Late effects",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
+                    }
 
-                if (shouldShowLongTermAnimation) {
-                    EffectAnimation(
-                        shouldShowLongTermAnimation,
-                        false,
-                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
+                    Text(
+                        buildAnnotatedString {
+                            append("These effects appear ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("after")
+                            }
+                            append(" treatment is completed.")
+                        },
+                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                            .alpha(lateTextAlpha),
+                        style = MaterialTheme.typography.body1
                     )
-                } else {
-                    EffectAnimation(
-                        false,
-                        shouldShowLateAnimation,
-                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
-                    )
+
+                    val animationModifier = Modifier
+                        .padding(16.dp).align(Alignment.CenterHorizontally).then(
+                            if (boxScope.maxWidth > boxScope.maxHeight) Modifier.fillMaxWidth(.7f)
+                            else Modifier.fillMaxWidth()
+                        )
+
+                    if (shouldShowLongTermAnimation) {
+                        EffectAnimation(shouldShowLongTermAnimation, false, animationModifier)
+                    } else {
+                        EffectAnimation(false, shouldShowLateAnimation, animationModifier)
+                    }
                 }
             }
         }

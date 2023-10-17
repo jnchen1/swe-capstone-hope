@@ -2,15 +2,17 @@ package ui.physical_effect
 
 import HomeScreen
 import WhatIsSurvivorshipThirdScreen
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -37,8 +39,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
@@ -112,9 +115,12 @@ data class PhysicalEffectIntroScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
-                        val textStyleButton = MaterialTheme.typography.button
-                        var textSize by remember { mutableStateOf(textStyleButton.fontSize) }
-                        var readyToDraw by remember { mutableStateOf(false) }
+                        val textSize = MaterialTheme.typography.button.fontSize
+                        val textLayout = rememberTextMeasurer().measure(
+                            text = "Previous section",
+                            style = MaterialTheme.typography.button,
+                            overflow = TextOverflow.Clip
+                        )
 
                         Button(
                             onClick = {
@@ -132,22 +138,21 @@ data class PhysicalEffectIntroScreen(
                                 Icons.Rounded.FirstPage,
                                 contentDescription = "Previous section"
                             )
-                            Text(
-                                text = "Previous section",
-                                fontSize = textSize,
-                                overflow = TextOverflow.Clip,
-                                modifier = Modifier.padding(start = 8.dp).drawWithContent {
-                                    if (readyToDraw) drawContent()
-                                },
-                                onTextLayout = { textLayoutResult ->
-                                    if (!readyToDraw && textLayoutResult.hasVisualOverflow) {
-                                        textSize *= .85
-                                    } else if (!readyToDraw && !textLayoutResult.hasVisualOverflow) {
-                                        textSize = textStyleButton.fontSize
-                                    }
-                                    readyToDraw = true
+
+                            BoxWithConstraints {
+                                val boxScope = this
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
                                 }
-                            )
+
+                                Text(
+                                    text = "Previous section",
+                                    fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .8 else textSize,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(start = 4.dp)
+                                )
+                            }
+
                         }
 
                         BottomNavigationItem(
@@ -174,55 +179,59 @@ data class PhysicalEffectIntroScreen(
                 }
             }
         ) {
-            Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 8.dp),
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("Cancer treatment(s)")
-                        }
-                        append(" can cause ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("mild to severe")
-                        }
-                        append(" physical side effects. There are ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("2 types")
-                        }
-                        append(" of side effects that may affect you now, click on each button below to see the animation.")
-                    }
-                )
+            BoxWithConstraints {
+                val boxScope = this
 
-                var shouldShowLongTermText by remember { mutableStateOf(false) }
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFF426E86),
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = {
-                        shouldShowLongTermText = true
-                        shouldShowLongTermAnimation = true
-                        shouldShowLateAnimation = false
-                    }
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        "Long-term effects",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp)
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 8.dp),
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Cancer treatment(s)")
+                            }
+                            append(" can cause ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("mild to severe")
+                            }
+                            append(" physical side effects. There are ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("2 types")
+                            }
+                            append(" of side effects that may affect you now, click on each button below to see the animation.")
+                        }
                     )
-                }
 
-                val density = LocalDensity.current
-                AnimatedVisibility(
-                    visible = shouldShowLongTermText,
-                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
-                ) {
+                    var shouldShowLongTermText by remember { mutableStateOf(false) }
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFF426E86),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        onClick = {
+                            shouldShowLongTermText = true
+                            shouldShowLongTermAnimation = true
+                            shouldShowLateAnimation = false
+                        }
+                    ) {
+                        Text(
+                            "Long-term effects",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
+                    }
+                    val longTermTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowLongTermText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
                     Text(
                         buildAnnotatedString {
                             append("These effects appear ")
@@ -236,33 +245,37 @@ data class PhysicalEffectIntroScreen(
                             append(" even after finishing treatment(s).")
                         },
                         Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                            .alpha(longTermTextAlpha),
+                        style = MaterialTheme.typography.body1
                     )
-                }
 
-                var shouldShowLateText by remember { mutableStateOf(false) }
-                Card(
-                    shape = RoundedCornerShape(8.dp),
-                    elevation = 4.dp,
-                    backgroundColor = Color(0xFF5B7065),
-                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
-                    onClick = {
-                        shouldShowLateText = true
-                        shouldShowLongTermAnimation = false
-                        shouldShowLateAnimation = true
+                    var shouldShowLateText by remember { mutableStateOf(false) }
+                    val lateTextAlpha by animateFloatAsState(
+                        targetValue = if (shouldShowLateText) 1f else 0f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearEasing
+                        )
+                    )
+                    Card(
+                        shape = RoundedCornerShape(8.dp),
+                        elevation = 4.dp,
+                        backgroundColor = Color(0xFF5B7065),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        onClick = {
+                            shouldShowLateText = true
+                            shouldShowLongTermAnimation = false
+                            shouldShowLateAnimation = true
+                        }
+                    ) {
+                        Text(
+                            "Late effects",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(12.dp, 8.dp)
+                        )
                     }
-                ) {
-                    Text(
-                        "Late effects",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
 
-                AnimatedVisibility(
-                    visible = shouldShowLateText,
-                    enter = slideInVertically { with(density) { 0.dp.roundToPx() } },
-                ) {
                     Text(
                         buildAnnotatedString {
                             append("These effects appear ")
@@ -270,22 +283,23 @@ data class PhysicalEffectIntroScreen(
                                 append("after")
                             }
                             append(" treatment is completed.")
-                        }, Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                        },
+                        Modifier.fillMaxWidth().padding(start = 12.dp, end = 8.dp, top = 4.dp)
+                            .alpha(lateTextAlpha),
+                        style = MaterialTheme.typography.body1
                     )
-                }
 
-                if (shouldShowLongTermAnimation) {
-                    EffectAnimation(
-                        shouldShowLongTermAnimation,
-                        false,
-                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
-                    )
-                } else {
-                    EffectAnimation(
-                        false,
-                        shouldShowLateAnimation,
-                        modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
-                    )
+                    val animationModifier = Modifier
+                        .padding(16.dp).align(Alignment.CenterHorizontally).then(
+                            if (boxScope.maxWidth > boxScope.maxHeight) Modifier.fillMaxWidth(.7f)
+                            else Modifier.fillMaxWidth()
+                        )
+
+                    if (shouldShowLongTermAnimation) {
+                        EffectAnimation(shouldShowLongTermAnimation, false, animationModifier)
+                    } else {
+                        EffectAnimation(false, shouldShowLateAnimation, animationModifier)
+                    }
                 }
             }
         }

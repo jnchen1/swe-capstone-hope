@@ -1,5 +1,6 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,9 +26,11 @@ import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
@@ -111,11 +114,32 @@ data class WhatIsSurvivorshipThirdScreen(
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            Text(
-                                text = "Next section",
-                                overflow = TextOverflow.Clip
-                            )
+                            BoxWithConstraints {
+                                val boxScope = this
 
+                                val textSize = MaterialTheme.typography.button.fontSize
+                                val textLayout = rememberTextMeasurer().measure(
+                                    text = "Next section",
+                                    style = MaterialTheme.typography.button,
+                                    overflow = TextOverflow.Clip
+                                )
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+                                val textAndSize =
+                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
+                                        "Next\nsection", textSize * .8
+                                    )
+                                    else Pair("Next section", textSize)
+
+                                Text(
+                                    text = textAndSize.first,
+                                    fontSize = textAndSize.second,
+                                    textAlign = TextAlign.End,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
                             Icon(
                                 Icons.Rounded.LastPage,
                                 contentDescription = "Next section"

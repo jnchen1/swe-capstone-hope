@@ -88,6 +88,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.conclusion.ConclusionScreen
 import ui.followup_care.FollowupCareIntroScreen
 import ui.physical_effect.PhysicalEffectExamplesScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
@@ -218,7 +219,7 @@ data class FindingWhatMattersScoreScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO : Conclusion Screen */},
+                            onClick = { navigator.push(ConclusionScreen())},
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)

@@ -45,6 +45,7 @@ import org.jetbrains.compose.resources.painterResource
 import ui.followup_care.FollowupCareIntroScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
+
 data class HomeScreen(
     val wrapContent: Boolean = false
 ) : Screen {
@@ -138,7 +139,7 @@ data class HomeScreen(
                             when (option) {
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(WhatIsSurvivorshipFirstScreen())
                                 PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
-                                EMOTIONAL_EFFECT -> navigator.push(EmotionalEffectsFirstScreen())
+                                EMOTIONAL_EFFECT -> navigator.push(EmotionalEffectFirstScreen())
                                 FOLLOWUP_CARE -> navigator.push(FollowupCareIntroScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())
                                 WHAT_MATTERS -> navigator.push(DisclaimerScreen())

@@ -20,7 +20,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
@@ -47,7 +46,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.physical_effect.PhysicalEffectExamplesScreen
 
-data class EmotionalEffectsFirstScreen(
+data class EmotionalEffectFirstScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
@@ -133,7 +132,7 @@ data class EmotionalEffectsFirstScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(EmotionalEffectsSecondScreen()) },
+                            onClick = { navigator.push(EmotionalEffectSecondScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {
@@ -157,7 +156,7 @@ data class EmotionalEffectsFirstScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Image(
-                        painter = painterResource("emotional_effect_1.png"),
+                        painter = painterResource("emotional_effects_1.png"),
                         contentDescription = "Emotional effects",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
@@ -191,14 +190,14 @@ data class EmotionalEffectsFirstScreen(
 
                 {
                     Image(
-                        painter = painterResource("emotional_effect_2.png"),
+                        painter = painterResource("emotional_effects_2.png"),
                         contentDescription = "Emotional Effects",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
 
                     )
                     Image(
-                        painter = painterResource("emotional_effect_3.png"),
+                        painter = painterResource("emotional_effects_3.png"),
                         contentDescription = "Emotional Effects",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)

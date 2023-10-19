@@ -138,7 +138,7 @@ data class HomeScreen(
                             when (option) {
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(WhatIsSurvivorshipFirstScreen())
                                 PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
-                                EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                EMOTIONAL_EFFECT -> navigator.push(EmotionalEffectsFirstScreen())
                                 FOLLOWUP_CARE -> navigator.push(FollowupCareIntroScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())
                                 WHAT_MATTERS -> navigator.push(DisclaimerScreen())

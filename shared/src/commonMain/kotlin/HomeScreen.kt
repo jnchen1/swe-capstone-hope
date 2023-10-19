@@ -42,6 +42,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.finding_whatmatters.FindingWhatMattersScreen
 import ui.followup_care.FollowupCareIntroScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
@@ -141,7 +142,7 @@ data class HomeScreen(
                                 EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
                                 FOLLOWUP_CARE -> navigator.push(FollowupCareIntroScreen())
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())
-                                WHAT_MATTERS -> navigator.push(DisclaimerScreen())
+                                WHAT_MATTERS -> navigator.push(FindingWhatMattersScreen())
                                 CONCLUSION -> navigator.push(DisclaimerScreen())
                                 RESOURCES -> navigator.push(DisclaimerScreen())
                             }

@@ -45,6 +45,7 @@ import org.jetbrains.compose.resources.painterResource
 import ui.conclusion.ConclusionScreen
 import ui.finding_whatmatters.FindingWhatMattersScreen
 import ui.followup_care.FollowupCareIntroScreen
+import ui.more_information.MoreInformationFirstScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
 data class HomeScreen(
@@ -145,7 +146,7 @@ data class HomeScreen(
                                 COMPARE_CARE -> navigator.push(DisclaimerScreen())
                                 WHAT_MATTERS -> navigator.push(FindingWhatMattersScreen())
                                 CONCLUSION -> navigator.push(ConclusionScreen())
-                                RESOURCES -> navigator.push(DisclaimerScreen())
+                                RESOURCES -> navigator.push(MoreInformationFirstScreen())
                             }
                         }
                     ) {

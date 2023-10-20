@@ -2,6 +2,7 @@ package ui.more_information
 
 
 import HomeScreen
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,7 +30,9 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,6 +43,8 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import ui.conclusion.ConclusionScreen
 
 
@@ -50,7 +55,7 @@ data class MoreInformationThirdScreen (
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "OTHER ONLINE RESOURCES"
 
-    @OptIn(ExperimentalMaterialApi::class)
+    @OptIn(ExperimentalMaterialApi::class, ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -145,6 +150,146 @@ data class MoreInformationThirdScreen (
                     modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
+
+                    Image(
+                        painter = painterResource("more_information/heart.png"),
+                        contentDescription = "heart",
+                        contentScale = ContentScale.FillWidth,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal=100.dp)
+                    )
+
+                    Text(
+                        text = "Self-help resources",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h2,
+                        modifier = Modifier.padding(4.dp)
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg1",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Coping with cancer and treatments",
+                            hyperLinks = mutableMapOf(
+                                "Coping with cancer and treatments" to "https://www.nccs.com.sg/patient-care/Pages/Coping-with-Cancer-and-treatments.aspx"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg2",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Exercise during & after treatment",
+                            hyperLinks = mutableMapOf(
+                                "Exercise during & after treatment" to "https://www.nccs.com.sg/patient-care/Pages/Exercise-and-healthy-living.aspx"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg3",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "How to quit smoking?",
+                            hyperLinks = mutableMapOf(
+                                "How to quit smoking?" to "https://www.healthhub.sg/live-healthy/1766/build-your-quitting-game-plan"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg4",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Cervical cancer screening",
+                            hyperLinks = mutableMapOf(
+                                "Cervical cancer screening" to "https://www.healthhub.sg/programmes/157/cervical-cancer-screening"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg5",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Colorectal cancer screening",
+                            hyperLinks = mutableMapOf(
+                                "Colorectal cancer screening" to "https://www.healthhub.sg/live-healthy/106/screening_colorectal_cancer_nuhs"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_singapore.png"),
+                            contentDescription = "sg6",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Breast self-examination",
+                            hyperLinks = mutableMapOf(
+                                "Breast self-examination" to "https://www.singaporecancersociety.org.sg/get-screened/breast-cancer/breast-self-examination.html"
+                            )
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+
+                        Image(
+                            painter = painterResource("more_information/flag_uk.png"),
+                            contentDescription = "uk1",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.padding(horizontal=4.dp)
+                        )
+                        HyperlinkText(
+                            fullText = "Healthy eating after treatment",
+                            hyperLinks = mutableMapOf(
+                                "Healthy eating after treatment" to "https://breastcancernow.org/information-support/facing-breast-cancer/living-beyond-breast-cancer/your-body/healthy-eating-after-treatment-breast-cancer"
+                            )
+                        )
+                    }
 
                 }
             }

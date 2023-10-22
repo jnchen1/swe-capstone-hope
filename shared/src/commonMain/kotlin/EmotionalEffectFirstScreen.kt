@@ -69,7 +69,7 @@ data class EmotionalEffectFirstScreen(
                     title = {
                         Text(
                             text = screenTitle,
-                            color = Color(0xFFFF7E79),
+                            color = Color(0xFFFFE699),
                             style = MaterialTheme.typography.h1,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center

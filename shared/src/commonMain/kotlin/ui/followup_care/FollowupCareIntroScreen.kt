@@ -1,5 +1,6 @@
 package ui.followup_care
 
+import EmotionalEffectSecondScreen
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -89,7 +90,13 @@ data class FollowupCareIntroScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO: Add Section 3*/ },
+                            onClick = {
+                                if (navigator.items.contains(EmotionalEffectSecondScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(EmotionalEffectSecondScreen())
+                                }
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)

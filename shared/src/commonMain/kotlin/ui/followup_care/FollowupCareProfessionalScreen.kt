@@ -2,6 +2,7 @@ package ui.followup_care
 
 import HomeScreen
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -46,7 +47,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import model.HealthcareProfessional
+import model.HealthcareProfessional.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -156,7 +157,7 @@ data class FollowupCareProfessionalScreen(
                         modifier = Modifier.padding(top = 8.dp, start = 16.dp)
                     )
 
-                    val ratio = with(painterResource(HealthcareProfessional.ONCOLOGIST.image)) {
+                    val ratio = with(painterResource(ONCOLOGIST.image)) {
                         intrinsicSize.width / intrinsicSize.height
                     }
                     val imageWidth = (143.dp / ratio).value
@@ -165,20 +166,24 @@ data class FollowupCareProfessionalScreen(
                             modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
                             horizontalArrangement = Arrangement.SpaceAround
                         ) {
-                            HealthcareProfessional.ONCOLOGIST.run {
+                            ONCOLOGIST.run {
                                 Image(
                                     painterResource(image),
                                     name,
-                                    Modifier.height(200.dp),
+                                    Modifier.height(200.dp).clickable {
+                                        navigator.push(FollowupCareProfessionalDetailsScreen(this))
+                                    },
                                     contentScale = ContentScale.FillHeight
                                 )
                             }
 
-                            HealthcareProfessional.NURSE.run {
+                            NURSE.run {
                                 Image(
                                     painterResource(image),
                                     name,
-                                    Modifier.height(200.dp),
+                                    Modifier.height(200.dp).clickable {
+                                        navigator.push(FollowupCareProfessionalDetailsScreen(this))
+                                    },
                                     contentScale = ContentScale.FillHeight
                                 )
                             }
@@ -188,20 +193,24 @@ data class FollowupCareProfessionalScreen(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceAround
                         ) {
-                            HealthcareProfessional.DOCTOR.run {
+                            DOCTOR.run {
                                 Image(
                                     painterResource(image),
                                     name,
-                                    Modifier.height(200.dp),
+                                    Modifier.height(200.dp).clickable {
+                                        navigator.push(FollowupCareProfessionalDetailsScreen(this))
+                                    },
                                     contentScale = ContentScale.FillHeight
                                 )
                             }
 
-                            HealthcareProfessional.PHARMACIST.run {
+                            PHARMACIST.run {
                                 Image(
                                     painterResource(image),
                                     name,
-                                    Modifier.height(200.dp).padding(start = 12.dp),
+                                    Modifier.height(200.dp).padding(start = 12.dp).clickable {
+                                        navigator.push(FollowupCareProfessionalDetailsScreen(this))
+                                    },
                                     contentScale = ContentScale.FillHeight
                                 )
                             }
@@ -212,11 +221,13 @@ data class FollowupCareProfessionalScreen(
                             modifier = Modifier.padding(8.dp, 16.dp).wrapContentWidth()
                                 .align(Alignment.CenterHorizontally)
                         ) {
-                            items(HealthcareProfessional.entries) { person ->
+                            items(entries) { person ->
                                 Image(
                                     painterResource(person.image),
                                     person.name,
-                                    Modifier.height(200.dp),
+                                    Modifier.height(200.dp).clickable {
+                                        navigator.push(FollowupCareProfessionalDetailsScreen(person))
+                                    },
                                     contentScale = ContentScale.FillHeight
                                 )
                             }

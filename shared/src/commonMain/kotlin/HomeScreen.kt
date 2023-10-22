@@ -45,7 +45,7 @@ import org.jetbrains.compose.resources.painterResource
 import ui.followup_care.FollowupCareIntroScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
-
+//main
 data class HomeScreen(
     val wrapContent: Boolean = false
 ) : Screen {

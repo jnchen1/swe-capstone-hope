@@ -224,7 +224,12 @@ data class ComparingOptionsInformationSharedScreen(
                 }
                 Button(
                     enabled = true,
-                    onClick = {},
+                    onClick = {
+                        if (navigator.items.contains(ComparingOptionsCareScheduleScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(ComparingOptionsCareScheduleScreen())
+                        }},
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
                 ){
                     Text("What is your follow-up schedule?")

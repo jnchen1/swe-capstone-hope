@@ -55,7 +55,8 @@ import ui.physical_effect.PhysicalEffectExamplesScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
 data class FindingWhatMattersScreen(
-    val wrapContent: Boolean = false
+    val wrapContent: Boolean = false,
+    val totalPoints : Int = 0
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
@@ -188,7 +189,7 @@ data class FindingWhatMattersScreen(
                     )
 
                     Button(
-                        onClick = {/* TODO : Survey screen */ },
+                        onClick = {navigator.push(SurveyScreen()) },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
                         modifier = Modifier.padding(top =4.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
                     ) {

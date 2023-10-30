@@ -32,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +57,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.followup_care.FollowupCareOptionScreen
+import ui.physical_effect.PhysicalEffectIntroScreen
 
 data class ComparingOptionsInformationSharedScreen(
     val wrapContent: Boolean = false
@@ -81,7 +83,7 @@ data class ComparingOptionsInformationSharedScreen(
                         Text(
                             text = screenTitle,
                             style = MaterialTheme.typography.h1,
-                            color = Color(0xFFC61E1DC),
+                            color = Color(0xFFC1E1DC),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -141,15 +143,42 @@ data class ComparingOptionsInformationSharedScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(FollowupCareOptionScreen()) },
+                            onClick = {
+                                //navigator.push(PhysicalEffectIntroScreen())
+                                      },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            Text(text = "Next")
+                            BoxWithConstraints {
+                                val boxScope = this
 
+                                val textSize = MaterialTheme.typography.button.fontSize
+                                val textLayout = rememberTextMeasurer().measure(
+                                    text = "Next section",
+                                    style = MaterialTheme.typography.button,
+                                    overflow = TextOverflow.Clip
+                                )
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+                                val textAndSize =
+                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
+                                        "Next\nsection", textSize * .8
+                                    )
+                                    else Pair("Next section", textSize)
+
+                                Text(
+                                    text = textAndSize.first,
+                                    fontSize = textAndSize.second,
+                                    textAlign = TextAlign.End,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
                             Icon(
-                                Icons.Rounded.ArrowForward, "Next page",
-                                Modifier.padding(start = 4.dp)
+                                Icons.Rounded.LastPage,
+                                contentDescription = "Next section"
                             )
                         }
                     }
@@ -236,7 +265,13 @@ data class ComparingOptionsInformationSharedScreen(
                 }
                 Button(
                     enabled = true,
-                    onClick = {},
+                    onClick = {
+                        if (navigator.items.contains(ComparingOptionsCareCostScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(ComparingOptionsCareCostScreen())
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
                 ){
                     Text("Cost?")

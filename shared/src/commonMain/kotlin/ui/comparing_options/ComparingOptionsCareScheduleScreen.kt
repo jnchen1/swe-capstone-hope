@@ -87,7 +87,7 @@ data class ComparingOptionsCareScheduleScreen(
                         Text(
                             text = screenTitle,
                             style = MaterialTheme.typography.h1,
-                            color = Color(0xFFC61E1DC),
+                            color = Color(0xFFC1E1DC),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -147,15 +147,42 @@ data class ComparingOptionsCareScheduleScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(ComparingOptionsInformationSharedScreen()) },
+                            onClick = {
+//                                navigator.push(PhysicalEffectIntroScreen())
+                                      },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            Text(text = "Next")
+                            BoxWithConstraints {
+                                val boxScope = this
 
+                                val textSize = MaterialTheme.typography.button.fontSize
+                                val textLayout = rememberTextMeasurer().measure(
+                                    text = "Next section",
+                                    style = MaterialTheme.typography.button,
+                                    overflow = TextOverflow.Clip
+                                )
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+                                val textAndSize =
+                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
+                                        "Next\nsection", textSize * .8
+                                    )
+                                    else Pair("Next section", textSize)
+
+                                Text(
+                                    text = textAndSize.first,
+                                    fontSize = textAndSize.second,
+                                    textAlign = TextAlign.End,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
                             Icon(
-                                Icons.Rounded.ArrowForward, "Next page",
-                                Modifier.padding(start = 4.dp)
+                                Icons.Rounded.LastPage,
+                                contentDescription = "Next section"
                             )
                         }
                     }
@@ -225,7 +252,8 @@ data class ComparingOptionsCareScheduleScreen(
                             navigator.pop()
                         } else {
                             navigator.replace(ComparingOptionsInformationSharedScreen())
-                        } },
+                        }
+                              },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
                 ){
                     Text("How is information about you shared?")
@@ -239,7 +267,13 @@ data class ComparingOptionsCareScheduleScreen(
                 }
                 Button(
                     enabled = true,
-                    onClick = {},
+                    onClick = {
+                        if (navigator.items.contains(ComparingOptionsCareCostScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(ComparingOptionsCareCostScreen())
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
                 ){
                     Text("Cost?")

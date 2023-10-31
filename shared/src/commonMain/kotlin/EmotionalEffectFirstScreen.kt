@@ -20,12 +20,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -43,14 +44,14 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.physical_effect.PhysicalEffectIntroScreen
+import ui.physical_effect.PhysicalEffectExamplesScreen
 
-data class WhatIsSurvivorshipThirdScreen(
+data class EmotionalEffectFirstScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "SURVIVORSHIP"
+    private val screenTitle = "EMOTIONAL EFFECTS"
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -68,7 +69,7 @@ data class WhatIsSurvivorshipThirdScreen(
                     title = {
                         Text(
                             text = screenTitle,
-                            color = Color(0xFFFF7E79),
+                            color = Color(0xFFFFE699),
                             style = MaterialTheme.typography.h1,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
@@ -82,22 +83,44 @@ data class WhatIsSurvivorshipThirdScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
+                        val textSize = MaterialTheme.typography.button.fontSize
+                        val textLayout = rememberTextMeasurer().measure(
+                            text = "Previous section",
+                            style = MaterialTheme.typography.button,
+                            overflow = TextOverflow.Clip
+                        )
+
                         Button(
                             onClick = {
-                                if (navigator.items.contains(WhatIsSurvivorshipSecondScreen())) {
+                                if (navigator.items.contains(PhysicalEffectExamplesScreen())) {
                                     navigator.pop()
                                 } else {
-                                    navigator.replace(WhatIsSurvivorshipSecondScreen())
+                                    navigator.replace(PhysicalEffectExamplesScreen())
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Icon(
-                                Icons.Rounded.ArrowBack, "Back page",
-                                Modifier.padding(end = 4.dp)
+                                Icons.Rounded.FirstPage,
+                                contentDescription = "Previous section"
                             )
-                            Text(text = "Back")
+
+                            BoxWithConstraints {
+                                val boxScope = this
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+
+                                Text(
+                                    text = "Previous section",
+                                    fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .8 else textSize,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(start = 4.dp)
+                                )
+                            }
+
                         }
 
                         BottomNavigationItem(
@@ -109,40 +132,15 @@ data class WhatIsSurvivorshipThirdScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(PhysicalEffectIntroScreen()) },
+                            onClick = { navigator.push(EmotionalEffectSecondScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                            modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {
-                            BoxWithConstraints {
-                                val boxScope = this
+                            Text(text = "Next")
 
-                                val textSize = MaterialTheme.typography.button.fontSize
-                                val textLayout = rememberTextMeasurer().measure(
-                                    text = "Next section",
-                                    style = MaterialTheme.typography.button,
-                                    overflow = TextOverflow.Clip
-                                )
-                                val sizeInDp = with(LocalDensity.current) {
-                                    textLayout.size.width.toDp()
-                                }
-                                val textAndSize =
-                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
-                                        "Next\nsection", textSize * .8
-                                    )
-                                    else Pair("Next section", textSize)
-
-                                Text(
-                                    text = textAndSize.first,
-                                    fontSize = textAndSize.second,
-                                    textAlign = TextAlign.End,
-                                    overflow = TextOverflow.Clip,
-                                    modifier = Modifier.padding(end = 4.dp)
-                                )
-                            }
                             Icon(
-                                Icons.Rounded.LastPage,
-                                contentDescription = "Next section"
+                                Icons.Rounded.ArrowForward, "Next page",
+                                Modifier.padding(start = 4.dp)
                             )
                         }
                     }
@@ -158,40 +156,79 @@ data class WhatIsSurvivorshipThirdScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Image(
-                        painter = painterResource("ribbon_survivorship.png"),
-                        contentDescription = "Physical effects",
+                        painter = painterResource("emotional_effects_1.png"),
+                        contentDescription = "Emotional effects",
+                        contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
                     )
+
                 }
+
                 Text(
                     style = MaterialTheme.typography.h1,
                     modifier = Modifier.padding(8.dp),
-                    text = "Why is survivorship care important?"
+                    text = "Survivors may still feel distressed"
                 )
+
                 Text(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("Survivorship care includes ")
+                        append("You may feel emotions such as ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("regular follow-up sessions")
+                            append("depression, anxiety, worry, or fear ")
                         }
-                        append(" to ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("prevent and monitor")
-                        }
-                        append(" for signs of returning cancers. This is because there is a ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("possibility")
-                        }
-                        append(" of the cancer ")
-
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("returning")
-                        }
-                        append(" in the breast or other parts of the body.")
+                        append("even after treatment due to worry of cancer returning ")
+                        append("financial concerns, changes in physical appearances etc. ")
                     }
                 )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                )
+
+                {
+                    Image(
+                        painter = painterResource("emotional_effects_2.png"),
+                        contentDescription = "Emotional Effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+
+                    )
+                    Image(
+                        painter = painterResource("emotional_effects_3.png"),
+                        contentDescription = "Emotional Effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+
+                    )
+
+                }
+
+                Text(
+                    style = MaterialTheme.typography.h1,
+                    modifier = Modifier.padding(8.dp),
+                    text = "Find your emotional support"
+                )
+
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(8.dp),
+                    text = buildAnnotatedString {
+                        append("It is important for you to identify someone who can support you ")
+                        append("emotionally. He/she can be anyone-a ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("family member, friend, ")
+                        }
+                        append("or ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("other cancer survivors. ")
+                        }
+                    }
+                )
+
+
 
             }
         }

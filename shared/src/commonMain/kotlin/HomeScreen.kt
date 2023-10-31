@@ -44,9 +44,11 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.conclusion.ConclusionScreen
 import ui.finding_whatmatters.FindingWhatMattersScreen
+import ui.comparing_options.ComparingOptionsIntroScreen
 import ui.followup_care.FollowupCareIntroScreen
 import ui.more_information.MoreInformationFirstScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
+
 
 data class HomeScreen(
     val wrapContent: Boolean = false
@@ -141,12 +143,13 @@ data class HomeScreen(
                             when (option) {
                                 WHAT_IS_SURVIVORSHIP -> navigator.push(WhatIsSurvivorshipFirstScreen())
                                 PHYSICAL_EFFECT -> navigator.push(PhysicalEffectIntroScreen())
-                                EMOTIONAL_EFFECT -> navigator.push(DisclaimerScreen())
+                                EMOTIONAL_EFFECT -> navigator.push(EmotionalEffectFirstScreen())
                                 FOLLOWUP_CARE -> navigator.push(FollowupCareIntroScreen())
-                                COMPARE_CARE -> navigator.push(DisclaimerScreen())
+                                COMPARE_CARE -> navigator.push(ComparingOptionsIntroScreen())
                                 WHAT_MATTERS -> navigator.push(FindingWhatMattersScreen())
                                 CONCLUSION -> navigator.push(ConclusionScreen())
                                 RESOURCES -> navigator.push(MoreInformationFirstScreen())
+
                             }
                         }
                     ) {

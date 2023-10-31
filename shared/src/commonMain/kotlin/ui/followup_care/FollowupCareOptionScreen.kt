@@ -139,7 +139,7 @@ data class FollowupCareOptionScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { navigator.push(FollowupCareProfessionalScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {

@@ -47,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -81,7 +82,6 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import model.HealthcareProfessional.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -93,6 +93,7 @@ data class FollowupCareScheduleScreen(
 
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "FOLLOW-UP CARE OPTION"
+    private val defaultImageHeight = 240.dp
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -125,7 +126,7 @@ data class FollowupCareScheduleScreen(
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
                         Button(
-                            onClick = {
+                            onClick = { /*TODO*/
                                 /*if (navigator.items.contains(FollowupCareOptionScreen())) {
                                     navigator.pop()
                                 } else {
@@ -219,8 +220,7 @@ data class FollowupCareScheduleScreen(
                                 )
                             } else {
                                 SharedCareLayout(
-                                    boxScope,
-                                    Modifier.align(Alignment.CenterHorizontally)
+                                    boxScope, Modifier.align(Alignment.CenterHorizontally)
                                 )
                             }
                         }
@@ -236,7 +236,8 @@ data class FollowupCareScheduleScreen(
         changeToSharedCare: () -> Unit,
         modifier: Modifier
     ) {
-        val boxTextStyle = with(LocalDensity.current) {
+        val density = LocalDensity.current
+        val boxTextStyle = with(density) {
             val testSize =
                 (MaterialTheme.typography.caption.fontSize.value * boxScope.maxWidth.value * .005f).toSp()
             if (testSize > MaterialTheme.typography.body1.fontSize) MaterialTheme.typography.body1.fontSize
@@ -247,7 +248,9 @@ data class FollowupCareScheduleScreen(
                 textAlign = TextAlign.Center
             )
         }
-        val doctorTextBoxOffsetY = boxScope.maxWidth * .5f
+        val bottomTextBoxOffsetX = boxScope.maxWidth * .225f
+        val bottomTextBoxOffsetY =
+            (boxScope.maxWidth * .15f).takeIf { it < defaultImageHeight } ?: defaultImageHeight
 
         val continueText = "Tap here to continue"
         var shouldShowMammogramText by remember { mutableStateOf(false) }
@@ -291,10 +294,7 @@ data class FollowupCareScheduleScreen(
             Text("Usual care", Modifier.padding(16.dp, 4.dp), Color.White)
         }
 
-        Box(
-            Modifier.padding(4.dp).fillMaxWidth()
-                .wrapContentHeight()
-        ) {
+        Box(Modifier.padding(4.dp, 8.dp).fillMaxWidth().wrapContentHeight()) {
             if (shouldShowMammogramText) {
                 DashedBox(
                     Color(0xFFC61C71),
@@ -339,8 +339,8 @@ data class FollowupCareScheduleScreen(
             if (shouldShowOncologistText) {
                 DashedBox(
                     Color(0xFF336B87),
-                    Modifier.align(Alignment.BottomCenter)
-                        .fillMaxWidth(.45f)
+                    Modifier.padding(top = bottomTextBoxOffsetY).align(Alignment.Center)
+                        .fillMaxWidth(.35f)
                 ) {
                     val oncologistText = buildAnnotatedString {
                         append("You may see your oncologist\n(surgical, radiation, or medical)\nonce or twice\n")
@@ -368,9 +368,9 @@ data class FollowupCareScheduleScreen(
             if (shouldShowDoctor1Text) {
                 DashedBox(
                     Color(0xFFFF5B61),
-                    Modifier.padding(start = doctorTextBoxOffsetY)
-                        .fillMaxWidth(.6f)
-                        .align(Alignment.BottomStart)
+                    Modifier.padding(start = bottomTextBoxOffsetX, top = bottomTextBoxOffsetY)
+                        .fillMaxWidth(.325f)
+                        .align(Alignment.Center)
 
                 ) {
                     val doctorText = buildAnnotatedString {
@@ -399,9 +399,9 @@ data class FollowupCareScheduleScreen(
             if (shouldShowDoctor2Text) {
                 DashedBox(
                     Color(0xFFFF5B61),
-                    Modifier.padding(start = doctorTextBoxOffsetY)
-                        .fillMaxWidth(.6f)
-                        .align(Alignment.BottomStart)
+                    Modifier.padding(start = bottomTextBoxOffsetX, top = bottomTextBoxOffsetY)
+                        .fillMaxWidth(.325f)
+                        .align(Alignment.Center)
 
                 ) {
                     val tapToSharedCare =
@@ -439,6 +439,8 @@ data class FollowupCareScheduleScreen(
         }.let {
             MaterialTheme.typography.caption.copy(fontSize = it, textAlign = TextAlign.Center)
         }
+        val bottomTextBoxOffsetY =
+            (boxScope.maxWidth * .15f).takeIf { it < defaultImageHeight } ?: defaultImageHeight
 
         val continueText = "Tap here to continue"
         var shouldShowStartText by remember { mutableStateOf(true) }
@@ -451,6 +453,13 @@ data class FollowupCareScheduleScreen(
         var shouldHidePhysician by remember { mutableStateOf(false) }
         var shouldReplaceOncologist by remember { mutableStateOf(false) }
         var shouldShowPharmacist by remember { mutableStateOf(false) }
+        val replaceTextAlpha = remember { Animatable(0f) }
+
+        if (shouldShowReplaceText) {
+            LaunchedEffect(shouldShowReplaceText) {
+                replaceTextAlpha.animateTo(1f, tween(500, 1400, LinearEasing))
+            }
+        }
 
         Surface(modifier, color = Color(0xFFE99787)) {
             Text("Shared care", Modifier.padding(16.dp, 4.dp), Color.White)
@@ -470,7 +479,7 @@ data class FollowupCareScheduleScreen(
                 DashedBox(
                     Color(0xFFC61C71),
                     Modifier.align(Alignment.TopStart)
-                        .fillMaxWidth(.275f)
+                        .fillMaxWidth(.225f)
                 ) {
                     val startText = buildAnnotatedString {
                         append("You will now see how the schedule ")
@@ -501,7 +510,7 @@ data class FollowupCareScheduleScreen(
                 shouldWiggleMammogram = true
                 DashedBox(
                     Color(0xFFC61C71),
-                    Modifier.align(Alignment.TopEnd).fillMaxWidth(.275f)
+                    Modifier.align(Alignment.TopEnd).fillMaxWidth(.25f)
                 ) {
                     val text = buildAnnotatedString {
                         append("You will ")
@@ -536,8 +545,8 @@ data class FollowupCareScheduleScreen(
                 shouldHidePhysician = true
                 DashedBox(
                     Color(0xFFC61C71),
-                    Modifier.align(Alignment.BottomStart)
-                        .fillMaxWidth(.3f)
+                    Modifier.padding(top = bottomTextBoxOffsetY).align(Alignment.CenterStart)
+                        .fillMaxWidth(.175f)
                 ) {
                     val text = buildAnnotatedString {
                         append("You will see the ")
@@ -568,15 +577,15 @@ data class FollowupCareScheduleScreen(
                 shouldReplaceOncologist = true
                 DashedBox(
                     Color(0xFFC61C71),
-                    Modifier.align(Alignment.TopStart)
-                        .fillMaxWidth(.3f)
+                    Modifier.padding(top = bottomTextBoxOffsetY).align(Alignment.CenterStart)
+                        .fillMaxWidth(.3f).alpha(replaceTextAlpha.value)
                 ) {
                     val text = buildAnnotatedString {
                         append("One of the oncologist visits will be merged and  ")
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("replaced")
                         }
-                        append("with your visit to the ")
+                        append(" with your visit to the ")
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("family physician")
                         }
@@ -603,7 +612,8 @@ data class FollowupCareScheduleScreen(
             if (shouldShowPhysicianExplanationText) {
                 DashedBox(
                     Color(0xFFC61C71),
-                    Modifier.align(Alignment.BottomStart).fillMaxWidth(.3f)
+                    Modifier.padding(top = bottomTextBoxOffsetY).align(Alignment.CenterStart)
+                        .fillMaxWidth(.3f)
                 ) {
                     val text = buildAnnotatedString {
                         append("The family physician will see you for your ")
@@ -634,7 +644,8 @@ data class FollowupCareScheduleScreen(
                 shouldShowPharmacist = true
                 DashedBox(
                     Color(0xFFC61C71),
-                    Modifier.align(Alignment.BottomStart).fillMaxWidth(.3f)
+                    Modifier.padding(top = bottomTextBoxOffsetY).align(Alignment.CenterStart)
+                        .fillMaxWidth(.3f)
                 ) {
                     val text = buildAnnotatedString {
                         append("An assigned ")
@@ -647,19 +658,10 @@ data class FollowupCareScheduleScreen(
                         }
                         append(" with you regularly via ")
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("phone calls\n")
-                        }
-                        withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
-                            pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
-                            )
-                            append(continueText)
+                            append("phone calls")
                         }
                     }
-                    Text(
-                        text = text, style = boxTextStyle
-                    )
+                    Text(text = text, style = boxTextStyle)
                 }
             }
         }
@@ -688,7 +690,6 @@ data class FollowupCareScheduleScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(Modifier.padding(4.dp)) { content() }
-
         }
     }
 
@@ -699,6 +700,7 @@ data class FollowupCareScheduleScreen(
         shouldWiggleDoctor: Boolean,
         modifier: Modifier
     ) {
+        val density = LocalDensity.current
         val lineColor = Color(0xFF595959)
         val orangeColor = Color(0xFFFF5B61)
         val blueGreyColor = Color(0xFF336B87)
@@ -724,13 +726,11 @@ data class FollowupCareScheduleScreen(
         val orange2Rotation = remember { Animatable(0f) }
         val orange1Rotation = remember { Animatable(0f) }
         LaunchedEffect(shouldShowText) {
-            launch {
-                delay(100)
-                shouldShowText = true
-                arrowBody.animateTo(1f, animationSpec = tween(1500))
-                arrow.animateTo(1f, animationSpec = tween(300))
-                mammogramAlpha.animateTo(1f, animationSpec = tween(1000, easing = LinearEasing))
-            }
+            delay(100)
+            shouldShowText = true
+            arrowBody.animateTo(1f, animationSpec = tween(1500))
+            arrow.animateTo(1f, animationSpec = tween(300))
+            mammogramAlpha.animateTo(1f, animationSpec = tween(1000, easing = LinearEasing))
         }
 
         if (shouldShowOncologist) {
@@ -751,11 +751,19 @@ data class FollowupCareScheduleScreen(
         if (shouldWiggleDoctor) {
             LaunchedEffect(shouldWiggleDoctor) {
                 orange2Rotation.animateTo(360f, animationSpec = tween(500))
-                (1..3).forEach {
-                    when (it) {
-                        1 -> orange1Rotation.animateTo(-30f, tween(100))
-                        2 -> orange1Rotation.animateTo(30f, tween(200))
-                        else -> orange1Rotation.animateTo(0f, tween(100))
+                (1..5).forEach { time ->
+                    when (time) {
+                        1, 3 -> orange1Rotation.animateTo(
+                            -10f, tween(100, easing = LinearEasing)
+                        )
+
+                        2, 4 -> orange1Rotation.animateTo(
+                            10f, tween(200, easing = LinearEasing)
+                        )
+
+                        else -> orange1Rotation.animateTo(
+                            0f, tween(100, easing = LinearEasing)
+                        )
                     }
                 }
             }
@@ -763,10 +771,12 @@ data class FollowupCareScheduleScreen(
 
         Canvas(modifier = modifier.autoWrapHeight()) {
             val height = size.width * .35f
-            val imageSize = (size.width * .15f).let { imageHeight ->
+            val imageSize = with(density) {
+                val imageHeight =
+                    (size.width * .15f).dp.takeIf { it < defaultImageHeight } ?: defaultImageHeight
                 val ratio =
                     oncologist.intrinsicSize.height / oncologist.intrinsicSize.width
-                Size(imageHeight / ratio, imageHeight)
+                Size(imageHeight.value / ratio, imageHeight.value)
             }
 
             val textLayoutSize = textMeasurer.measure(
@@ -774,15 +784,14 @@ data class FollowupCareScheduleScreen(
                 style = ts.copy(
                     fontSize = ts.fontSize * size.width * .0009f,
                     fontWeight = FontWeight.Bold
-                ),
-                constraints = Constraints.fixedWidth((size.width * .2).toInt())
+                )
             )
 
+            val horizontalLineY = imageSize.height * 1.2f
             val textBoxSize =
                 Size(textLayoutSize.size.width * 1.1f, textLayoutSize.size.height * 1.2f)
-            val textBoxOffset = Offset(0f, height * .5f - textBoxSize.center.y)
+            val textBoxOffset = Offset(0f, horizontalLineY - textBoxSize.center.y)
 
-            val horizontalLineY = height * .5f
             if (shouldShowText) {
                 drawLine(
                     lineColor,
@@ -815,7 +824,7 @@ data class FollowupCareScheduleScreen(
                 )
             }
 
-            val circleRadius = size.width * 0.025f
+            val circleRadius = textBoxSize.height * .25f
 
             val pinkOffset = Offset(size.width * .57f, horizontalLineY)
             drawCircle(pinkColor, circleRadius, pinkOffset, mammogramAlpha.value)
@@ -849,7 +858,7 @@ data class FollowupCareScheduleScreen(
             }
 
             val orange2Offset =
-                Offset(textBoxSize.width + size.width * .275f, horizontalLineY)
+                Offset(textBoxSize.width + size.width * .25f, horizontalLineY)
             drawCircle(orangeColor, circleRadius, orange2Offset, orange2Alpha.value)
             translate(orange2Offset.x - imageSize.center.x, bottomImageY) {
                 with(doctor2) {
@@ -913,24 +922,22 @@ data class FollowupCareScheduleScreen(
 
         if (shouldWiggleMammogram) {
             LaunchedEffect(shouldWiggleMammogram) {
-                launch {
-                    (1..5).forEach { time ->
-                        when (time) {
-                            1, 3 -> mammogramRotation.animateTo(
-                                -10f,
-                                tween(100, easing = LinearEasing)
-                            )
+                (1..5).forEach { time ->
+                    when (time) {
+                        1, 3 -> mammogramRotation.animateTo(
+                            -10f,
+                            tween(100, easing = LinearEasing)
+                        )
 
-                            2, 4 -> mammogramRotation.animateTo(
-                                10f,
-                                tween(200, easing = LinearEasing)
-                            )
+                        2, 4 -> mammogramRotation.animateTo(
+                            10f,
+                            tween(200, easing = LinearEasing)
+                        )
 
-                            else -> mammogramRotation.animateTo(
-                                0f,
-                                tween(100, easing = LinearEasing)
-                            )
-                        }
+                        else -> mammogramRotation.animateTo(
+                            0f,
+                            tween(100, easing = LinearEasing)
+                        )
                     }
                 }
             }
@@ -938,26 +945,24 @@ data class FollowupCareScheduleScreen(
 
         if (shouldHidePhysician) {
             LaunchedEffect(shouldHidePhysician) {
-                launch {
-                    physicianAlpha.animateTo(0f, tween(800, easing = EaseOutBack))
-                    doctorAlpha.animateTo(1f, tween(800, easing = EaseIn))
-                    (1..5).forEach { time ->
-                        when (time) {
-                            1, 3 -> doctorRotation.animateTo(
-                                -10f,
-                                tween(100, easing = LinearEasing)
-                            )
+                physicianAlpha.animateTo(0f, tween(800, easing = EaseOutBack))
+                doctorAlpha.animateTo(1f, tween(800, easing = EaseIn))
+                (1..5).forEach { time ->
+                    when (time) {
+                        1, 3 -> doctorRotation.animateTo(
+                            -10f,
+                            tween(100, easing = LinearEasing)
+                        )
 
-                            2, 4 -> doctorRotation.animateTo(
-                                10f,
-                                tween(200, easing = LinearEasing)
-                            )
+                        2, 4 -> doctorRotation.animateTo(
+                            10f,
+                            tween(200, easing = LinearEasing)
+                        )
 
-                            else -> doctorRotation.animateTo(
-                                0f,
-                                tween(100, easing = LinearEasing)
-                            )
-                        }
+                        else -> doctorRotation.animateTo(
+                            0f,
+                            tween(100, easing = LinearEasing)
+                        )
                     }
                 }
             }
@@ -965,31 +970,29 @@ data class FollowupCareScheduleScreen(
 
         if (shouldReplaceOncologist) {
             LaunchedEffect(shouldReplaceOncologist) {
-                launch {
-                    dotX.animateTo(1f, tween(800))
-                    doctorMovement.animateTo(1f, tween(800))
-                }
+                dotX.animateTo(1f, tween(800))
+                doctorMovement.animateTo(1f, tween(800))
             }
         }
 
         if (shouldShowPharmacist) {
             LaunchedEffect(shouldShowPharmacist) {
-                launch {
-                    pharmacist1Alpha.animateTo(1f, tween(800))
-                    pharmacist2Alpha.animateTo(1f, tween(800))
-                    pharmacist3Alpha.animateTo(1f, tween(800))
-                }
+                pharmacist1Alpha.animateTo(1f, tween(800))
+                pharmacist2Alpha.animateTo(1f, tween(800))
+                pharmacist3Alpha.animateTo(1f, tween(800))
             }
         }
 
         Canvas(modifier.autoWrapHeight()) {
             val height = size.width * .35f
-            val imageSize = (size.width * .15f).let { imageHeight ->
+            val imageSize = with(density) {
+                val imageHeight =
+                    (size.width * .15f).dp.takeIf { it < defaultImageHeight } ?: defaultImageHeight
                 val ratio =
                     oncologist.intrinsicSize.height / oncologist.intrinsicSize.width
-                Size(imageHeight / ratio, imageHeight)
+                Size(imageHeight.value / ratio, imageHeight.value)
             }
-            val pharmacistSize = (size.width * .16f).let { imageHeight ->
+            val pharmacistSize = (imageSize.height).let { imageHeight ->
                 val ratio =
                     pharmacist.intrinsicSize.height / pharmacist.intrinsicSize.width
                 Size(imageHeight / ratio, imageHeight)
@@ -1000,15 +1003,14 @@ data class FollowupCareScheduleScreen(
                 style = ts.copy(
                     fontSize = ts.fontSize * size.width * .0009f,
                     fontWeight = FontWeight.Bold
-                ),
-                constraints = Constraints.fixedWidth((size.width * .2).toInt())
+                )
             )
 
+            val horizontalLineY = imageSize.height * 1.2f
             val textBoxSize =
                 Size(textLayoutSize.size.width * 1.1f, textLayoutSize.size.height * 1.2f)
-            val textBoxOffset = Offset(0f, height * .5f - textBoxSize.center.y)
+            val textBoxOffset = Offset(0f, horizontalLineY - textBoxSize.center.y)
 
-            val horizontalLineY = height * .5f
             drawLine(
                 lineColor,
                 start = Offset(textBoxSize.center.x, horizontalLineY),
@@ -1039,7 +1041,7 @@ data class FollowupCareScheduleScreen(
                 )
             )
 
-            val circleRadius = size.width * 0.025f
+            val circleRadius = textBoxSize.height * .2f
 
             val pinkOffset = Offset(size.width * .57f, horizontalLineY)
             drawCircle(pinkColor, circleRadius, pinkOffset)
@@ -1080,7 +1082,7 @@ data class FollowupCareScheduleScreen(
             }
 
             val orange2Offset =
-                Offset(textBoxSize.width + size.width * .275f, horizontalLineY)
+                Offset(textBoxSize.width + size.width * .25f, horizontalLineY)
             drawCircle(orangeColor, circleRadius, orange2Offset)
             translate(orange2Offset.x - imageSize.center.x, bottomImageY) {
                 with(doctor2) { draw(imageSize, physicianAlpha.value) }
@@ -1129,7 +1131,7 @@ data class FollowupCareScheduleScreen(
             val maxWidth = placeable.width
             var yPosition = 0
 
-            return layout(maxWidth, (maxWidth * .4).toInt()) {
+            return layout(maxWidth, (maxWidth * .3).toInt()) {
                 placeable.placeRelative(x = 0, y = yPosition)
                 yPosition += placeable.height
             }

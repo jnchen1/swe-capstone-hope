@@ -94,6 +94,7 @@ data class FollowupCareScheduleScreen(
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "FOLLOW-UP CARE OPTION"
     private val defaultImageHeight = 240.dp
+    private val continueText = "Tap here to continue"
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -168,10 +169,12 @@ data class FollowupCareScheduleScreen(
         ) {
             BoxWithConstraints {
                 val boxScope = this
+                val isPortrait = boxScope.maxHeight > boxScope.maxWidth
 
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
-                        .verticalScroll(rememberScrollState())
+                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp).then(
+                        if (isPortrait) Modifier else Modifier.verticalScroll(rememberScrollState())
+                    )
                 ) {
 
                     Text(
@@ -208,16 +211,22 @@ data class FollowupCareScheduleScreen(
                     }
 
                     Surface(
-                        Modifier.padding(bottom = 8.dp).fillMaxWidth()
-                            .wrapContentHeight(),
+                        Modifier.padding(bottom = 8.dp).fillMaxWidth().wrapContentHeight(),
                         RoundedCornerShape(12.dp), Color.White, elevation = 4.dp
                     ) {
-                        Column(Modifier.fillMaxWidth()) {
+                        Column(Modifier.fillMaxWidth().wrapContentHeight()) {
                             if (currentCareOption == CareOption.USUAL) {
-                                UsualCareLayout(
-                                    boxScope, { currentCareOption = CareOption.SHARED },
-                                    Modifier.align(Alignment.CenterHorizontally)
-                                )
+                                if (isPortrait) {
+                                    UsualCareLayoutPortrait(
+                                        boxScope, { currentCareOption = CareOption.SHARED },
+                                        Modifier.align(Alignment.CenterHorizontally)
+                                    )
+                                } else {
+                                    UsualCareLayoutLandscape(
+                                        boxScope, { currentCareOption = CareOption.SHARED },
+                                        Modifier.align(Alignment.CenterHorizontally)
+                                    )
+                                }
                             } else {
                                 SharedCareLayout(
                                     boxScope, Modifier.align(Alignment.CenterHorizontally)
@@ -231,7 +240,194 @@ data class FollowupCareScheduleScreen(
     }
 
     @Composable
-    private fun UsualCareLayout(
+    private fun UsualCareLayoutPortrait(
+        boxScope: BoxWithConstraintsScope,
+        changeToSharedCare: () -> Unit,
+        modifier: Modifier
+    ) {
+        val density = LocalDensity.current
+        val boxTextStyle = with(density) {
+            val testSize =
+                (MaterialTheme.typography.caption.fontSize.value * boxScope.maxWidth.value * .005f).toSp()
+            if (testSize > MaterialTheme.typography.body1.fontSize) MaterialTheme.typography.body1.fontSize
+            else testSize
+        }.let {
+            MaterialTheme.typography.caption.copy(
+                fontSize = it,
+                textAlign = TextAlign.Center
+            )
+        }
+        val height = boxScope.maxHeight
+
+        var shouldShowMammogramText by remember { mutableStateOf(false) }
+        var shouldShowOncologistText by remember { mutableStateOf(false) }
+        var shouldShowDoctor1Text by remember { mutableStateOf(false) }
+        var shouldShowDoctor2Text by remember { mutableStateOf(false) }
+        var shouldShowOncologist by remember { mutableStateOf(false) }
+        var shouldShowDoctor by remember { mutableStateOf(false) }
+        var shouldWiggleDoctor by remember { mutableStateOf(false) }
+
+        LaunchedEffect("") {
+            delay(3000)
+            shouldShowMammogramText = true
+        }
+
+        if (shouldShowOncologist) {
+            LaunchedEffect(shouldShowOncologist) {
+                delay(1600)
+                shouldShowOncologistText = true
+            }
+        }
+
+        if (shouldShowDoctor) {
+            LaunchedEffect(shouldShowOncologist) {
+                delay(2400)
+                shouldShowDoctor1Text = true
+            }
+        }
+
+        if (shouldWiggleDoctor) {
+            LaunchedEffect(shouldShowOncologist) {
+                delay(1000)
+                shouldShowDoctor2Text = true
+            }
+        }
+
+        Surface(
+            modifier,
+            color = Color(0xFFA49592)
+        ) {
+            Text("Usual care", Modifier.padding(16.dp, 4.dp), Color.White)
+        }
+
+        Row(Modifier.fillMaxSize()) {
+            Row(Modifier.padding(4.dp).fillMaxWidth(.35f).fillMaxHeight()) {
+                if (shouldShowMammogramText) {
+                    DashedBox(
+                        Color(0xFFC61C71), Modifier.fillMaxWidth().align(Alignment.CenterVertically)
+                    ) {
+                        val mammogramText = buildAnnotatedString {
+                            append("You will receive ")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("yearly mammogram")
+                            }
+                            append(" at the cancer centre\n")
+                            withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                                pushStringAnnotation(
+                                    tag = continueText, annotation = continueText
+                                )
+                                append(continueText)
+                            }
+                        }
+                        ClickableText(
+                            text = mammogramText,
+                            style = boxTextStyle,
+                            onClick = { offset ->
+                                mammogramText.getStringAnnotations(offset, offset)
+                                    .firstOrNull()?.let {
+                                        shouldShowMammogramText = false
+                                        shouldShowOncologist = true
+                                    }
+                            })
+                    }
+                }
+
+                if (shouldShowOncologistText) {
+                    DashedBox(
+                        Color(0xFF336B87),
+                        Modifier.padding(top = height * .1f)
+                    ) {
+                        val oncologistText = buildAnnotatedString {
+                            append("You may see your oncologist\n(surgical, radiation, or medical)\nonce or twice\n")
+                            withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                                pushStringAnnotation(
+                                    tag = continueText, annotation = continueText
+                                )
+                                append(continueText)
+                            }
+                        }
+                        ClickableText(
+                            text = oncologistText,
+                            style = boxTextStyle,
+                            onClick = { offset ->
+                                oncologistText.getStringAnnotations(offset, offset)
+                                    .firstOrNull()?.let {
+                                        shouldShowOncologistText = false
+                                        shouldShowDoctor = true
+                                    }
+                            })
+                    }
+                }
+            }
+
+            UsualCareAnimationPortrait(
+                shouldShowOncologist,
+                shouldShowDoctor,
+                shouldWiggleDoctor,
+                Modifier.padding(4.dp).fillMaxWidth(.45f).fillMaxHeight()
+                    .align(Alignment.CenterVertically)
+            )
+
+            Row(Modifier.padding(4.dp).fillMaxWidth().fillMaxHeight()) {
+                if (shouldShowDoctor1Text) {
+                    DashedBox(
+                        Color(0xFFFF5B61),
+                        Modifier.padding(top = height * .25f)
+                    ) {
+                        val doctorText = buildAnnotatedString {
+                            append("You may see a GP or polyclinic doctor as many times as needed\n")
+                            withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                                pushStringAnnotation(
+                                    tag = continueText, annotation = continueText
+                                )
+                                append(continueText)
+                            }
+                        }
+                        ClickableText(
+                            text = doctorText,
+                            style = boxTextStyle,
+                            onClick = { offset ->
+                                doctorText.getStringAnnotations(offset, offset)
+                                    .firstOrNull()?.let {
+                                        shouldShowDoctor1Text = false
+                                        shouldWiggleDoctor = true
+                                    }
+                            })
+                    }
+                }
+
+                if (shouldShowDoctor2Text) {
+                    DashedBox(
+                        Color(0xFFFF5B61),
+                        Modifier.padding(top = height * .25f).fillMaxWidth()
+                    ) {
+                        val tapToSharedCare =
+                            "Tap here or the above shared care button to see the difference"
+                        val doctorText = buildAnnotatedString {
+                            append("You may or may not see the same doctor each time\n")
+                            withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
+                                pushStringAnnotation(
+                                    tag = tapToSharedCare,
+                                    annotation = tapToSharedCare
+                                )
+                                append(tapToSharedCare)
+                            }
+                        }
+                        ClickableText(
+                            text = doctorText,
+                            style = boxTextStyle,
+                            onClick = { offset ->
+                                doctorText.getStringAnnotations(offset, offset)
+                                    .firstOrNull()?.let { changeToSharedCare.invoke() }
+                            })
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun UsualCareLayoutLandscape(
         boxScope: BoxWithConstraintsScope,
         changeToSharedCare: () -> Unit,
         modifier: Modifier
@@ -252,7 +448,6 @@ data class FollowupCareScheduleScreen(
         val bottomTextBoxOffsetY =
             (boxScope.maxWidth * .15f).takeIf { it < defaultImageHeight } ?: defaultImageHeight
 
-        val continueText = "Tap here to continue"
         var shouldShowMammogramText by remember { mutableStateOf(false) }
         var shouldShowOncologistText by remember { mutableStateOf(false) }
         var shouldShowDoctor1Text by remember { mutableStateOf(false) }
@@ -309,8 +504,7 @@ data class FollowupCareScheduleScreen(
                         append(" at the cancer centre\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -346,8 +540,7 @@ data class FollowupCareScheduleScreen(
                         append("You may see your oncologist\n(surgical, radiation, or medical)\nonce or twice\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -377,8 +570,7 @@ data class FollowupCareScheduleScreen(
                         append("You may see a GP or polyclinic doctor as many times as needed\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -489,8 +681,7 @@ data class FollowupCareScheduleScreen(
                         append(" under shared care\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -524,8 +715,7 @@ data class FollowupCareScheduleScreen(
                         append(" at the cancer centre\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -556,8 +746,7 @@ data class FollowupCareScheduleScreen(
                         append(" from polyclinic\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -592,8 +781,7 @@ data class FollowupCareScheduleScreen(
                         append(" from polyclinic\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -623,8 +811,7 @@ data class FollowupCareScheduleScreen(
                         append("\n")
                         withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                             pushStringAnnotation(
-                                tag = continueText,
-                                annotation = continueText
+                                tag = continueText, annotation = continueText
                             )
                             append(continueText)
                         }
@@ -882,6 +1069,208 @@ data class FollowupCareScheduleScreen(
                     if (!shouldWiggleDoctor) draw(imageSize, orange3Alpha.value)
                     else rotate(orange1Rotation.value, imageSize.center) {
                         draw(imageSize, orange3Alpha.value)
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun UsualCareAnimationPortrait(
+        shouldShowOncologist: Boolean,
+        shouldShowDoctor: Boolean,
+        shouldWiggleDoctor: Boolean,
+        modifier: Modifier
+    ) {
+        val density = LocalDensity.current
+        val lineColor = Color(0xFF595959)
+        val orangeColor = Color(0xFFFF5B61)
+        val blueGreyColor = Color(0xFF336B87)
+        val pinkColor = Color(0xFFC61C71)
+
+        val oncologist = painterResource("followup_care/care_oncologist.png")
+        val doctor1 = painterResource("followup_care/care_doctor.png")
+        val doctor2 = painterResource("followup_care/care_practioner.png")
+        val mammogram = painterResource("followup_care/care_mammogram.png")
+
+        val textMeasurer = rememberTextMeasurer()
+        val ts = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center)
+
+        var shouldShowText by remember { mutableStateOf(true) }
+        val arrowBody = remember { Animatable(0f) }
+        val arrow = remember { Animatable(0f) }
+        val mammogramAlpha = remember { Animatable(0f) }
+        val oncologist1Alpha = remember { Animatable(0f) }
+        val oncologist2Alpha = remember { Animatable(0f) }
+        val doctor1Alpha = remember { Animatable(0f) }
+        val doctor2Alpha = remember { Animatable(0f) }
+        val doctor3Alpha = remember { Animatable(0f) }
+        val doctor2Rotation = remember { Animatable(0f) }
+        val doctor1Rotation = remember { Animatable(0f) }
+        LaunchedEffect(shouldShowText) {
+            delay(100)
+            shouldShowText = true
+            arrowBody.animateTo(1f, animationSpec = tween(1500))
+            arrow.animateTo(1f, animationSpec = tween(300))
+            mammogramAlpha.animateTo(1f, animationSpec = tween(1000, easing = LinearEasing))
+        }
+
+        if (shouldShowOncologist) {
+            LaunchedEffect(shouldShowOncologist) {
+                oncologist1Alpha.animateTo(1f, animationSpec = tween(800, easing = LinearEasing))
+                oncologist2Alpha.animateTo(1f, animationSpec = tween(800, easing = LinearEasing))
+            }
+        }
+
+        if (shouldShowDoctor) {
+            LaunchedEffect(shouldShowOncologist) {
+                doctor1Alpha.animateTo(
+                    1f,
+                    animationSpec = tween(800, easing = LinearEasing)
+                )
+                doctor2Alpha.animateTo(
+                    1f,
+                    animationSpec = tween(800, easing = LinearEasing)
+                )
+                doctor3Alpha.animateTo(
+                    1f,
+                    animationSpec = tween(800, easing = LinearEasing)
+                )
+            }
+        }
+
+        if (shouldWiggleDoctor) {
+            LaunchedEffect(shouldWiggleDoctor) {
+                doctor2Rotation.animateTo(360f, animationSpec = tween(500))
+                (1..5).forEach { time ->
+                    when (time) {
+                        1, 3 -> doctor1Rotation.animateTo(
+                            -10f, tween(100, easing = LinearEasing)
+                        )
+
+                        2, 4 -> doctor1Rotation.animateTo(
+                            10f, tween(200, easing = LinearEasing)
+                        )
+
+                        else -> doctor1Rotation.animateTo(
+                            0f, tween(100, easing = LinearEasing)
+                        )
+                    }
+                }
+            }
+        }
+
+        Canvas(modifier) {
+            val imageSize = with(density) {
+                val imageHeight =
+                    (size.height * .075f).dp.takeIf { it < defaultImageHeight }
+                        ?: defaultImageHeight
+                val ratio =
+                    oncologist.intrinsicSize.height / oncologist.intrinsicSize.width
+                Size(imageHeight.value / ratio, imageHeight.value)
+            }
+
+            val textLayoutSize = textMeasurer.measure(
+                "1 year period",
+                style = ts.copy(fontWeight = FontWeight.Bold)
+            )
+
+            val middleX = size.width * .5f
+            val textBoxSize =
+                Size(textLayoutSize.size.width * 1.2f, textLayoutSize.size.height * 1.4f)
+            val textBoxOffset = Offset(middleX - textBoxSize.center.x, 0f)
+
+            if (shouldShowText) {
+                drawLine(
+                    lineColor,
+                    start = Offset(middleX, textBoxOffset.y),
+                    end = Offset(middleX, (size.height * .977f) * arrowBody.value),
+                    strokeWidth = size.width * 0.02f
+                )
+
+                val path = Path().apply {
+                    moveTo(
+                        middleX,
+
+                        size.height * .975f + (size.height * .025f * arrow.value)
+                    )
+                    lineTo(middleX - size.width * .055f, size.height * .975f)
+                    lineTo(middleX + size.width * .055f, size.height * .975f)
+                }
+                drawPath(path, lineColor)
+
+
+                drawRoundRect(
+                    lineColor, textBoxOffset,
+                    textBoxSize, CornerRadius(20f, 20f)
+                )
+                drawText(
+                    textLayoutSize, Color.White, Offset(
+                        textBoxOffset.x + textBoxSize.center.x - textLayoutSize.size.center.x,
+                        textBoxSize.center.y - textLayoutSize.size.center.y
+                    )
+                )
+            }
+
+            val circleRadius = textBoxSize.height * .25f
+            val leftImageOffsetX = middleX - imageSize.width * 1.5f
+            val rightImageOffsetX = middleX + imageSize.width * .5f
+
+            val pinkOffset = Offset(middleX, size.height * .5f)
+            drawCircle(pinkColor, circleRadius, pinkOffset, mammogramAlpha.value)
+            translate(
+                middleX - imageSize.height * 1.3f,
+                pinkOffset.y - imageSize.height * .5f
+            ) {
+                with(mammogram) {
+                    draw(
+                        Size(imageSize.height * .9f, imageSize.height * .9f),
+                        mammogramAlpha.value
+                    )
+                }
+            }
+
+            val doctor1Offset = Offset(middleX, size.height * .1f)
+            drawCircle(orangeColor, circleRadius, doctor1Offset, doctor1Alpha.value)
+            translate(rightImageOffsetX, doctor1Offset.y - imageSize.center.y) {
+                with(doctor1) {
+                    if (!shouldWiggleDoctor) draw(imageSize, doctor1Alpha.value)
+                    else rotate(doctor1Rotation.value, imageSize.center) {
+                        draw(imageSize, doctor1Alpha.value)
+                    }
+                }
+            }
+
+            val oncologist1Offset = Offset(middleX, size.height * .2f)
+            drawCircle(blueGreyColor, circleRadius, oncologist1Offset, oncologist1Alpha.value)
+            translate(leftImageOffsetX, oncologist1Offset.y - imageSize.center.y) {
+                with(oncologist) { draw(imageSize, oncologist1Alpha.value) }
+            }
+
+            val doctor2Offset = Offset(middleX, size.height * .4f)
+            drawCircle(orangeColor, circleRadius, doctor2Offset, doctor2Alpha.value)
+            translate(rightImageOffsetX, doctor2Offset.y - imageSize.center.y) {
+                with(doctor2) {
+                    if (!shouldWiggleDoctor) draw(imageSize, doctor2Alpha.value)
+                    else rotate(doctor2Rotation.value, imageSize.center) {
+                        draw(imageSize, doctor2Alpha.value)
+                    }
+                }
+            }
+
+            val oncologist2Offset = Offset(middleX, size.height * .7f)
+            drawCircle(blueGreyColor, circleRadius, oncologist2Offset, oncologist2Alpha.value)
+            translate(leftImageOffsetX, oncologist2Offset.y - imageSize.center.y) {
+                with(oncologist) { draw(imageSize, oncologist2Alpha.value) }
+            }
+
+            val doctor3Offset = Offset(middleX, size.height * .8f)
+            drawCircle(orangeColor, circleRadius, doctor3Offset, doctor3Alpha.value)
+            translate(rightImageOffsetX, doctor3Offset.y - imageSize.center.y) {
+                with(doctor1) {
+                    if (!shouldWiggleDoctor) draw(imageSize, doctor3Alpha.value)
+                    else rotate(doctor1Rotation.value, imageSize.center) {
+                        draw(imageSize, doctor3Alpha.value)
                     }
                 }
             }

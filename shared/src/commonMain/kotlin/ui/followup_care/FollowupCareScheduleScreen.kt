@@ -24,21 +24,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,7 +61,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.center
@@ -86,6 +76,7 @@ import model.HealthcareProfessional.*
 import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
 import ui.comparing_options.ComparingOptionsIntroScreen
 
@@ -120,72 +111,11 @@ data class FollowupCareScheduleScreen(
         Scaffold(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
-                BottomNavigation {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
-                    ) {
-                        Button(
-                            onClick = { /*TODO*/
-                                /*if (navigator.items.contains(FollowupCareOptionScreen())) {
-                                    navigator.pop()
-                                } else {
-                                    navigator.replace(FollowupCareOptionScreen())
-                                }*/
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                        ) {
-                            Icon(
-                                Icons.Rounded.ArrowBack, "Back page",
-                                Modifier.padding(end = 4.dp)
-                            )
-                            Text(text = "Back")
-                        }
-
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { navigator.popUntil { it == HomeScreen() } },
-                            icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
-                            label = { Text(text = "Home", color = Color.White) },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Button(
-                            onClick = { navigator.push(ComparingOptionsIntroScreen()) },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                        ) {
-                            BoxWithConstraints {
-                                val boxScope = this
-
-                                val textSize = MaterialTheme.typography.button.fontSize
-                                val textLayout = rememberTextMeasurer().measure(
-                                    text = "Next section",
-                                    style = MaterialTheme.typography.button,
-                                    overflow = TextOverflow.Clip
-                                )
-                                val sizeInDp = with(LocalDensity.current) {
-                                    textLayout.size.width.toDp()
-                                }
-                                val textAndSize =
-                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
-                                        "Next\nsection", textSize * .8
-                                    )
-                                    else Pair("Next section", textSize)
-
-                                Text(
-                                    text = textAndSize.first,
-                                    fontSize = textAndSize.second,
-                                    textAlign = TextAlign.End,
-                                    overflow = TextOverflow.Clip,
-                                    modifier = Modifier.padding(end = 4.dp)
-                                )
-                            }
-                            Icon(Icons.Rounded.LastPage, contentDescription = "Next section")
-                        }
-                    }
-                }
+                ThemeBottomNavigation(
+                    showPrevPage = true, prevAction = { /*TODO*/ },
+                    showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
+                    showNextSection = true, nextAction = { navigator.push(ComparingOptionsIntroScreen()) }
+                )
             }
         ) {
             BoxWithConstraints {

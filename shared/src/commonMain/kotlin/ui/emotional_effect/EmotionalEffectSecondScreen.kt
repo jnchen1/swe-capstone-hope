@@ -2,42 +2,26 @@ package ui.emotional_effect
 
 import HomeScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -49,6 +33,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
 import ui.followup_care.FollowupCareIntroScreen
 
@@ -73,73 +58,18 @@ data class EmotionalEffectSecondScreen(
         Scaffold(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
-                BottomNavigation {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
-                    ) {
-                        Button(
-                            onClick = {
-                                if (navigator.items.contains(EmotionalEffectFirstScreen())) {
-                                    navigator.pop()
-                                } else {
-                                    navigator.replace(EmotionalEffectFirstScreen())
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
-                        ) {
-                            Icon(
-                                Icons.Rounded.ArrowBack, "Back page",
-                                Modifier.padding(end = 4.dp)
-                            )
-                            Text(text = "Back")
+                ThemeBottomNavigation(
+                    showPrevPage = true, prevAction = {
+                        if (navigator.items.contains(EmotionalEffectFirstScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(EmotionalEffectFirstScreen())
                         }
-
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { navigator.popUntil { it == HomeScreen() } },
-                            icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
-                            label = { Text(text = "Home", color = Color.White) },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Button(
-                            onClick = { navigator.push(FollowupCareIntroScreen()) },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
-                        ) {
-                            BoxWithConstraints {
-                                val boxScope = this
-
-                                val textSize = MaterialTheme.typography.button.fontSize
-                                val textLayout = rememberTextMeasurer().measure(
-                                    text = "Next section",
-                                    style = MaterialTheme.typography.button,
-                                    overflow = TextOverflow.Clip
-                                )
-                                val sizeInDp = with(LocalDensity.current) {
-                                    textLayout.size.width.toDp()
-                                }
-                                val textAndSize =
-                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
-                                        "Next\nsection", textSize * .8
-                                    )
-                                    else Pair("Next section", textSize)
-
-                                Text(
-                                    text = textAndSize.first,
-                                    fontSize = textAndSize.second,
-                                    textAlign = TextAlign.End,
-                                    overflow = TextOverflow.Clip,
-                                    modifier = Modifier.padding(end = 4.dp)
-                                )
-                            }
-                            Icon(Icons.Rounded.LastPage, contentDescription = "Next section")
-                        }
-                    }
-                }
+                    },
+                    showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
+                    showNextSection = true,
+                    nextAction = { navigator.push(FollowupCareIntroScreen()) }
+                )
             }
         ) {
             Column(

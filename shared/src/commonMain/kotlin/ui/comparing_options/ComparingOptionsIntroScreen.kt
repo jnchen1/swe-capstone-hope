@@ -54,7 +54,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
+import ui.finding_whatmatters.FindingWhatMattersScreen
 import ui.followup_care.FollowupCareScheduleScreen
 
 data class ComparingOptionsIntroScreen(
@@ -78,98 +80,17 @@ data class ComparingOptionsIntroScreen(
         Scaffold(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
-                BottomNavigation {
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
-                    ) {
-                        val textSize = MaterialTheme.typography.button.fontSize
-                        val textLayout = rememberTextMeasurer().measure(
-                            text = "Previous section",
-                            style = MaterialTheme.typography.button,
-                            overflow = TextOverflow.Clip
-                        )
-
-                        Button(
-                            onClick = {
-                                if (navigator.items.contains(FollowupCareScheduleScreen())) {
-                                    navigator.pop()
-                                } else {
-                                    navigator.replace(FollowupCareScheduleScreen())
-                                }
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
-                        ) {
-                            Icon(
-                                Icons.Rounded.FirstPage,
-                                contentDescription = "Previous section"
-                            )
-                            BoxWithConstraints {
-                                val boxScope = this
-                                val sizeInDp = with(LocalDensity.current) {
-                                    textLayout.size.width.toDp()
-                                }
-
-                                Text(
-                                    text = "Previous section",
-                                    fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .8 else textSize,
-                                    overflow = TextOverflow.Clip,
-                                    modifier = Modifier.padding(start = 8.dp)
-                                )
-                            }
+                ThemeBottomNavigation(
+                    showPrevSection = true, prevAction = {
+                        if (navigator.items.contains(FollowupCareScheduleScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(FollowupCareScheduleScreen())
                         }
-
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { navigator.popUntil { it == HomeScreen() } },
-                            icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
-                            label = { Text(text = "Home", color = Color.White) },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Button(
-                            onClick = {
-                                //navigator.push(PhysicalEffectIntroScreen())
-                            },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
-                        ) {
-                            BoxWithConstraints {
-                                val boxScope = this
-
-                                val textSize = MaterialTheme.typography.button.fontSize
-                                val textLayout = rememberTextMeasurer().measure(
-                                    text = "Next section",
-                                    style = MaterialTheme.typography.button,
-                                    overflow = TextOverflow.Clip
-                                )
-                                val sizeInDp = with(LocalDensity.current) {
-                                    textLayout.size.width.toDp()
-                                }
-                                val textAndSize =
-                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
-                                        "Next\nsection", textSize * .8
-                                    )
-                                    else Pair("Next section", textSize)
-
-                                Text(
-                                    text = textAndSize.first,
-                                    fontSize = textAndSize.second,
-                                    textAlign = TextAlign.End,
-                                    overflow = TextOverflow.Clip,
-                                    modifier = Modifier.padding(end = 4.dp)
-                                )
-                            }
-                            Icon(
-                                Icons.Rounded.LastPage,
-                                contentDescription = "Next section"
-                            )
-                        }
-                    }
-                }
+                    },
+                    showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
+                    showNextSection = true, nextAction = { navigator.push(FindingWhatMattersScreen()) }
+                )
             }
         ) {
             Column(

@@ -1,22 +1,12 @@
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -33,6 +23,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
 
 data class WhoIsThisForScreen(
@@ -55,40 +46,10 @@ data class WhoIsThisForScreen(
         Scaffold(
             topBar = { ThemeTopAppBar(screenTitle) },
             bottomBar = {
-                BottomNavigation {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
-                    ) {
-                        Button(
-                            onClick = { navigator.pop() },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "previous page arrow"
-                            )
-                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
-                        }
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Button(
-                            onClick = { navigator.push(HomeScreen()) },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(text = "Next")
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowForward,
-                                contentDescription = "next page arrow",
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
-                    }
-                }
+                ThemeBottomNavigation(
+                    showPrevPage = true, prevAction = navigator::pop,
+                    showNextPage = true, nextAction = { navigator.push(HomeScreen()) }
+                )
             }
         ) {
             Column(

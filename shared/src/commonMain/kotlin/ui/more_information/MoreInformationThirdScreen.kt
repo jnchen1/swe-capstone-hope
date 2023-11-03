@@ -1,6 +1,5 @@
 package ui.more_information
 
-
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -17,12 +16,10 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
@@ -34,7 +31,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -43,19 +39,20 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.conclusion.ConclusionScreen
+import ui.ThemeTopAppBar
 
-
-data class MoreInformationThirdScreen (
+data class MoreInformationThirdScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "OTHER ONLINE RESOURCES"
+    val option = HomeOptions.RESOURCES
+    private val screenTitle = option.title
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalResourceApi::class)
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -66,19 +63,7 @@ data class MoreInformationThirdScreen (
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h2,
-                            color = Color(0xFFEBACEF),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -93,7 +78,7 @@ data class MoreInformationThirdScreen (
                         )
 
                         Button(
-                            onClick = {navigator.push(MoreInformationSecondScreen())},
+                            onClick = { navigator.push(MoreInformationSecondScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -155,7 +140,7 @@ data class MoreInformationThirdScreen (
                         painter = painterResource("more_information/heart.png"),
                         contentDescription = "heart",
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal=100.dp)
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 100.dp)
                     )
 
                     Text(
@@ -173,7 +158,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Coping with cancer and treatments",
@@ -191,7 +176,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg2",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Exercise during & after treatment",
@@ -209,7 +194,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg3",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "How to quit smoking?",
@@ -227,7 +212,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg4",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Cervical cancer screening",
@@ -245,7 +230,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg5",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Colorectal cancer screening",
@@ -263,7 +248,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg6",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Breast self-examination",
@@ -281,7 +266,7 @@ data class MoreInformationThirdScreen (
                             painter = painterResource("more_information/flag_uk.png"),
                             contentDescription = "uk1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Healthy eating after treatment",

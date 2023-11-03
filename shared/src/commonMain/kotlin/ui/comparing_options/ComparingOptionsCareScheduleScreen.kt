@@ -3,19 +3,15 @@ package ui.comparing_options
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,17 +19,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
@@ -58,17 +50,18 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.followup_care.FollowupCareOptionScreen
-import ui.physical_effect.PhysicalEffectIntroScreen
+import ui.ThemeTopAppBar
 
 data class ComparingOptionsCareScheduleScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "COMPARING THE OPTIONS"
+    val option = HomeOptions.COMPARE_CARE
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -81,19 +74,7 @@ data class ComparingOptionsCareScheduleScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFC1E1DC),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -149,7 +130,7 @@ data class ComparingOptionsCareScheduleScreen(
                         Button(
                             onClick = {
 //                                navigator.push(PhysicalEffectIntroScreen())
-                                      },
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -200,14 +181,17 @@ data class ComparingOptionsCareScheduleScreen(
                     modifier = Modifier.padding(10.dp),
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFA49592))
-                        ){
-                            Text(text = "Usual Care",
+                        ) {
+                            Text(
+                                text = "Usual Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -242,7 +226,7 @@ data class ComparingOptionsCareScheduleScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Who is caring for you?")
                 }
                 Button(
@@ -253,16 +237,16 @@ data class ComparingOptionsCareScheduleScreen(
                         } else {
                             navigator.replace(ComparingOptionsInformationSharedScreen())
                         }
-                              },
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("How is information about you shared?")
                 }
                 Button(
                     enabled = false,
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("What is your follow-up schedule?")
                 }
                 Button(
@@ -275,7 +259,7 @@ data class ComparingOptionsCareScheduleScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Cost?")
                 }
 
@@ -284,14 +268,17 @@ data class ComparingOptionsCareScheduleScreen(
                     modifier = Modifier.padding(10.dp),
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFE99787))
-                        ){
-                            Text(text = "Shared Care",
+                        ) {
+                            Text(
+                                text = "Shared Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)

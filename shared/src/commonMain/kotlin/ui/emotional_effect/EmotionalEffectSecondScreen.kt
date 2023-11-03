@@ -1,5 +1,7 @@
+package ui.emotional_effect
+
+import HomeScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -18,15 +21,17 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -41,16 +46,19 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.physical_effect.PhysicalEffectIntroScreen
+import ui.ThemeTopAppBar
+import ui.followup_care.FollowupCareIntroScreen
 
-data class WhatIsSurvivorshipThirdScreen(
+data class EmotionalEffectSecondScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "SURVIVORSHIP"
+    val option = HomeOptions.EMOTIONAL_EFFECT
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -63,19 +71,7 @@ data class WhatIsSurvivorshipThirdScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            color = Color(0xFFFF7E79),
-                            style = MaterialTheme.typography.h1,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -84,10 +80,10 @@ data class WhatIsSurvivorshipThirdScreen(
                     ) {
                         Button(
                             onClick = {
-                                if (navigator.items.contains(WhatIsSurvivorshipSecondScreen())) {
+                                if (navigator.items.contains(EmotionalEffectFirstScreen())) {
                                     navigator.pop()
                                 } else {
-                                    navigator.replace(WhatIsSurvivorshipSecondScreen())
+                                    navigator.replace(EmotionalEffectFirstScreen())
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
@@ -109,7 +105,7 @@ data class WhatIsSurvivorshipThirdScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(PhysicalEffectIntroScreen()) },
+                            onClick = { navigator.push(FollowupCareIntroScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -140,10 +136,7 @@ data class WhatIsSurvivorshipThirdScreen(
                                     modifier = Modifier.padding(end = 4.dp)
                                 )
                             }
-                            Icon(
-                                Icons.Rounded.LastPage,
-                                contentDescription = "Next section"
-                            )
+                            Icon(Icons.Rounded.LastPage, contentDescription = "Next section")
                         }
                     }
                 }
@@ -153,47 +146,143 @@ data class WhatIsSurvivorshipThirdScreen(
                 modifier = Modifier.padding(it).padding(horizontal = 8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Image(
-                        painter = painterResource("ribbon_survivorship.png"),
-                        contentDescription = "Physical effects",
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-                    )
-                }
-                Text(
-                    style = MaterialTheme.typography.h1,
-                    modifier = Modifier.padding(8.dp),
-                    text = "Why is survivorship care important?"
+                Image(
+                    painter = painterResource("emotional_effects_4.png"),
+                    contentDescription = "Emotional effects",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(200.dp).padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
+
+                Text(
+                    style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(8.dp, 4.dp),
+                    text = "How to seek help?"
+                )
+
                 Text(
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     text = buildAnnotatedString {
-                        append("Survivorship care includes ")
+                        append("Consider speaking to a ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("regular follow-up sessions")
+                            append("counsellor")
                         }
-                        append(" to ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("prevent and monitor")
-                        }
-                        append(" for signs of returning cancers. This is because there is a ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("possibility")
-                        }
-                        append(" of the cancer ")
+                        append(" or seek medical attention when you feel like you need help ")
 
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("returning")
-                        }
-                        append(" in the breast or other parts of the body.")
                     }
                 )
 
+                Text(
+                    style = MaterialTheme.typography.h3,
+                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 12.dp),
+                    text = "What can you do?"
+                )
+
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = buildAnnotatedString {
+                        append("You may contact the  ")
+                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(" National Cancer Centre Singapore") }
+                        append(" for their services through the following: ")
+                    }
+                )
+
+                PhoneLinkText(
+                    Modifier.padding(horizontal = 8.dp).padding(top = 8.dp).fillMaxWidth()
+                )
+
+                EmailLinkText(
+                    Modifier.padding(8.dp).fillMaxWidth()
+                )
             }
         }
     }
 }
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun PhoneLinkText(modifier: Modifier = Modifier) {
+    val phoneNumber = "+65 6558 0384"
+
+    val uriHandler = LocalUriHandler.current
+
+    Row(verticalAlignment = Alignment.Top, modifier = modifier) {
+        // Add the image here
+        Image(
+            painter = painterResource("emotional_effects_5.png"), // Replace 'your_image' with the actual image resource
+            contentDescription = null, // Provide a content description as needed
+            modifier = Modifier.padding(end = 4.dp).size(24.dp)
+                .fillMaxWidth(.1f) // Adjust the size as needed
+        )
+
+        // Add the text
+        Column {
+            val serviceText = buildAnnotatedString {
+                append("Psychological Services, Medical Social Services, Counselling and Financial Assistance: ")
+                withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                    pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
+                    append(phoneNumber)
+                }
+            }
+            ClickableText(text = serviceText, onClick = { offset ->
+                serviceText.getStringAnnotations(offset, offset)
+                    .firstOrNull()?.let { uriHandler.openUri("tel:$phoneNumber") }
+            })
+
+            val programText = buildAnnotatedString {
+                append("Patient Support Programmes: ")
+                withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                    pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
+                    append(phoneNumber)
+                }
+            }
+            ClickableText(text = programText, Modifier.padding(top = 4.dp), onClick = { offset ->
+                programText.getStringAnnotations(offset, offset)
+                    .firstOrNull()?.let { uriHandler.openUri("tel:$phoneNumber") }
+            })
+        }
+    }
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun EmailLinkText(modifier: Modifier = Modifier) {
+    val emailAddress = "psychosocial@nccs.com.sg"
+
+    val uriHandler = LocalUriHandler.current
+
+    Row(
+        verticalAlignment = Alignment.Top,
+        modifier = modifier
+    ) {
+        // Add the image here
+        Image(
+            painter = painterResource("emotional_effects_6.png"), // Replace 'your_image' with the actual image resource
+            contentDescription = null, // Provide a content description as needed
+            modifier = Modifier.padding(end = 4.dp).size(24.dp) // Adjust the size as needed
+        )
+
+        // Add the text
+        val emailText = buildAnnotatedString {
+            append("Email at ")
+            withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                pushStringAnnotation(tag = emailAddress, annotation = emailAddress)
+                append(emailAddress)
+            }
+            append(" for more details")
+        }
+        ClickableText(text = emailText, Modifier.padding(top = 4.dp), onClick = { offset ->
+            emailText.getStringAnnotations(offset, offset)
+                .firstOrNull()?.let { uriHandler.openUri("mailto:$emailAddress") }
+        })
+    }
+}
+
+
+
+
+
+
+

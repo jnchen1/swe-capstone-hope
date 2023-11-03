@@ -1,4 +1,3 @@
-import HomeOptions.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
@@ -31,7 +29,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -40,15 +37,18 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.conclusion.ConclusionScreen
-import ui.finding_whatmatters.FindingWhatMattersScreen
+import ui.ThemeTopAppBar
 import ui.comparing_options.ComparingOptionsIntroScreen
+import ui.conclusion.ConclusionScreen
+import ui.emotional_effect.EmotionalEffectFirstScreen
+import ui.finding_whatmatters.FindingWhatMattersScreen
 import ui.followup_care.FollowupCareIntroScreen
 import ui.more_information.MoreInformationFirstScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
-
+import ui.survivorship.WhatIsSurvivorshipFirstScreen
 
 data class HomeScreen(
     val wrapContent: Boolean = false
@@ -68,18 +68,7 @@ data class HomeScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -149,7 +138,6 @@ data class HomeScreen(
                                 WHAT_MATTERS -> navigator.push(FindingWhatMattersScreen())
                                 CONCLUSION -> navigator.push(ConclusionScreen())
                                 RESOURCES -> navigator.push(MoreInformationFirstScreen())
-
                             }
                         }
                     ) {
@@ -161,15 +149,4 @@ data class HomeScreen(
             }
         }
     }
-}
-
-private enum class HomeOptions(val text: String, val color: Color) {
-    WHAT_IS_SURVIVORSHIP("1. What is cancer survivorship?", Color(0xFFFF7E79)),
-    PHYSICAL_EFFECT("2. Physical effects", Color(0xFFF4B183)),
-    EMOTIONAL_EFFECT("3. Emotional effects", Color(0xFFFFE699)),
-    FOLLOWUP_CARE("4. Follow-up care options", Color(0xFFC6E0B5)),
-    COMPARE_CARE("5. Comparing options", Color(0xFFA0E6E3)),
-    WHAT_MATTERS("6. Finding out what matters to you", Color(0xFF9DC3E6)),
-    CONCLUSION("7. Conclusion", Color(0xFFBCBBE7)),
-    RESOURCES("Other online resources", Color(0xFFEBACEF))
 }

@@ -49,8 +49,10 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
 import ui.physical_effect.PhysicalEffectExamplesScreen
 import ui.physical_effect.PhysicalEffectIntroScreen
 
@@ -60,7 +62,8 @@ data class FindingWhatMattersScreen(
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "WHAT MATTERS TO YOU?"
+    val option = HomeOptions.WHAT_MATTERS
+    private val screenTitle = option.title
 
 
     @OptIn(ExperimentalResourceApi::class)
@@ -74,19 +77,7 @@ data class FindingWhatMattersScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFF9DC3E6),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(

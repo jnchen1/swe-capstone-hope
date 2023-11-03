@@ -19,7 +19,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
@@ -27,10 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -39,8 +36,10 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
 import ui.more_information.MoreInformationFirstScreen
 
 data class ConclusionScreen(
@@ -48,8 +47,8 @@ data class ConclusionScreen(
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "CONCLUSION"
-
+    val option = HomeOptions.CONCLUSION
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -62,19 +61,7 @@ data class ConclusionScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFBCBBE7),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -119,14 +106,15 @@ data class ConclusionScreen(
                             painter = painterResource("conclusion/nextstep_image.png"),
                             contentDescription = "nextstep1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth().weight(0.9f).padding(horizontal=4.dp)
+                            modifier = Modifier.fillMaxWidth().weight(0.9f)
+                                .padding(horizontal = 4.dp)
                         )
 
                         Image(
                             painter = painterResource("conclusion/nextstep_image2.png"),
                             contentDescription = "nextstep2",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal=4.dp)
+                            modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 4.dp)
                         )
                     }
 
@@ -139,12 +127,12 @@ data class ConclusionScreen(
 
                     Text(
                         text = "You have reached the end of this decision aid. You can now:" +
-                                "\n\n" +
-                                "-   Revisit previous sections by pressing the ‘HOME’ button" +
-                                "\n\n" +
-                                "-   Revisit this decision aid in the future" +
-                                "\n\n" +
-                                "-   Speak to your oncologist to discuss your suitability for whichever option you favour",
+                            "\n\n" +
+                            "-   Revisit previous sections by pressing the ‘HOME’ button" +
+                            "\n\n" +
+                            "-   Revisit this decision aid in the future" +
+                            "\n\n" +
+                            "-   Speak to your oncologist to discuss your suitability for whichever option you favour",
                         style = MaterialTheme.typography.body2,
                         modifier = Modifier.padding(4.dp)
                     )
@@ -163,9 +151,16 @@ data class ConclusionScreen(
                     )
 
                     Button(
-                        onClick = {navigator.push(MoreInformationFirstScreen())},
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(235,172,239)),
-                        modifier = Modifier.padding(top =4.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
+                        onClick = { navigator.push(MoreInformationFirstScreen()) },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(
+                                235,
+                                172,
+                                239
+                            )
+                        ),
+                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
                     ) {
                         Text(text = "Additional Resources")
                     }

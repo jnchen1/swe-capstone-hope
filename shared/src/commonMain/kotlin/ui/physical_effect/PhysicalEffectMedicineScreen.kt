@@ -23,7 +23,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Home
@@ -34,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,9 +42,11 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import model.TherapyMedicineEffect
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
 
 data class PhysicalEffectMedicineScreen(
     val treatmentMedicine: TherapyMedicineEffect,
@@ -54,7 +54,8 @@ data class PhysicalEffectMedicineScreen(
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "PHYSICAL EFFECT"
+    val option = HomeOptions.PHYSICAL_EFFECT
+    private val screenTitle = option.title
     private val buttonColors = listOf(Color(0xFF426E86), Color(0xFF5B7065), Color(0xFF755248))
 
     @OptIn(ExperimentalResourceApi::class, ExperimentalMaterialApi::class)
@@ -69,16 +70,8 @@ data class PhysicalEffectMedicineScreen(
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFF4B183),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    },
+                ThemeTopAppBar(
+                    screenTitle, option.color,
                     navigationIcon = {
                         Image(
                             painterResource(treatmentMedicine.icon),

@@ -16,12 +16,10 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
@@ -33,7 +31,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -42,19 +39,20 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.conclusion.ConclusionScreen
+import ui.ThemeTopAppBar
 
-
-data class MoreInformationSecondScreen (
+data class MoreInformationSecondScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "OTHER ONLINE RESOURCES"
+    val option = HomeOptions.RESOURCES
+    private val screenTitle = option.title
 
-    @OptIn(ExperimentalMaterialApi::class, ExperimentalResourceApi::class)
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         LifecycleEffect(
@@ -65,19 +63,7 @@ data class MoreInformationSecondScreen (
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h2,
-                            color = Color(0xFFEBACEF),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -92,7 +78,7 @@ data class MoreInformationSecondScreen (
                         )
 
                         Button(
-                            onClick = {navigator.push(MoreInformationFirstScreen())},
+                            onClick = { navigator.push(MoreInformationFirstScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -154,7 +140,7 @@ data class MoreInformationSecondScreen (
                         painter = painterResource("more_information/5logo.png"),
                         contentDescription = "5logo",
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal=100.dp)
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 100.dp)
                     )
 
                     Text(
@@ -172,7 +158,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Coping with cancer and treatments",
@@ -190,7 +176,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Managing cancer-related side effects",
@@ -208,7 +194,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa2",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Menopausal hormone therapy after breast cancer",
@@ -226,7 +212,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa3",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Pregnancy after breast cancer",
@@ -244,7 +230,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa4",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Body image and sexuality after breast cancer",
@@ -262,7 +248,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_uk.png"),
                             contentDescription = "uk1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Sex, intimacy and breast cancer",
@@ -280,7 +266,7 @@ data class MoreInformationSecondScreen (
                             painter = painterResource("more_information/flag_uk.png"),
                             contentDescription = "uk2",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal=4.dp)
+                            modifier = Modifier.padding(horizontal = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Menopausal symptoms and breast cancer",

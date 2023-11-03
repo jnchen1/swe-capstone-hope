@@ -3,20 +3,15 @@ package ui.comparing_options
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,22 +19,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,23 +45,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.followup_care.FollowupCareOptionScreen
-import ui.physical_effect.PhysicalEffectIntroScreen
+import ui.ThemeTopAppBar
 
 data class ComparingOptionsCareCostScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "COMPARING THE OPTIONS"
+    val option = HomeOptions.COMPARE_CARE
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -88,29 +77,16 @@ data class ComparingOptionsCareCostScreen(
         var permanent_resident_button_enabled by remember { mutableStateOf(true) }
         var non_resident_button_enabled by remember { mutableStateOf(true) }
 
+        var usual_care_oncologist by remember { mutableStateOf(buildAnnotatedString { append("") }) }
+        var usual_care_familyphysician by remember { mutableStateOf(buildAnnotatedString { append("") }) }
+        var usual_care_general by remember { mutableStateOf(buildAnnotatedString { append("") }) }
 
-        var usual_care_oncologist by remember { mutableStateOf(buildAnnotatedString{append("")}) }
-        var usual_care_familyphysician by remember { mutableStateOf(buildAnnotatedString{append("")}) }
-        var usual_care_general by remember { mutableStateOf(buildAnnotatedString{append("")}) }
-
-        var shared_care_save by remember { mutableStateOf(buildAnnotatedString{append("")}) }
-        var shared_care_costmore by remember { mutableStateOf(buildAnnotatedString{append("")}) }
+        var shared_care_save by remember { mutableStateOf(buildAnnotatedString { append("") }) }
+        var shared_care_costmore by remember { mutableStateOf(buildAnnotatedString { append("") }) }
 
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFC1E1DC),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -166,7 +142,7 @@ data class ComparingOptionsCareCostScreen(
                         Button(
                             onClick = {
 //                                navigator.push(PhysicalEffectIntroScreen())
-                                      },
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -217,14 +193,17 @@ data class ComparingOptionsCareCostScreen(
                     modifier = Modifier.padding(10.dp),
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFA49592))
-                        ){
-                            Text(text = "Usual Care",
+                        ) {
+                            Text(
+                                text = "Usual Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -242,7 +221,10 @@ data class ComparingOptionsCareCostScreen(
                                 append(" oncologist visits cost:")
                             }
                         )
-                        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Image(
                                 painter = painterResource("comparing_options/comparing_2_oncologists.png"),
                                 contentDescription = "Two Oncologist visits",
@@ -252,22 +234,27 @@ data class ComparingOptionsCareCostScreen(
                             Box(
                                 modifier = Modifier.fillMaxSize().background(Color(0xFF336B87)),
                                 contentAlignment = Alignment.Center,
-                            ){
-                                Text(color = Color.White,
+                            ) {
+                                Text(
+                                    color = Color.White,
                                     modifier = Modifier.padding(2.dp),
                                     textAlign = TextAlign.Center,
                                     text = usual_care_oncologist
-                                    )
+                                )
                             }
 
                         }
                         Text(
                             style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(top=8.dp).align(Alignment.CenterHorizontally),
+                            modifier = Modifier.padding(top = 8.dp)
+                                .align(Alignment.CenterHorizontally),
                             text = "Each visit to the polyclinic will cost:"
 
                         )
-                        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 24.dp,end = 24.dp)){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(start = 24.dp, end = 24.dp)
+                        ) {
                             Image(
                                 painter = painterResource("comparing_options/comparing_doctor.png"),
                                 contentDescription = "Family Physician",
@@ -277,8 +264,9 @@ data class ComparingOptionsCareCostScreen(
                             Box(
                                 modifier = Modifier.fillMaxSize().background(Color(0xFFFF5B61)),
                                 contentAlignment = Alignment.Center,
-                            ){
-                                Text( color = Color.White,
+                            ) {
+                                Text(
+                                    color = Color.White,
                                     modifier = Modifier.padding(2.dp),
                                     textAlign = TextAlign.Center,
                                     text = usual_care_familyphysician
@@ -286,7 +274,10 @@ data class ComparingOptionsCareCostScreen(
 
                             }
                         }
-                        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 24.dp,end = 24.dp, bottom = 8.dp)){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 8.dp)
+                        ) {
                             Image(
                                 painter = painterResource("comparing_options/comparing_general_clinic.png"),
                                 contentDescription = "General Clinic Doctor",
@@ -296,8 +287,9 @@ data class ComparingOptionsCareCostScreen(
                             Box(
                                 modifier = Modifier.fillMaxSize().background(Color(0xFFC61C71)),
                                 contentAlignment = Alignment.Center,
-                            ){
-                                Text( color = Color.White,
+                            ) {
+                                Text(
+                                    color = Color.White,
                                     modifier = Modifier.padding(2.dp),
                                     textAlign = TextAlign.Center,
                                     text = usual_care_general
@@ -305,7 +297,6 @@ data class ComparingOptionsCareCostScreen(
 
                             }
                         }
-
 
                     }
                 }
@@ -320,7 +311,7 @@ data class ComparingOptionsCareCostScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Who is caring for you?")
                 }
                 Button(
@@ -330,9 +321,10 @@ data class ComparingOptionsCareCostScreen(
                             navigator.pop()
                         } else {
                             navigator.replace(ComparingOptionsInformationSharedScreen())
-                        } },
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("How is information about you shared?")
                 }
                 Button(
@@ -345,20 +337,20 @@ data class ComparingOptionsCareCostScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("What is your follow-up schedule?")
                 }
                 Button(
                     enabled = false,
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Cost?")
                 }
 
                 Text(
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(top=8.dp).align(Alignment.CenterHorizontally),
+                    modifier = Modifier.padding(top = 8.dp).align(Alignment.CenterHorizontally),
                     text = "Click on the option that applies to you below:"
                 )
                 Button(
@@ -368,7 +360,7 @@ data class ComparingOptionsCareCostScreen(
                         citizen_button_enabled = false
                         permanent_resident_button_enabled = true
                         non_resident_button_enabled = true
-                        usual_care_oncologist = buildAnnotatedString{
+                        usual_care_oncologist = buildAnnotatedString {
 
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("\$76")
@@ -380,10 +372,10 @@ data class ComparingOptionsCareCostScreen(
                             append(" (private)")
                         }
                         usual_care_familyphysician = buildAnnotatedString {
-                             append("Family physician clinic: ")
-                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                 append("\$25.40")
-                             }
+                            append("Family physician clinic: ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("\$25.40")
+                            }
                         }
                         usual_care_general = buildAnnotatedString {
                             append("General clinic: ")
@@ -392,17 +384,18 @@ data class ComparingOptionsCareCostScreen(
                             }
                         }
 
-                        shared_care_save = buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
+                        shared_care_save =
+                            buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
 
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$12.60")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$12.60")
+                                }
+                                append(" (after subsidy) to ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$129.75")
+                                }
+                                append(" (private)")
                             }
-                            append(" (after subsidy) to ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$129.75")
-                            }
-                            append(" (private)")
-                        }
 
 
                         shared_care_costmore = buildAnnotatedString {
@@ -415,7 +408,7 @@ data class ComparingOptionsCareCostScreen(
 
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFFC1E1DC)),
-                ){
+                ) {
                     Text("Singapore citizen")
                 }
                 Button(
@@ -425,7 +418,7 @@ data class ComparingOptionsCareCostScreen(
                         permanent_resident_button_enabled = false
                         non_resident_button_enabled = true
 
-                        usual_care_oncologist = buildAnnotatedString{
+                        usual_care_oncologist = buildAnnotatedString {
 
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("\$114")
@@ -449,17 +442,18 @@ data class ComparingOptionsCareCostScreen(
                             }
                         }
 
-                        shared_care_save = buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
+                        shared_care_save =
+                            buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
 
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$17")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$17")
+                                }
+                                append(" (after subsidy) to ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$115.15")
+                                }
+                                append(" (private)")
                             }
-                            append(" (after subsidy) to ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$115.15")
-                            }
-                            append(" (private)")
-                        }
 
 
                         shared_care_costmore = buildAnnotatedString {
@@ -472,7 +466,7 @@ data class ComparingOptionsCareCostScreen(
 
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFFC1E1DC)),
-                ){
+                ) {
                     Text("Permanent resident")
                 }
                 Button(
@@ -482,7 +476,7 @@ data class ComparingOptionsCareCostScreen(
                         permanent_resident_button_enabled = true
                         non_resident_button_enabled = false
 
-                        usual_care_oncologist = buildAnnotatedString{
+                        usual_care_oncologist = buildAnnotatedString {
 
                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("\$261.08")
@@ -506,17 +500,18 @@ data class ComparingOptionsCareCostScreen(
                             }
                         }
 
-                        shared_care_save = buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
+                        shared_care_save =
+                            buildAnnotatedString {  //text = "$76 (after subsidy) to $310.30 (private)",
 
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$56.64")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$56.64")
+                                }
+                                append(" (after subsidy) to ")
+                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                    append("\$97.30")
+                                }
+                                append(" (private)")
                             }
-                            append(" (after subsidy) to ")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("\$97.30")
-                            }
-                            append(" (private)")
-                        }
 
 
                         shared_care_costmore = buildAnnotatedString {
@@ -528,7 +523,7 @@ data class ComparingOptionsCareCostScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFFC1E1DC)),
-                ){
+                ) {
                     Text("Non-resident")
                 }
 
@@ -537,14 +532,17 @@ data class ComparingOptionsCareCostScreen(
                     modifier = Modifier.padding(10.dp),
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFE99787))
-                        ){
-                            Text(text = "Shared Care",
+                        ) {
+                            Text(
+                                text = "Shared Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -564,7 +562,10 @@ data class ComparingOptionsCareCostScreen(
                             },
                             textAlign = TextAlign.Center
                         )
-                        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Image(
                                 painter = painterResource("comparing_options/comparing_oncologist_family.png"),
                                 contentDescription = "One Visit with Oncologist and One with the Family Physician",
@@ -574,8 +575,9 @@ data class ComparingOptionsCareCostScreen(
                             Box(
                                 modifier = Modifier.fillMaxSize().background(Color(0xFF336B87)),
                                 contentAlignment = Alignment.Center,
-                            ){
-                                Text(color = Color.White,
+                            ) {
+                                Text(
+                                    color = Color.White,
                                     modifier = Modifier.padding(2.dp),
                                     textAlign = TextAlign.Center,
                                     text = shared_care_save
@@ -585,17 +587,27 @@ data class ComparingOptionsCareCostScreen(
                         }
                         Text(
                             style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(top=8.dp).align(Alignment.CenterHorizontally),
+                            modifier = Modifier.padding(top = 8.dp)
+                                .align(Alignment.CenterHorizontally),
                             text = "Seeing a family physician instead of a general doctor in the polyclinic will cost you:",
                             textAlign = TextAlign.Center
 
                         )
-                        Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 24.dp,end = 24.dp, top = 8.dp, bottom = 8.dp)){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(
+                                start = 24.dp,
+                                end = 24.dp,
+                                top = 8.dp,
+                                bottom = 8.dp
+                            )
+                        ) {
                             Box(
                                 modifier = Modifier.fillMaxSize().background(Color(0xFFE99787)),
                                 contentAlignment = Alignment.Center,
-                            ){
-                                Text( color = Color.White,
+                            ) {
+                                Text(
+                                    color = Color.White,
                                     modifier = Modifier.padding(2.dp),
                                     textAlign = TextAlign.Center,
                                     text = shared_care_costmore
@@ -603,7 +615,6 @@ data class ComparingOptionsCareCostScreen(
 
                             }
                         }
-
 
                     }
                 }

@@ -1,6 +1,11 @@
+package ui.survivorship
+
+import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,19 +21,20 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -37,15 +43,19 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
+import ui.physical_effect.PhysicalEffectIntroScreen
 
-data class WhatIsSurvivorshipSecondScreen(
+data class WhatIsSurvivorshipThirdScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "SURVIVORSHIP"
+    private val option = HomeOptions.WHAT_IS_SURVIVORSHIP
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -58,19 +68,7 @@ data class WhatIsSurvivorshipSecondScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            color = Color(0xFFFF7E79),
-                            style = MaterialTheme.typography.h1,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -79,10 +77,10 @@ data class WhatIsSurvivorshipSecondScreen(
                     ) {
                         Button(
                             onClick = {
-                                if (navigator.items.contains(WhatIsSurvivorshipFirstScreen())) {
+                                if (navigator.items.contains(WhatIsSurvivorshipSecondScreen())) {
                                     navigator.pop()
                                 } else {
-                                    navigator.replace(WhatIsSurvivorshipFirstScreen())
+                                    navigator.replace(WhatIsSurvivorshipSecondScreen())
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
@@ -104,14 +102,40 @@ data class WhatIsSurvivorshipSecondScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(WhatIsSurvivorshipThirdScreen()) },
+                            onClick = { navigator.push(PhysicalEffectIntroScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f).fillMaxHeight()
+                            modifier = Modifier.weight(1f),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
                         ) {
-                            Text(text = "Next")
+                            BoxWithConstraints {
+                                val boxScope = this
+
+                                val textSize = MaterialTheme.typography.button.fontSize
+                                val textLayout = rememberTextMeasurer().measure(
+                                    text = "Next section",
+                                    style = MaterialTheme.typography.button,
+                                    overflow = TextOverflow.Clip
+                                )
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+                                val textAndSize =
+                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
+                                        "Next\nsection", textSize * .8
+                                    )
+                                    else Pair("Next section", textSize)
+
+                                Text(
+                                    text = textAndSize.first,
+                                    fontSize = textAndSize.second,
+                                    textAlign = TextAlign.End,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
                             Icon(
-                                Icons.Rounded.ArrowForward, "Next page",
-                                Modifier.padding(start = 4.dp)
+                                Icons.Rounded.LastPage,
+                                contentDescription = "Next section"
                             )
                         }
                     }
@@ -127,17 +151,9 @@ data class WhatIsSurvivorshipSecondScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Image(
-                        painter = painterResource("physical_effects_survivorship.png"),
+                        painter = painterResource("ribbon_survivorship.png"),
                         contentDescription = "Physical effects",
-                        contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
-                    )
-                    Image(
-                        painter = painterResource("emotional_effects_survivorship.png"),
-                        contentDescription = "Emotional Effects",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-
                     )
                 }
                 Text(
@@ -149,20 +165,24 @@ data class WhatIsSurvivorshipSecondScreen(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("After cancer diagnosis and treatment, breast cancer survivors may experience a ")
+                        append("Survivorship care includes ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("broad range of effects")
+                            append("regular follow-up sessions")
                         }
-                        append(" years after treatment.\n\n")
-                        append("Survivorship care ensures that all survivors receive the ")
+                        append(" to ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("medical and psychosocial support")
+                            append("prevent and monitor")
                         }
-                        append(" they need through the ")
+                        append(" for signs of returning cancers. This is because there is a ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("prevention, assessment and management")
+                            append("possibility")
                         }
-                        append(" of such effects.")
+                        append(" of the cancer ")
+
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("returning")
+                        }
+                        append(" in the breast or other parts of the body.")
                     }
                 )
 

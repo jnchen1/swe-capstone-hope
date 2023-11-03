@@ -1,6 +1,5 @@
 package ui.followup_care
 
-import EmotionalEffectSecondScreen
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -21,7 +20,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
@@ -33,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -42,15 +39,19 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
+import ui.emotional_effect.EmotionalEffectSecondScreen
 
 data class FollowupCareIntroScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "FOLLOW-UP CARE OPTION"
+    val option = HomeOptions.FOLLOWUP_CARE
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -63,19 +64,7 @@ data class FollowupCareIntroScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFC6E0B5),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(

@@ -1,7 +1,6 @@
 package ui.physical_effect
 
 import HomeScreen
-import WhatIsSurvivorshipThirdScreen
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -28,7 +27,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
@@ -73,15 +71,19 @@ import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.launch
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
+import ui.survivorship.WhatIsSurvivorshipThirdScreen
 
 data class PhysicalEffectIntroScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "PHYSICAL EFFECT"
+    val option = HomeOptions.PHYSICAL_EFFECT
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
@@ -96,19 +98,7 @@ data class PhysicalEffectIntroScreen(
         var shouldShowLateAnimation by remember { mutableStateOf(false) }
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFFF4B183),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(

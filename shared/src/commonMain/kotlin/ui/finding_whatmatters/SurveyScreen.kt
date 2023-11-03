@@ -2,15 +2,12 @@ package ui.finding_whatmatters
 
 import HomeScreen
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,10 +19,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -40,7 +35,6 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
@@ -52,21 +46,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -75,22 +64,17 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-
+import model.HomeOptions
+import ui.ThemeTopAppBar
 
 data class SurveyScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "PREFERENCE SURVEY"
+    val option = HomeOptions.WHAT_MATTERS
+    private val screenTitle = option.title
 
-
-
-
-
-    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         var visible by remember {
@@ -100,7 +84,6 @@ data class SurveyScreen(
         var play by remember {
             mutableStateOf(false)
         }
-
 
         val animatedAlpha by animateFloatAsState(
             targetValue = if (visible) 1.0f else 0f,
@@ -119,7 +102,8 @@ data class SurveyScreen(
 
         LifecycleEffect(
             onStarted = {
-                println("Navigator: Start screen $screenTitle") },
+                println("Navigator: Start screen $screenTitle")
+            },
             onDisposed = { println("Navigator: Dispose screen $screenTitle") }
         )
 
@@ -130,19 +114,7 @@ data class SurveyScreen(
         val visibleState = remember { MutableTransitionState(false) }
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            style = MaterialTheme.typography.h1,
-                            color = Color(0xFF9DC3E6),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
@@ -157,7 +129,8 @@ data class SurveyScreen(
                         )
 
                         Button(
-                            onClick = { navigator.push(FindingWhatMattersScreen())
+                            onClick = {
+                                navigator.push(FindingWhatMattersScreen())
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
@@ -214,14 +187,12 @@ data class SurveyScreen(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
 
-
-
-
                     val q1option = listOf(
                         "The cost of visits does not matter much to me.",
                         "I am willing to pay more to see the oncologist as I do now.",
-                        "I do not mind trying shared care as it is cheaper with the consolidated primary care doctor visit.")
-                    val q1points = listOf(1,0,2)
+                        "I do not mind trying shared care as it is cheaper with the consolidated primary care doctor visit."
+                    )
+                    val q1points = listOf(1, 0, 2)
                     val (q1choice, q1setchoice) = remember { mutableStateOf("") }
 
 
@@ -240,12 +211,12 @@ data class SurveyScreen(
 
                     }
 
-
                     val q2option = listOf(
                         "The location of the cancer centre or polyclinics do not matter much to me.",
                         "I am willing to travel a longer distance to see the oncologist.",
-                        "I do not mind trying shared care as the polyclinic is located more conveniently than the cancer centre.")
-                    val q2points = listOf(1,0,2)
+                        "I do not mind trying shared care as the polyclinic is located more conveniently than the cancer centre."
+                    )
+                    val q2points = listOf(1, 0, 2)
                     val (q2choice, q2setchoice) = remember { mutableStateOf("") }
 
 
@@ -266,8 +237,9 @@ data class SurveyScreen(
                     val q3option = listOf(
                         "I like the idea that the polyclinic doctor I see is trained to care for my cancer-related problems.",
                         "Whether the polyclinic doctor I see care for my cancer-related problems is not important to me.",
-                        "I prefer for my cancer-related problems to be cared for by my oncologist only.")
-                    val q3points = listOf(1,0,2)
+                        "I prefer for my cancer-related problems to be cared for by my oncologist only."
+                    )
+                    val q3points = listOf(1, 0, 2)
                     val (q3choice, q3setchoice) = remember { mutableStateOf("") }
 
 
@@ -288,8 +260,9 @@ data class SurveyScreen(
                     val q4option = listOf(
                         "I am neutral towards polyclinic doctors' ability in caring for my cancer.",
                         "I have low or no confidence in polyclinic doctors in caring for my cancer, even if they are trained by oncologists for it.",
-                        "I am confident that the polyclinic doctors could care for my cancer if they are trained by oncologists for it.")
-                    val q4points = listOf(1,0,2)
+                        "I am confident that the polyclinic doctors could care for my cancer if they are trained by oncologists for it."
+                    )
+                    val q4points = listOf(1, 0, 2)
                     val (q4choice, q4setchoice) = remember { mutableStateOf("") }
 
 
@@ -309,8 +282,9 @@ data class SurveyScreen(
 
                     val q5option = listOf(
                         "I like the idea that the polyclinic doctor I see is aware of my cancer history.",
-                        "It is not necessary for the polyclinic doctor I see to be aware of my cancer history.")
-                    val q5points = listOf(1,2)
+                        "It is not necessary for the polyclinic doctor I see to be aware of my cancer history."
+                    )
+                    val q5points = listOf(1, 2)
                     val (q5choice, q5setchoice) = remember { mutableStateOf("") }
 
 
@@ -328,11 +302,11 @@ data class SurveyScreen(
                         )
                     }
 
-
                     val q6option = listOf(
                         "It does not matter much to me whether I see the same or a different polyclinic doctor each time I viist the polyclinic.",
-                        "Seeing the same polyclinic doctor each time is important to me.")
-                    val q6points = listOf(1,2)
+                        "Seeing the same polyclinic doctor each time is important to me."
+                    )
+                    val q6points = listOf(1, 2)
                     val (q6choice, q6setchoice) = remember { mutableStateOf("") }
 
 
@@ -353,8 +327,9 @@ data class SurveyScreen(
                     val q7option = listOf(
                         "I prefer for my cancer-related problems to be cared for by my oncologist only.",
                         "It is useful for me to be able to contact a community pharmacist to ask questions and seek advice for my cancer.",
-                        "Whether the community pharmacist I talk to care for my cancer-related problems is not important to me.")
-                    val q7points = listOf(1,0,2)
+                        "Whether the community pharmacist I talk to care for my cancer-related problems is not important to me."
+                    )
+                    val q7points = listOf(1, 0, 2)
                     val (q7choice, q7setchoice) = remember { mutableStateOf("") }
 
 
@@ -374,8 +349,9 @@ data class SurveyScreen(
 
                     val q8option = listOf(
                         "It is not necessary for the community pharmacist talking to me to be aware of my cancer history.",
-                        "I like the idea that the community pharmacist talking to me is aware of my cancer history.")
-                    val q8points = listOf(1,2)
+                        "I like the idea that the community pharmacist talking to me is aware of my cancer history."
+                    )
+                    val q8points = listOf(1, 2)
                     val (q8choice, q8setchoice) = remember { mutableStateOf("") }
 
 
@@ -395,8 +371,9 @@ data class SurveyScreen(
 
                     val q9option = listOf(
                         "Whether the oncologist, polyclinic doctor, and community pharmacists caring for me are contactable by one another is not important to me.",
-                        "I like the idea that the oncologist, polyclinic doctor, and community pharmacists caring for me are contactable by one another.")
-                    val q9points = listOf(1,2)
+                        "I like the idea that the oncologist, polyclinic doctor, and community pharmacists caring for me are contactable by one another."
+                    )
+                    val q9points = listOf(1, 2)
                     val (q9choice, q9setchoice) = remember { mutableStateOf("") }
 
 
@@ -422,28 +399,32 @@ data class SurveyScreen(
 
                             totalPoints.value = 0
                             if (q1choice == "" || q2choice == "" || q3choice == "" || q4choice == "" ||
-                                q5choice == "" || q6choice == "" || q7choice == "" || q8choice == "" || q9choice == "")
+                                q5choice == "" || q6choice == "" || q7choice == "" || q8choice == "" || q9choice == ""
+                            )
                                 errormsg.value = "Error : Complete all questions"
-                            else
-                            {errormsg.value = ""
+                            else {
+                                errormsg.value = ""
                                 totalPoints.value =
 
-                                    (totalPoints.value.plus(q1points[q1option.indexOf(q1choice)]
-                                    .plus(q2points[q2option.indexOf(q2choice)])
-                                    .plus(q3points[q3option.indexOf(q3choice)])
-                                    .plus(q4points[q4option.indexOf(q4choice)])
-                                    .plus(q5points[q5option.indexOf(q5choice)])
-                                    .plus(q6points[q6option.indexOf(q6choice)])
-                                    .plus(q7points[q7option.indexOf(q7choice)])
-                                    .plus(q8points[q8option.indexOf(q8choice)])
-                                    .plus(q9points[q9option.indexOf(q9choice)]))*100/18
-                                )
+                                    (totalPoints.value.plus(
+                                        q1points[q1option.indexOf(q1choice)]
+                                            .plus(q2points[q2option.indexOf(q2choice)])
+                                            .plus(q3points[q3option.indexOf(q3choice)])
+                                            .plus(q4points[q4option.indexOf(q4choice)])
+                                            .plus(q5points[q5option.indexOf(q5choice)])
+                                            .plus(q6points[q6option.indexOf(q6choice)])
+                                            .plus(q7points[q7option.indexOf(q7choice)])
+                                            .plus(q8points[q8option.indexOf(q8choice)])
+                                            .plus(q9points[q9option.indexOf(q9choice)])
+                                    ) * 100 / 18
+                                        )
                                 play = true
                                 visibleState.targetState = true
                             }
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                        modifier = Modifier.padding(vertical =16.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
+                        modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
                     ) {
                         Text(text = "SUBMIT")
                     }
@@ -466,17 +447,16 @@ data class SurveyScreen(
                                 },
                         )
                         {
-                            Column (
+                            Column(
                                 verticalArrangement = Arrangement.Center,
                                 modifier = Modifier.fillMaxWidth()
-                            ){
+                            ) {
 
                                 Spacer(modifier = Modifier.weight(2.5f))
 
 
                                 Column(
-                                    modifier = Modifier.padding(it).weight(2.25f)
-                                    ,
+                                    modifier = Modifier.padding(it).weight(2.25f),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
 
@@ -503,9 +483,9 @@ data class SurveyScreen(
                                         }
                                     }
                                     Text(
-                                        text = (if(totalPoints.value == 50) "This indicates you are neutral towards both options."
-                                                else if (totalPoints.value > 50) "Score of more than 50% indicates increasing preference for shared care"
-                                                    else "Score of less than 50% indicates increasing preference for usual care"),
+                                        text = (if (totalPoints.value == 50) "This indicates you are neutral towards both options."
+                                        else if (totalPoints.value > 50) "Score of more than 50% indicates increasing preference for shared care"
+                                        else "Score of less than 50% indicates increasing preference for usual care"),
                                         modifier = Modifier.fillMaxWidth().graphicsLayer {
                                             alpha = animatedAlpha1
                                         },
@@ -529,8 +509,11 @@ data class SurveyScreen(
                                 ) {
                                     Box(
                                         modifier = Modifier
-                                            .size(boxScope.maxWidth.value*totalPoints.value*0.01.dp,(boxScope.maxHeight.value*0.1).dp)
-                                            .align(Alignment.Start).background(Color(230,117,194))
+                                            .size(
+                                                boxScope.maxWidth.value * totalPoints.value * 0.01.dp,
+                                                (boxScope.maxHeight.value * 0.1).dp
+                                            )
+                                            .align(Alignment.Start).background(Color(230, 117, 194))
                                         //boxScope.maxWidth.value*totalPoints.value*0.01.dp,boxScope.maxHeight.value*0.1.dp
                                     )
                                 }
@@ -554,14 +537,16 @@ data class SurveyScreen(
                                         Text(
                                             text = "USUAL CARE",
                                             color = Color.White,
-                                            modifier = Modifier.padding(12.dp).align(Alignment.CenterStart),
+                                            modifier = Modifier.padding(12.dp)
+                                                .align(Alignment.CenterStart),
                                             textAlign = TextAlign.Center
                                         )
 
                                         Text(
                                             text = "SHARED CARE",
                                             color = Color.White,
-                                            modifier = Modifier.padding(12.dp).align(Alignment.CenterEnd),
+                                            modifier = Modifier.padding(12.dp)
+                                                .align(Alignment.CenterEnd),
                                             textAlign = TextAlign.Center
                                         )
                                     }
@@ -571,8 +556,13 @@ data class SurveyScreen(
 
                                 Button(
                                     onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
-                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                                    modifier = Modifier.fillMaxWidth(0.6f).align(Alignment.CenterHorizontally).weight(1f)
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Color(
+                                            0xFF9DC3E6
+                                        )
+                                    ),
+                                    modifier = Modifier.fillMaxWidth(0.6f)
+                                        .align(Alignment.CenterHorizontally).weight(1f)
                                 ) {
                                     Text(text = "Understanding my score")
                                 }
@@ -581,12 +571,9 @@ data class SurveyScreen(
 
                             }
 
-
                         }
                     }
                 }
-
-
 
             }
         }
@@ -608,8 +595,6 @@ data class SurveyScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-
-
 
                         RadioButton(
                             selected = selected == item,

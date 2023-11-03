@@ -1,10 +1,14 @@
+package ui.survivorship
+
+import HomeScreen
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
@@ -15,8 +19,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
@@ -26,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -35,15 +38,18 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeTopAppBar
 
-data class WhatIsSurvivorshipFirstScreen(
+data class WhatIsSurvivorshipSecondScreen(
     val wrapContent: Boolean = false
 ) : Screen {
 
     override val key: ScreenKey = uniqueScreenKey
-    private val screenTitle = "SURVIVORSHIP"
+    private val option = HomeOptions.WHAT_IS_SURVIVORSHIP
+    private val screenTitle = option.title
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -56,26 +62,31 @@ data class WhatIsSurvivorshipFirstScreen(
         val navigator = LocalNavigator.currentOrThrow
 
         Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = screenTitle,
-                            color = Color(0xFFFF7E79),
-                            style = MaterialTheme.typography.h1,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            },
+            topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 BottomNavigation {
                     Row(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 8.dp).padding(bottom = 4.dp)
                     ) {
-                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            onClick = {
+                                if (navigator.items.contains(WhatIsSurvivorshipFirstScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(WhatIsSurvivorshipFirstScreen())
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
+                            modifier = Modifier.weight(1f).fillMaxHeight()
+                        ) {
+                            Icon(
+                                Icons.Rounded.ArrowBack, "Back page",
+                                Modifier.padding(end = 4.dp)
+                            )
+                            Text(text = "Back")
+                        }
+
                         BottomNavigationItem(
                             selected = false,
                             onClick = { navigator.popUntil { it == HomeScreen() } },
@@ -83,10 +94,9 @@ data class WhatIsSurvivorshipFirstScreen(
                             label = { Text(text = "Home", color = Color.White) },
                             modifier = Modifier.weight(1f)
                         )
+
                         Button(
-                            onClick = {
-                                navigator.push(WhatIsSurvivorshipSecondScreen())
-                            },
+                            onClick = { navigator.push(WhatIsSurvivorshipThirdScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {
@@ -104,24 +114,50 @@ data class WhatIsSurvivorshipFirstScreen(
                 modifier = Modifier.padding(it).padding(horizontal = 8.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Image(
+                        painter = painterResource("physical_effects_survivorship.png"),
+                        contentDescription = "Physical effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+                    )
+                    Image(
+                        painter = painterResource("emotional_effects_survivorship.png"),
+                        contentDescription = "Emotional Effects",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(200.dp).padding(10.dp)
+
+                    )
+                }
+                Text(
+                    style = MaterialTheme.typography.h1,
+                    modifier = Modifier.padding(8.dp),
+                    text = "Why is survivorship care important?"
+                )
                 Text(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                     text = buildAnnotatedString {
-                        append("Cancer survivorship ")
+                        append("After cancer diagnosis and treatment, breast cancer survivors may experience a ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("starts")
+                            append("broad range of effects")
                         }
-                        append(" from the moment you are diagnosed with cancer and continues even after treatment to the end of life.")
+                        append(" years after treatment.\n\n")
+                        append("Survivorship care ensures that all survivors receive the ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("medical and psychosocial support")
+                        }
+                        append(" they need through the ")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("prevention, assessment and management")
+                        }
+                        append(" of such effects.")
                     }
                 )
 
-                Image(
-                    painter = painterResource("we_are_all_survivors_survivorship.png"),
-                    contentDescription = "Survivorship infographic",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
-                )
             }
         }
     }

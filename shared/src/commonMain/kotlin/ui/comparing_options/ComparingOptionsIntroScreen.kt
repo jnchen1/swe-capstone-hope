@@ -3,15 +3,12 @@ package ui.comparing_options
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -32,8 +28,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
@@ -60,8 +54,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.followup_care.FollowupCareOptionScreen
-import ui.physical_effect.PhysicalEffectIntroScreen
+import ui.followup_care.FollowupCareScheduleScreen
 
 data class ComparingOptionsIntroScreen(
     val wrapContent: Boolean = false
@@ -109,11 +102,11 @@ data class ComparingOptionsIntroScreen(
 
                         Button(
                             onClick = {
-//                                if (navigator.items.contains(ComparingOptionsIntroScreen())) {
-//                                    navigator.pop()
-//                                } else {
-//                                    navigator.replace(ComparingOptionsIntroScreen())
-//                                }
+                                if (navigator.items.contains(FollowupCareScheduleScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(FollowupCareScheduleScreen())
+                                }
                             },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
@@ -149,7 +142,7 @@ data class ComparingOptionsIntroScreen(
                         Button(
                             onClick = {
                                 //navigator.push(PhysicalEffectIntroScreen())
-                                },
+                            },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
@@ -200,14 +193,17 @@ data class ComparingOptionsIntroScreen(
                     modifier = Modifier.padding(10.dp),
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFA49592))
-                        ){
-                            Text(text = "Usual Care",
+                        ) {
+                            Text(
+                                text = "Usual Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -230,7 +226,7 @@ data class ComparingOptionsIntroScreen(
                                 }
                             }
                         )
-                        Row{
+                        Row {
                             Image(
                                 painter = painterResource("comparing_options/comparing_gp_doctor.png"),
                                 contentDescription = "Doctor and GP",
@@ -252,12 +248,13 @@ data class ComparingOptionsIntroScreen(
                                 }
                             )
                         }
-                        Row{
+                        Row {
                             //TODO: Move the image ot the right of the text. At the moment it disappears when that happens
                             Image(
                                 painter = painterResource("comparing_options/comparing_pharmacist.png"),
                                 contentDescription = "Pharmacist",
-                                modifier = Modifier.size(110.dp).padding(10.dp).align(Alignment.CenterVertically)
+                                modifier = Modifier.size(110.dp).padding(10.dp)
+                                    .align(Alignment.CenterVertically)
                             )
                             Text(
                                 style = MaterialTheme.typography.body1,
@@ -276,7 +273,6 @@ data class ComparingOptionsIntroScreen(
                             )
                         }
 
-
                     }
                 }
 
@@ -284,21 +280,21 @@ data class ComparingOptionsIntroScreen(
                     enabled = false,
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Who is caring for you?")
                 }
                 Button(
                     enabled = true,
-                    onClick = {navigator.push(ComparingOptionsInformationSharedScreen())},
+                    onClick = { navigator.push(ComparingOptionsInformationSharedScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("How is information about you shared?")
                 }
                 Button(
                     enabled = true,
-                    onClick = {navigator.push(ComparingOptionsCareScheduleScreen())},
+                    onClick = { navigator.push(ComparingOptionsCareScheduleScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("What is your follow-up schedule?")
                 }
                 Button(
@@ -311,7 +307,7 @@ data class ComparingOptionsIntroScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ){
+                ) {
                     Text("Cost?")
                 }
 
@@ -320,14 +316,17 @@ data class ComparingOptionsIntroScreen(
                     modifier = Modifier.padding(10.dp), //.width(350.dp).height(475.dp)
                     shape = RoundedCornerShape(20.dp),
                     backgroundColor = Color.White
-                ){
-                    Column(modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally){
+                ) {
+                    Column(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Box(
                             modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
                                 .background(Color(0xFFE99787))
-                        ){
-                            Text(text = "Shared Care",
+                        ) {
+                            Text(
+                                text = "Shared Care",
                                 style = MaterialTheme.typography.h2,
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -351,7 +350,7 @@ data class ComparingOptionsIntroScreen(
                                 append(" by one another")
                             }
                         )
-                        Row{
+                        Row {
                             Image(
                                 painter = painterResource("comparing_options/comparing_doctor.png"),
                                 contentDescription = "Doctor and GP",
@@ -373,12 +372,13 @@ data class ComparingOptionsIntroScreen(
                                 }
                             )
                         }
-                        Row{
+                        Row {
                             //TODO: Move the image ot the right of the text. At the moment it disappears when that happens
                             Image(
                                 painter = painterResource("comparing_options/comparing_pharmacist.png"),
                                 contentDescription = "Pharmacist",
-                                modifier = Modifier.size(110.dp).padding(10.dp).align(Alignment.CenterVertically)
+                                modifier = Modifier.size(110.dp).padding(10.dp)
+                                    .align(Alignment.CenterVertically)
                             )
                             Text(
                                 style = MaterialTheme.typography.body1,
@@ -397,10 +397,8 @@ data class ComparingOptionsIntroScreen(
                             )
                         }
 
-
                     }
                 }
-
 
 //                Row(
 //                    modifier = Modifier.fillMaxWidth(),

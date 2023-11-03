@@ -1,5 +1,6 @@
 package ui.physical_effect
 
+import EmotionalEffectFirstScreen
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -114,7 +115,7 @@ data class PhysicalEffectExamplesScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { navigator.push(EmotionalEffectFirstScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)

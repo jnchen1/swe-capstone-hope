@@ -38,8 +38,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LastPage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -71,6 +71,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.center
@@ -85,6 +86,7 @@ import kotlinx.coroutines.delay
 import model.HealthcareProfessional.*
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.comparing_options.ComparingOptionsIntroScreen
 
 @OptIn(ExperimentalResourceApi::class)
 data class FollowupCareScheduleScreen(
@@ -160,15 +162,37 @@ data class FollowupCareScheduleScreen(
                         )
 
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { navigator.push(ComparingOptionsIntroScreen()) },
                             colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
                             modifier = Modifier.weight(1f).fillMaxHeight()
                         ) {
-                            Text(text = "Next")
-                            Icon(
-                                Icons.Rounded.ArrowForward, "Next page",
-                                Modifier.padding(start = 4.dp)
-                            )
+                            BoxWithConstraints {
+                                val boxScope = this
+
+                                val textSize = MaterialTheme.typography.button.fontSize
+                                val textLayout = rememberTextMeasurer().measure(
+                                    text = "Next section",
+                                    style = MaterialTheme.typography.button,
+                                    overflow = TextOverflow.Clip
+                                )
+                                val sizeInDp = with(LocalDensity.current) {
+                                    textLayout.size.width.toDp()
+                                }
+                                val textAndSize =
+                                    if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
+                                        "Next\nsection", textSize * .8
+                                    )
+                                    else Pair("Next section", textSize)
+
+                                Text(
+                                    text = textAndSize.first,
+                                    fontSize = textAndSize.second,
+                                    textAlign = TextAlign.End,
+                                    overflow = TextOverflow.Clip,
+                                    modifier = Modifier.padding(end = 4.dp)
+                                )
+                            }
+                            Icon(Icons.Rounded.LastPage, contentDescription = "Next section")
                         }
                     }
                 }

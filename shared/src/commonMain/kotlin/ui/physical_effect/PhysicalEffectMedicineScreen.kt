@@ -3,7 +3,6 @@ package ui.physical_effect
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,20 +11,12 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +26,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -46,6 +36,7 @@ import model.HomeOptions
 import model.TherapyMedicineEffect
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
 
 data class PhysicalEffectMedicineScreen(
@@ -85,36 +76,10 @@ data class PhysicalEffectMedicineScreen(
                 )
             },
             bottomBar = {
-                BottomNavigation {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 8.dp)
-                            .padding(bottom = 4.dp)
-                    ) {
-                        Button(
-                            onClick = { navigator.pop() },
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colors.secondary),
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                            Text(text = "Back", modifier = Modifier.padding(start = 4.dp))
-                        }
-
-                        BottomNavigationItem(
-                            selected = false,
-                            onClick = { navigator.popUntil { it == HomeScreen() } },
-                            icon = { Icon(Icons.Rounded.Home, "Home", tint = Color.White) },
-                            label = { Text(text = "Home", color = Color.White) },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
+                ThemeBottomNavigation(
+                    showPrevPage = true, prevAction = navigator::pop,
+                    showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } }
+                )
             }
         ) {
             Column(
@@ -136,7 +101,7 @@ data class PhysicalEffectMedicineScreen(
                             Text(
                                 treatmentMedicine.therapyName,
                                 color = Color.White,
-                                style = MaterialTheme.typography.h3.copy(fontSize = 18.sp),
+                                style = MaterialTheme.typography.h3,
                                 modifier = Modifier.padding(8.dp, 4.dp).align(Alignment.Start)
                             )
                         }

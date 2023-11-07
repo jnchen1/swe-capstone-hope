@@ -81,7 +81,7 @@ data class PhysicalEffectExamplesScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        style = MaterialTheme.typography.h3,
+                        style = MaterialTheme.typography.h2,
                         modifier = Modifier.padding(top = 8.dp),
                         text = "What are some examples?"
                     )

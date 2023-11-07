@@ -78,23 +78,23 @@ data class EmotionalEffectFirstScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     Image(
-                        painter = painterResource("emotional_effects_1.png"),
+                        painter = painterResource("emotional_effect/emotional_effects_1.png"),
                         contentDescription = "Emotional effects",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(200.dp).padding(10.dp)
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier.size(200.dp).padding(8.dp)
                     )
 
                 }
 
                 Text(
-                    style = MaterialTheme.typography.h1,
-                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     text = "Survivors may still feel distressed"
                 )
 
                 Text(
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     text = buildAnnotatedString {
                         append("You may feel emotions such as ")
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -106,37 +106,29 @@ data class EmotionalEffectFirstScreen(
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 )
-
                 {
                     Image(
-                        painter = painterResource("emotional_effects_2.png"),
-                        contentDescription = "Emotional Effects",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-
+                        painter = painterResource("emotional_effect/emotional_effects_2.png"),
+                        contentDescription = "Emotional Effects"
                     )
                     Image(
-                        painter = painterResource("emotional_effects_3.png"),
-                        contentDescription = "Emotional Effects",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(200.dp).padding(10.dp)
-
+                        painter = painterResource("emotional_effect/emotional_effects_3.png"),
+                        contentDescription = "Emotional Effects"
                     )
-
                 }
 
                 Text(
-                    style = MaterialTheme.typography.h1,
-                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     text = "Find your emotional support"
                 )
 
                 Text(
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 12.dp),
                     text = buildAnnotatedString {
                         append("It is important for you to identify someone who can support you ")
                         append("emotionally. He/she can be anyone-a ")
@@ -149,7 +141,6 @@ data class EmotionalEffectFirstScreen(
                         }
                     }
                 )
-
             }
         }
     }

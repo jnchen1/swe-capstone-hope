@@ -85,7 +85,7 @@ data class WhatIsSurvivorshipThirdScreen(
                     )
                 }
                 Text(
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(8.dp),
                     text = "Why is survivorship care important?"
                 )

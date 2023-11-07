@@ -2,11 +2,13 @@ package ui.conclusion
 
 import HomeScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -61,79 +62,87 @@ data class ConclusionScreen(
                 )
             }
         ) {
-            BoxWithConstraints {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
-                    ) {
-                        Image(
-                            painter = painterResource("conclusion/nextstep_image.png"),
-                            contentDescription = "nextstep1",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth().weight(0.9f)
-                                .padding(horizontal = 4.dp)
-                        )
-
-                        Image(
-                            painter = painterResource("conclusion/nextstep_image2.png"),
-                            contentDescription = "nextstep2",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 4.dp)
-                        )
-                    }
-
-                    Text(
-                        text = "Next steps",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h2,
-                        modifier = Modifier.padding(4.dp)
+            Column(
+                Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp).verticalScroll(rememberScrollState())
+            ) {
+                Row(Modifier.fillMaxWidth().padding(8.dp), Arrangement.SpaceAround, Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource("conclusion/nextstep_image.png"),
+                        contentDescription = "nextstep1",
                     )
 
-                    Text(
-                        text = "You have reached the end of this decision aid. You can now:" +
-                            "\n\n" +
-                            "-   Revisit previous sections by pressing the ‘HOME’ button" +
-                            "\n\n" +
-                            "-   Revisit this decision aid in the future" +
-                            "\n\n" +
-                            "-   Speak to your oncologist to discuss your suitability for whichever option you favour",
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(4.dp)
+                    Image(
+                        painter = painterResource("conclusion/nextstep_image2.png"),
+                        contentDescription = "nextstep2"
                     )
-
-                    Text(
-                        text = "Where can you go for more information?",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h2,
-                        modifier = Modifier.padding(4.dp)
-                    )
-
-                    Text(
-                        text = "Click the button below to access a list of online websites you may be interested in",
-                        style = MaterialTheme.typography.body2,
-                        modifier = Modifier.padding(4.dp)
-                    )
-
-                    Button(
-                        onClick = { navigator.push(MoreInformationFirstScreen()) },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(
-                                235,
-                                172,
-                                239
-                            )
-                        ),
-                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Additional Resources")
-                    }
-
                 }
+
+                Text(
+                    text = "Next steps",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = "You have reached the end of this decision aid. You can now:",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                Column(Modifier.padding(horizontal = 8.dp).fillMaxWidth()) {
+                    Row(Modifier.fillMaxWidth()) {
+                        Text("•", style = MaterialTheme.typography.body1)
+                        Text(
+                            "Revisit previous sections by pressing the 'HOME' button",
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+
+                    Row(Modifier.fillMaxWidth()) {
+                        Text("•", style = MaterialTheme.typography.body1)
+                        Text(
+                            "Revisit this decision aid in the future",
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+
+                    Row(Modifier.fillMaxWidth()) {
+                        Text("•", style = MaterialTheme.typography.body1)
+                        Text(
+                            "Speak to your oncologist to discuss your suitability for whichever option you favour",
+                            style = MaterialTheme.typography.body1,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                }
+
+                Text(
+                    text = "Where can you go for more information?",
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.padding(8.dp)
+                )
+
+                Text(
+                    text = "Click the button below to access a list of online websites you may be interested in",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                Button(
+                    onClick = { navigator.push(MoreInformationFirstScreen()) },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(235, 172, 239)
+                    ),
+                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Additional Resources")
+                }
+
+                Spacer(Modifier.height(8.dp))
             }
         }
     }

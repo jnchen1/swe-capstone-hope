@@ -82,7 +82,7 @@ data class HomeScreen(
 
                 Text(
                     text = "What to do?",
-                    style = MaterialTheme.typography.h3
+                    style = MaterialTheme.typography.h2
                 )
 
                 Text(

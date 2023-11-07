@@ -110,7 +110,7 @@ data class FollowupCareOptionScreen(
 
                     Text(
                         text = "What are your options?",
-                        style = MaterialTheme.typography.h3,
+                        style = MaterialTheme.typography.h2,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
 

@@ -139,6 +139,12 @@ data class FollowupCareScheduleScreen(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
 
+                    Text(
+                        text = "Click into each button to see the difference of each option.",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                    )
+
                     var currentCareOption by remember { mutableStateOf(CareOption.USUAL) }
 
                     Row(Modifier.fillMaxWidth(), Arrangement.SpaceAround) {

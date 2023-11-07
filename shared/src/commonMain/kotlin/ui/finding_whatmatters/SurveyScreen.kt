@@ -2,6 +2,7 @@ package ui.finding_whatmatters
 
 import HomeScreen
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateFloatAsState
@@ -9,37 +10,34 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -120,6 +118,7 @@ data class SurveyScreen(
         ) {
             BoxWithConstraints {
                 val boxScope = this
+                var shouldEnableSubmitButton by remember { mutableStateOf(false) }
 
                 Column(
                     modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
@@ -127,10 +126,15 @@ data class SurveyScreen(
                 ) {
 
                     Text(
-                        text = "What matters to you?\nPlease select the statement that best applies to you\n\n",
-                        style = MaterialTheme.typography.body1,
-                        fontWeight = FontWeight.Bold,
+                        text = "What matters to you?",
+                        style = MaterialTheme.typography.h2,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                    )
+
+                    Text(
+                        text = "Please select the statement that best applies to you",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 4.dp)
                     )
 
                     val q1option = listOf(
@@ -141,20 +145,18 @@ data class SurveyScreen(
                     val q1points = listOf(1, 0, 2)
                     val (q1choice, q1setchoice) = remember { mutableStateOf("") }
 
-
                     Column {
                         Text(
                             text = "1. When thinking about the cost of follow-up,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
                             mItems = q1option,
                             q1choice, q1setchoice
                         )
-
                     }
 
                     val q2option = listOf(
@@ -165,13 +167,12 @@ data class SurveyScreen(
                     val q2points = listOf(1, 0, 2)
                     val (q2choice, q2setchoice) = remember { mutableStateOf("") }
 
-
                     Column {
                         Text(
-                            text = "\n\n2. Thinking about the location of cancer centre and polyclinics,",
+                            text = "2. Thinking about the location of cancer centre and polyclinics,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -188,13 +189,12 @@ data class SurveyScreen(
                     val q3points = listOf(1, 0, 2)
                     val (q3choice, q3setchoice) = remember { mutableStateOf("") }
 
-
                     Column {
                         Text(
-                            text = "\n\n3. When thinking about polyclinic doctors,",
+                            text = "3. When thinking about polyclinic doctors,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -214,10 +214,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n4. When thinking about polyclinic doctors,",
+                            text = "4. When thinking about polyclinic doctors,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -236,10 +236,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n5. When thinking about polyclinic doctors,",
+                            text = "5. When thinking about polyclinic doctors,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -258,10 +258,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n6. When thinking about polyclinic doctors,",
+                            text = "6. When thinking about polyclinic doctors,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -281,10 +281,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n7. When thinking about community pharmacists,",
+                            text = "7. When thinking about community pharmacists,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -303,10 +303,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n8. When thinking about community pharmacists,",
+                            text = "8. When thinking about community pharmacists,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -325,10 +325,10 @@ data class SurveyScreen(
 
                     Column {
                         Text(
-                            text = "\n\n9. When thinking about cancer follow-up care in general,",
+                            text = "9. When thinking about cancer follow-up care in general,",
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
                         )
 
                         KindRadioGroup(
@@ -337,36 +337,32 @@ data class SurveyScreen(
                         )
                     }
 
-                    val errormsg = remember { mutableStateOf("") }
+                    shouldEnableSubmitButton = isAllInputFilled(
+                        q1choice, q2choice, q3choice, q4choice, q5choice,
+                        q6choice, q7choice, q8choice, q9choice
+                    )
 
                     Button(
+                        enabled = shouldEnableSubmitButton,
                         onClick = {
                             visible = true
 
                             totalPoints.value = 0
-                            if (q1choice == "" || q2choice == "" || q3choice == "" || q4choice == "" ||
-                                q5choice == "" || q6choice == "" || q7choice == "" || q8choice == "" || q9choice == ""
-                            )
-                                errormsg.value = "Error : Complete all questions"
-                            else {
-                                errormsg.value = ""
-                                totalPoints.value =
+                            totalPoints.value = (
+                                totalPoints.value +
+                                    q1points[q1option.indexOf(q1choice)] +
+                                    q2points[q2option.indexOf(q2choice)] +
+                                    q3points[q3option.indexOf(q3choice)] +
+                                    q4points[q4option.indexOf(q4choice)] +
+                                    q5points[q5option.indexOf(q5choice)] +
+                                    q6points[q6option.indexOf(q6choice)] +
+                                    q7points[q7option.indexOf(q7choice)] +
+                                    q8points[q8option.indexOf(q8choice)] +
+                                    q9points[q9option.indexOf(q9choice)]
+                                ) * 100 / 18
 
-                                    (totalPoints.value.plus(
-                                        q1points[q1option.indexOf(q1choice)]
-                                            .plus(q2points[q2option.indexOf(q2choice)])
-                                            .plus(q3points[q3option.indexOf(q3choice)])
-                                            .plus(q4points[q4option.indexOf(q4choice)])
-                                            .plus(q5points[q5option.indexOf(q5choice)])
-                                            .plus(q6points[q6option.indexOf(q6choice)])
-                                            .plus(q7points[q7option.indexOf(q7choice)])
-                                            .plus(q8points[q8option.indexOf(q8choice)])
-                                            .plus(q9points[q9option.indexOf(q9choice)])
-                                    ) * 100 / 18
-                                        )
-                                play = true
-                                visibleState.targetState = true
-                            }
+                            play = true
+                            visibleState.targetState = true
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
                         modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
@@ -374,156 +370,134 @@ data class SurveyScreen(
                     ) {
                         Text(text = "SUBMIT")
                     }
-
-                    Text(
-                        text = errormsg.value,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-
                 }
 
                 AnimatedVisibility(visible) {
-                    BoxWithConstraints {
+                    Box(Modifier.fillMaxSize().background(Color.White).graphicsLayer { alpha = animatedAlpha }) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
 
-                        Box(
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight()
-                                .background(Color.White).graphicsLayer {
-                                    alpha = animatedAlpha
-                                },
-                        )
-                        {
+                            Spacer(modifier = Modifier.weight(2.5f))
+
                             Column(
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.padding(it).weight(2.25f),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-
-                                Spacer(modifier = Modifier.weight(2.5f))
-
-
-                                Column(
-                                    modifier = Modifier.padding(it).weight(2.25f),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-
-                                    AnimatedVisibility(
-                                        visibleState = visibleState,
-                                        enter = scaleIn(
-                                            animationSpec = tween(
-                                                delayMillis = 2000,
-                                                durationMillis = 1500,
-                                                easing = LinearEasing
-                                            )
-                                        ),
-                                    ) {
-                                        Box(
-                                            modifier = Modifier.size(50.dp).clip(CircleShape)
-                                                .background(Color(157, 195, 230)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = "${totalPoints.value} %",
-                                                color = Color.White,
-                                                textAlign = TextAlign.Center
-                                            )
-                                        }
-                                    }
-                                    Text(
-                                        text = (if (totalPoints.value == 50) "This indicates you are neutral towards both options."
-                                        else if (totalPoints.value > 50) "Score of more than 50% indicates increasing preference for shared care"
-                                        else "Score of less than 50% indicates increasing preference for usual care"),
-                                        modifier = Modifier.fillMaxWidth().graphicsLayer {
-                                            alpha = animatedAlpha1
-                                        },
-                                        style = MaterialTheme.typography.caption,
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                }
-
 
                                 AnimatedVisibility(
                                     visibleState = visibleState,
-                                    modifier = Modifier.weight(0.25f),
-                                    enter = expandHorizontally(
+                                    enter = scaleIn(
                                         animationSpec = tween(
-                                            delayMillis = 1000,
+                                            delayMillis = 2000,
                                             durationMillis = 1000,
-                                            easing = LinearEasing
+                                            easing = EaseIn
                                         )
                                     ),
                                 ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(
-                                                boxScope.maxWidth.value * totalPoints.value * 0.01.dp,
-                                                (boxScope.maxHeight.value * 0.1).dp
-                                            )
-                                            .align(Alignment.Start).background(Color(230, 117, 194))
-                                        //boxScope.maxWidth.value*totalPoints.value*0.01.dp,boxScope.maxHeight.value*0.1.dp
+                                    Text(
+                                        text = "${totalPoints.value} %",
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.h3,
+                                        modifier = Modifier.drawBehind {
+                                            drawCircle(Color(0xFF9DC3E6), 80f)
+                                        }
                                     )
                                 }
-
-                                Card(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .weight(1f),
-                                    shape = RectangleShape,
-                                    elevation = 0.dp
-                                ) {
-                                    Box(
-                                        Modifier.background(
-                                            brush = Brush.horizontalGradient(
-                                                listOf(
-                                                    Color(164, 149, 146),
-                                                    Color(233, 151, 135)
-                                                )
-                                            )
-                                        )
-                                    ) {
-                                        Text(
-                                            text = "USUAL CARE",
-                                            color = Color.White,
-                                            modifier = Modifier.padding(12.dp)
-                                                .align(Alignment.CenterStart),
-                                            textAlign = TextAlign.Center
-                                        )
-
-                                        Text(
-                                            text = "SHARED CARE",
-                                            color = Color.White,
-                                            modifier = Modifier.padding(12.dp)
-                                                .align(Alignment.CenterEnd),
-                                            textAlign = TextAlign.Center
-                                        )
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.weight(2f))
-
-                                Button(
-                                    onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
-                                    colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = Color(
-                                            0xFF9DC3E6
-                                        )
-                                    ),
-                                    modifier = Modifier.fillMaxWidth(0.6f)
-                                        .align(Alignment.CenterHorizontally).weight(1f)
-                                ) {
-                                    Text(text = "Understanding my score")
-                                }
-
-                                Spacer(modifier = Modifier.weight(1f))
+                                Text(
+                                    text = (if (totalPoints.value == 50) "This indicates you are neutral towards both options."
+                                    else if (totalPoints.value > 50) "Score of more than 50% indicates increasing preference for shared care"
+                                    else "Score of less than 50% indicates increasing preference for usual care"),
+                                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
+                                        .graphicsLayer { alpha = animatedAlpha1 },
+                                    style = MaterialTheme.typography.body1,
+                                    textAlign = TextAlign.Center
+                                )
 
                             }
 
+                            AnimatedVisibility(
+                                visibleState = visibleState,
+                                modifier = Modifier.weight(0.25f),
+                                enter = expandHorizontally(
+                                    animationSpec = tween(
+                                        delayMillis = 1000,
+                                        durationMillis = 1000,
+                                        easing = LinearEasing
+                                    )
+                                ),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(
+                                            boxScope.maxWidth.value * totalPoints.value * 0.01.dp,
+                                            (boxScope.maxHeight.value * 0.1).dp
+                                        )
+                                        .align(Alignment.Start).background(Color(230, 117, 194))
+                                    //boxScope.maxWidth.value*totalPoints.value*0.01.dp,boxScope.maxHeight.value*0.1.dp
+                                )
+                            }
+
+                            Card(
+                                modifier = Modifier.fillMaxWidth()
+                                    .weight(1f),
+                                shape = RectangleShape,
+                                elevation = 0.dp
+                            ) {
+                                Box(
+                                    Modifier.background(
+                                        brush = Brush.horizontalGradient(
+                                            listOf(
+                                                Color(164, 149, 146),
+                                                Color(233, 151, 135)
+                                            )
+                                        )
+                                    )
+                                ) {
+                                    Text(
+                                        text = "USUAL CARE",
+                                        color = Color.White,
+                                        modifier = Modifier.padding(12.dp)
+                                            .align(Alignment.CenterStart),
+                                        textAlign = TextAlign.Center
+                                    )
+
+                                    Text(
+                                        text = "SHARED CARE",
+                                        color = Color.White,
+                                        modifier = Modifier.padding(12.dp)
+                                            .align(Alignment.CenterEnd),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.weight(2f))
+
+                            Button(
+                                onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
+                                modifier = Modifier.fillMaxWidth(0.6f)
+                                    .align(Alignment.CenterHorizontally).weight(1f)
+                            ) {
+                                Text(text = "Understanding my score")
+                            }
+
+                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                 }
-
             }
         }
     }
+
+    private fun isAllInputFilled(
+        q1choice: String, q2choice: String, q3choice: String, q4choice: String,
+        q5choice: String, q6choice: String, q7choice: String, q8choice: String,
+        q9choice: String,
+    ) = !(q1choice == "" || q2choice == "" || q3choice == "" || q4choice == "" ||
+        q5choice == "" || q6choice == "" || q7choice == "" || q8choice == "" || q9choice == "")
 
     @Composable
     fun KindRadioGroup(
@@ -531,31 +505,24 @@ data class SurveyScreen(
         selected: String,
         setSelected: (selected: String) -> Unit,
     ) {
-        CompositionLocalProvider() {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
-            ) {
-                mItems.forEach { item ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            mItems.forEach { item ->
+                Row(
+                    Modifier.clickable { setSelected(item) },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                        RadioButton(
-                            selected = selected == item,
-                            onClick = {
-                                setSelected(item)
-                            },
-                            enabled = true,
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = Color.Magenta
-                            )
-                        )
+                    RadioButton(
+                        selected = selected == item,
+                        onClick = { setSelected(item) },
+                        enabled = true
+                    )
 
-                        Text(text = item, modifier = Modifier.padding(start = 8.dp))
-
-                    }
+                    Text(text = item, style = MaterialTheme.typography.body1)
                 }
             }
         }

@@ -87,11 +87,11 @@ data class WhatIsSurvivorshipSecondScreen(
                         contentDescription = "Emotional Effects",
                         contentScale = ContentScale.Fit,
                         modifier = Modifier.size(200.dp).padding(10.dp)
-
                     )
                 }
+
                 Text(
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(8.dp),
                     text = "Why is survivorship care important?"
                 )

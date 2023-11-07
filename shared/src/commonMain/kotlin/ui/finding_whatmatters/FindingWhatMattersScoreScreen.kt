@@ -23,9 +23,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -143,32 +143,30 @@ data class FindingWhatMattersScoreScreen(
                 ) {
                     Text(
                         text = "What does your score mean?",
-                        style = MaterialTheme.typography.h3,
+                        style = MaterialTheme.typography.h2,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                        modifier = Modifier.padding(8.dp)
+                    )
+
+                    Text(
+                        "The score gives you an idea of where your preference is for the two options.",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
                     )
 
                     Text(
                         style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 4.dp),
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+                            .padding(top = 4.dp, bottom = 8.dp),
                         text = buildAnnotatedString {
-                            append("The score gives you an idea of where your preference is for the two options.")
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    fontStyle = FontStyle.Italic
-                                )
-                            ) {
-                                append("\nNote:")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)) {
+                                append("Note:")
                             }
                             withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
                                 append(" This is just a guide and is not meant to dictate which option you should eventually choose.")
                             }
                         }
                     )
-
-
 
                     Row(
                         horizontalArrangement = Arrangement.Start,
@@ -185,7 +183,7 @@ data class FindingWhatMattersScoreScreen(
                                     .graphicsLayer {
                                         alpha = animatedAlpha1
                                     },
-                                style = MaterialTheme.typography.caption
+                                style = MaterialTheme.typography.subtitle2
                             )
 
                             AnimatedVisibility(
@@ -209,7 +207,6 @@ data class FindingWhatMattersScoreScreen(
                         }
 
 
-
                         Column(
                             modifier = Modifier.padding(it).weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -231,6 +228,8 @@ data class FindingWhatMattersScoreScreen(
                                 ) {
                                     Text(
                                         text = "50%",
+                                        style = MaterialTheme.typography.body1,
+                                        fontWeight = FontWeight.Bold,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
                                     )
@@ -242,7 +241,7 @@ data class FindingWhatMattersScoreScreen(
                                     .graphicsLayer {
                                         alpha = animatedAlpha
                                     },
-                                style = MaterialTheme.typography.caption
+                                style = MaterialTheme.typography.subtitle2
                             )
 
                         }
@@ -256,7 +255,7 @@ data class FindingWhatMattersScoreScreen(
                                     .padding(top = 4.dp).graphicsLayer {
                                         alpha = animatedAlpha2
                                     },
-                                style = MaterialTheme.typography.caption
+                                style = MaterialTheme.typography.subtitle2
                             )
 
                             AnimatedVisibility(
@@ -276,7 +275,6 @@ data class FindingWhatMattersScoreScreen(
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
-
                         }
                     }
 
@@ -284,26 +282,23 @@ data class FindingWhatMattersScoreScreen(
                         horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp)
                     ) {
-                        Card(
-                            backgroundColor = Color(164, 149, 146),
+                        Surface(
+                            color = Color(164, 149, 146),
                             shape = RoundedCornerShape(12.dp),
                             elevation = 0.dp,
                             modifier = Modifier.fillMaxWidth().weight(1f)
-
                         ) {
                             Text(
                                 "I prefer continuing with usual care.",
                                 color = Color.White,
                                 style = MaterialTheme.typography.body2,
-                                modifier = Modifier.padding(12.dp)
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
 
-                        Card(
-                            modifier = Modifier.fillMaxWidth().weight(2.5f)
-                                .align(Alignment.CenterVertically),
-                            shape = RectangleShape,
-                            elevation = 0.dp
+                        Surface(
+                            modifier = Modifier.fillMaxWidth().weight(2.5f).align(Alignment.CenterVertically),
+                            shape = RectangleShape
                         ) {
                             Box(
                                 Modifier.background(
@@ -324,18 +319,16 @@ data class FindingWhatMattersScoreScreen(
                             }
                         }
 
-                        Card(
-                            backgroundColor = Color(233, 151, 135),
+                        Surface(
+                            color = Color(233, 151, 135),
                             shape = RoundedCornerShape(12.dp),
-                            elevation = 0.dp,
                             modifier = Modifier.fillMaxWidth().weight(1f)
-
                         ) {
                             Text(
                                 "I am willing to try out shared care.",
                                 color = Color.White,
                                 style = MaterialTheme.typography.body2,
-                                modifier = Modifier.padding(12.dp)
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
                     }

@@ -60,7 +60,7 @@ data class DecisionAidScreen(
             ) {
                 Text(
                     text = "What is this?",
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(top = 8.dp)
                 )
 
@@ -89,7 +89,7 @@ data class DecisionAidScreen(
 
                 Text(
                     text = "How to Navigate?",
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(top = 16.dp)
                 )
 

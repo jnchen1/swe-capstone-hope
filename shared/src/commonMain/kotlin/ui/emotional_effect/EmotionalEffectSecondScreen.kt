@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -77,15 +76,13 @@ data class EmotionalEffectSecondScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 Image(
-                    painter = painterResource("emotional_effects_4.png"),
+                    painter = painterResource("emotional_effect/emotional_effects_4.png"),
                     contentDescription = "Emotional effects",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(200.dp).padding(8.dp)
-                        .align(Alignment.CenterHorizontally)
+                    modifier = Modifier.size(200.dp).padding(8.dp).align(Alignment.CenterHorizontally)
                 )
 
                 Text(
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(8.dp, 4.dp),
                     text = "How to seek help?"
                 )
@@ -99,12 +96,11 @@ data class EmotionalEffectSecondScreen(
                             append("counsellor")
                         }
                         append(" or seek medical attention when you feel like you need help ")
-
                     }
                 )
 
                 Text(
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(horizontal = 8.dp).padding(top = 12.dp),
                     text = "What can you do?"
                 )
@@ -141,7 +137,7 @@ fun PhoneLinkText(modifier: Modifier = Modifier) {
     Row(verticalAlignment = Alignment.Top, modifier = modifier) {
         // Add the image here
         Image(
-            painter = painterResource("emotional_effects_5.png"), // Replace 'your_image' with the actual image resource
+            painter = painterResource("emotional_effect/emotional_effects_5.png"), // Replace 'your_image' with the actual image resource
             contentDescription = null, // Provide a content description as needed
             modifier = Modifier.padding(end = 4.dp).size(24.dp)
                 .fillMaxWidth(.1f) // Adjust the size as needed
@@ -189,7 +185,7 @@ fun EmailLinkText(modifier: Modifier = Modifier) {
     ) {
         // Add the image here
         Image(
-            painter = painterResource("emotional_effects_6.png"), // Replace 'your_image' with the actual image resource
+            painter = painterResource("emotional_effect/emotional_effects_6.png"), // Replace 'your_image' with the actual image resource
             contentDescription = null, // Provide a content description as needed
             modifier = Modifier.padding(end = 4.dp).size(24.dp) // Adjust the size as needed
         )

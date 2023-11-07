@@ -1,6 +1,7 @@
 package ui.more_information
 
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,7 +18,7 @@ fun HyperlinkText(
     modifier: Modifier = Modifier,
     fullText: String,
     hyperLinks: Map<String, String>,
-    textStyle: TextStyle = TextStyle.Default,
+    textStyle: TextStyle = MaterialTheme.typography.body1,
     linkTextColor: Color = Color.Blue,
     linkTextFontWeight: FontWeight = FontWeight.Normal,
     linkTextDecoration: TextDecoration = TextDecoration.None,
@@ -26,7 +27,7 @@ fun HyperlinkText(
     val annotatedString = buildAnnotatedString {
         append(fullText)
 
-        for((key, value) in hyperLinks){
+        for ((key, value) in hyperLinks) {
 
             val startIndex = fullText.indexOf(key)
             val endIndex = startIndex + key.length

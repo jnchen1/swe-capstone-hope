@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -74,22 +73,19 @@ data class FindingWhatMattersScreen(
             }
         ) {
             BoxWithConstraints {
-                val boxScope = this
-
                 Column(
                     modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
                         text = "Two possible decisions that may apply to you",
-                        style = MaterialTheme.typography.h3,
+                        style = MaterialTheme.typography.h2,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
 
                     Text(
                         style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 4.dp),
                         text = buildAnnotatedString {
                             append("After learning about both cancer follow-up care options, this section aims to help you find out")
@@ -117,7 +113,7 @@ data class FindingWhatMattersScreen(
                     Button(
                         onClick = { navigator.push(SurveyScreen()) },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth()
+                        modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth()
                             .align(Alignment.CenterHorizontally)
                     ) {
                         Text(text = "Preference survey")
@@ -132,12 +128,11 @@ data class FindingWhatMattersScreen(
                     Button(
                         onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth()
+                        modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth()
                             .align(Alignment.CenterHorizontally)
                     ) {
                         Text(text = "Understanding my score")
                     }
-
                 }
             }
         }

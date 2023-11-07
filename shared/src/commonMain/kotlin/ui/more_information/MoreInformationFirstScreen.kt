@@ -7,16 +7,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
@@ -77,198 +79,161 @@ data class MoreInformationFirstScreen(
                     Image(
                         painter = painterResource("home_person_image.png"),
                         contentDescription = "home_person",
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 100.dp)
+                        contentScale = ContentScale.FillHeight,
+                        modifier = Modifier.height(140.dp).align(Alignment.CenterHorizontally)
                     )
 
                     Text(
                         text = "Life After Cancer",
-                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h2,
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(8.dp, 4.dp)
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa_1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 8.dp)
                         )
                         HyperlinkText(
                             fullText = "Follow-up care after breast cancer treatment",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Follow-up care after breast cancer treatment" to "https://www.cancer.org/cancer/breast-cancer/living-as-a-breast-cancer-survivor/follow-up-care-after-breast-cancer-treatment.html"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg_1",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Understanding breast cancer",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Understanding breast cancer" to "https://www.healthhub.sg/a-z/diseases-and-conditions/20/breastcancer#1"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg_2",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Cancer survivorship – more than just surviving cancer",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Cancer survivorship – more than just surviving cancer" to "https://www.singhealth.com.sg/news/medical-news/cancer-survivorship"
                             )
                         )
                     }
 
-
-
-
-
-
                     Image(
                         painter = painterResource("ribbon_survivorship.png"),
                         contentDescription = "ribbon_survivorship",
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 100.dp)
+                        modifier = Modifier.size(140.dp).align(Alignment.CenterHorizontally)
                     )
 
                     Text(
                         text = "Return of cancer and second cancers",
-                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h2,
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(8.dp)
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
+                    Row(Modifier.padding(horizontal = 8.dp).fillMaxWidth()) {
 
                         Image(
                             painter = painterResource("more_information/flag_singapore.png"),
                             contentDescription = "sg_3",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Will my cancer come back?",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Will my cancer come back?" to "https://www.nccs.com.sg/patient-care/Pages/Will-my-cancer-come-back.aspx"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa_3",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Understanding recurrence",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Understanding recurrence" to "https://www.cancer.org/treatment/survivorship-during-and-after-treatment/long-term-health-concerns/recurrence.html"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa_4",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Second cancers after breast cancer",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Second cancers after breast cancer" to "https://www.cancer.org/cancer/breast-cancer/living-as-a-breast-cancer-survivor/second-cancers-after-breast-cancer.html"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa_5",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Can I lower my risk of breast cancer coming back?",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Can I lower my risk of breast cancer coming back?" to "https://www.cancer.org/cancer/breast-cancer/living-as-a-breast-cancer-survivor/can-i-lower-my-risk-of-breast-cancer-progressing-or-coming-back.html"
                             )
                         )
                     }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.padding(horizontal = 8.dp).fillMaxWidth()
                     ) {
 
                         Image(
                             painter = painterResource("more_information/flag_usa.png"),
                             contentDescription = "usa_7",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
                             fullText = "Coping with fear of recurrence",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Coping with fear of recurrence" to "https://www.oncolink.org/support/practical-and-emotional/coping-communication-concerns/coping-with-fear-of-recurrence"
                             )
                         )
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-
+                    Row(Modifier.padding(horizontal = 8.dp).padding(top = 4.dp).fillMaxWidth()) {
                         Image(
                             painter = painterResource("more_information/flag_uk.png"),
                             contentDescription = "uk_1",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.padding(horizontal = 4.dp)
+                            modifier = Modifier.padding(end = 4.dp)
                         )
                         HyperlinkText(
+                            modifier = Modifier.padding(bottom = 8.dp),
                             fullText = "Breast cancer recurrence symptoms",
-                            hyperLinks = mutableMapOf(
+                            hyperLinks = mapOf(
                                 "Breast cancer recurrence symptoms" to "https://breastcancernow.org/information-support/facing-breast-cancer/living-beyond-breast-cancer/life-after-breast-cancer-treatment/coping-emotionally/breast-cancer-recurrence-symptoms"
                             )
                         )
                     }
-
                 }
             }
         }

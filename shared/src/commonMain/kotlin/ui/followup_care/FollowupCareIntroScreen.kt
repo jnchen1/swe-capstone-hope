@@ -79,7 +79,7 @@ data class FollowupCareIntroScreen(
 
                 Text(
                     text = "Follow-up care aims to ensure your well-being",
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                 )
 

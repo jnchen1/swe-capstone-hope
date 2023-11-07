@@ -1,35 +1,53 @@
 package model
 
-enum class PhysicalEffectInfo(val icon: String, val info: String, val description: String) {
+enum class PhysicalEffectInfo(
+    val icon: String,
+    val portraitInfo: String,
+    val landscapeInfo: String,
+    val description: String,
+    val title: String
+) {
     SURGERY(
         "physical_effect/pe_surgery_icon.png",
-        "physical_effect/pe_surgery_info.png",
+        "physical_effect/pe_surgery_info_portrait.png",
+        "physical_effect/pe_surgery_info_landscape.png",
+        "Surgery",
         "Surgery"
     ),
     RADIOTHERAPY(
         "physical_effect/pe_radiotherapy_icon.png",
-        "physical_effect/pe_radiotherapy_info.png",
+        "physical_effect/pe_radiotherapy_info_portrait.png",
+        "physical_effect/pe_radiotherapy_info_landscape.png",
+        "Radiotherapy",
         "Radiotherapy"
     ),
     CHEMO(
         "physical_effect/pe_chemo_icon.png",
-        "physical_effect/pe_chemo_info.png",
+        "physical_effect/pe_chemo_info_portrait.png",
+        "physical_effect/pe_chemo_info_landscape.png",
+        "Chemotherapy",
         "Chemotherapy"
     ),
     HER2(
         "physical_effect/pe_her2_icon.png",
-        "physical_effect/pe_her2_info.png",
+        "physical_effect/pe_her2_info_portrait.png",
+        "physical_effect/pe_her2_info_landscape.png",
+        "HER2+ Therapy",
         "HER2+ Therapy"
     ),
     HORMONAL_TAMOXIFEN(
         "physical_effect/pe_hormonal_icon.png",
-        "physical_effect/pe_hormonal_tamoxifen_info.png",
-        "Hormonal Therapy"
+        "physical_effect/pe_hormonal_tamoxifen_info_portrait.png",
+        "physical_effect/pe_hormonal_tamoxifen_info_landscape.png",
+        "Hormonal Therapy",
+        "Tamoxifen"
     ),
     HORMONAL_ANASTROZOLE(
         "physical_effect/pe_hormonal_icon.png",
-        "physical_effect/pe_hormonal_anastrozole_info.png",
-        "Hormonal Therapy"
+        "physical_effect/pe_hormonal_anastrozole_info_portrait.png",
+        "physical_effect/pe_hormonal_anastrozole_info_landscape.png",
+        "Hormonal Therapy",
+        "Anastrozole\nExemestane\nLetrozole"
     )
 }
 

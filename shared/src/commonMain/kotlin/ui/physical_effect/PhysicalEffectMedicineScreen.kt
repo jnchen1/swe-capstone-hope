@@ -35,7 +35,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -136,7 +135,7 @@ data class PhysicalEffectMedicineScreen(
                             Text(
                                 treatmentMedicine.therapyName,
                                 color = Color.White,
-                                style = MaterialTheme.typography.h3.copy(fontSize = 18.sp),
+                                style = MaterialTheme.typography.h3,
                                 modifier = Modifier.padding(8.dp, 4.dp).align(Alignment.Start)
                             )
                         }

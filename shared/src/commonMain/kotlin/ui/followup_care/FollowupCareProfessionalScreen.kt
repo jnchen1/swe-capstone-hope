@@ -71,7 +71,7 @@ data class FollowupCareProfessionalScreen(
                         }
                     },
                     showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
-                    showNextPage = true, nextAction = { /*TODO*/ }
+                    showNextPage = true, nextAction = { navigator.push(FollowupCareCommunicationScreen()) }
                 )
             }
         ) {

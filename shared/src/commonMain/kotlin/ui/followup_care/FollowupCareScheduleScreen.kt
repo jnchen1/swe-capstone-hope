@@ -112,7 +112,13 @@ data class FollowupCareScheduleScreen(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 ThemeBottomNavigation(
-                    showPrevPage = true, prevAction = { /*TODO*/ },
+                    showPrevPage = true, prevAction = {
+                        if (navigator.items.contains(FollowupCareCommunicationScreen())) {
+                            navigator.pop()
+                        } else {
+                            navigator.replace(FollowupCareCommunicationScreen())
+                        }
+                                                      },
                     showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
                     showNextSection = true, nextAction = { navigator.push(ComparingOptionsIntroScreen()) }
                 )

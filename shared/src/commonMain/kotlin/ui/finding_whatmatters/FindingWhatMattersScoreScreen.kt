@@ -2,12 +2,11 @@ package ui.finding_whatmatters
 
 import HomeScreen
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,11 +16,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -29,16 +26,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -56,6 +52,7 @@ import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import kotlinx.coroutines.delay
 import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -77,46 +74,24 @@ data class FindingWhatMattersScoreScreen(
         val textMeasurer = rememberTextMeasurer()
         val density = LocalDensity.current
 
-        var visible by remember {
-            mutableStateOf(false)
+        val scoreAlpha = remember { Animatable(0f) }
+        val leftTextAlpha = remember { Animatable(0f) }
+        val shouldShowLeftArrow = remember { MutableTransitionState(false) }
+        val rightTextAlpha = remember { Animatable(0f) }
+        val shouldShowRightArrow = remember { MutableTransitionState(false) }
+
+        LaunchedEffect(key1 = "") {
+            delay(100)
+            scoreAlpha.animateTo(1f, tween(durationMillis = 500, easing = LinearEasing))
+            leftTextAlpha.animateTo(1f, tween(500, 500, easing = LinearEasing))
+            shouldShowRightArrow.targetState = true
+            rightTextAlpha.animateTo(1f, tween(500, 500, easing = LinearEasing))
         }
-
-        val visibleState = remember { MutableTransitionState(false) }
-
-        val animatedAlpha by animateFloatAsState(
-            targetValue = if (visible) 1.0f else 0f,
-            animationSpec = tween(
-                delayMillis = 500,
-                durationMillis = 1000,
-                easing = LinearEasing
-            ),
-            label = "alpha"
-        )
-        val animatedAlpha1 by animateFloatAsState(
-            targetValue = if (visible) 1.0f else 0f,
-            animationSpec = tween(
-                delayMillis = 2500,
-                durationMillis = 1000,
-                easing = LinearEasing
-            ),
-            label = "alpha"
-        )
-        val animatedAlpha2 by animateFloatAsState(
-            targetValue = if (visible) 1.0f else 0f,
-            animationSpec = tween(
-                delayMillis = 4500,
-                durationMillis = 1000,
-                easing = LinearEasing
-            ),
-            label = "alpha"
-        )
-
 
         LifecycleEffect(
             onStarted = {
                 println("Navigator: Start screen $screenTitle")
-                visible = true
-                visibleState.targetState = true
+                shouldShowLeftArrow.targetState = true
             },
             onDisposed = {
                 println("Navigator: Dispose screen $screenTitle")
@@ -129,13 +104,7 @@ data class FindingWhatMattersScoreScreen(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
             bottomBar = {
                 ThemeBottomNavigation(
-                    showPrevPage = true, prevAction = {
-                        if (navigator.items.contains(SurveyScreen())) {
-                            navigator.pop()
-                        } else {
-                            navigator.replace(SurveyScreen())
-                        }
-                    },
+                    showPrevPage = true, prevAction = { navigator.pop() },
                     showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
                     showNextSection = true, nextAction = { navigator.push(ConclusionScreen()) }
                 )
@@ -177,20 +146,22 @@ data class FindingWhatMattersScoreScreen(
                     }
                 )
 
-                BoxWithConstraints(Modifier.fillMaxWidth().padding(8.dp)) {
+                BoxWithConstraints(
+                    Modifier.fillMaxWidth().padding(horizontal = 8.dp).padding(top = 20.dp, bottom = 8.dp)
+                ) {
                     Column(modifier = Modifier.padding(end = 8.dp).width(maxWidth * .3f).align(Alignment.CenterStart)) {
                         Text(
                             text = "Score of less than 50% indicates increasing preference for usual care",
-                            modifier = Modifier.padding(8.dp).graphicsLayer { alpha = animatedAlpha1 },
+                            modifier = Modifier.padding(8.dp).alpha(leftTextAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
 
                         AnimatedVisibility(
-                            visibleState = visibleState,
+                            visibleState = shouldShowLeftArrow,
                             enter = expandHorizontally(
                                 expandFrom = Alignment.End,
                                 animationSpec = tween(
-                                    delayMillis = 2000,
+                                    delayMillis = 600,
                                     durationMillis = 500,
                                     easing = LinearEasing
                                 )
@@ -204,40 +175,27 @@ data class FindingWhatMattersScoreScreen(
                         }
                     }
 
-
                     Column(
                         Modifier.width(maxWidth * .3f).align(Alignment.TopCenter),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AnimatedVisibility(
-                            visibleState = visibleState,
-                            enter = scaleIn(
-                                animationSpec = tween(
-                                    durationMillis = 500,
-                                    easing = LinearEasing
-                                )
-                            ),
-                        ) {
-                            Surface(
-                                shape = CircleShape, color = Color(157, 195, 230),
-                                modifier = Modifier.size(50.dp)
-                            ) {
-                                Text(
-                                    text = "50%",
-                                    style = MaterialTheme.typography.body1,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.Black,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.wrapContentHeight(Alignment.CenterVertically)
+                        Text(
+                            text = "50%",
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.drawBehind {
+                                drawCircle(
+                                    color = Color(0xFF9DC3E6),
+                                    radius = size.maxDimension * .8f,
+                                    alpha = scoreAlpha.value
                                 )
                             }
-                        }
+                        )
                         Text(
                             text = "This indicates you are neutral towards both options.",
-                            modifier = Modifier.padding(top = 4.dp)
-                                .graphicsLayer {
-                                    alpha = animatedAlpha
-                                },
+                            modifier = Modifier.padding(top = 24.dp).alpha(scoreAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
                     }
@@ -247,15 +205,14 @@ data class FindingWhatMattersScoreScreen(
                     ) {
                         Text(
                             text = "Score of more than 50% indicates increasing preference for shared care",
-                            modifier = Modifier.padding(8.dp).graphicsLayer { alpha = animatedAlpha2 },
+                            modifier = Modifier.padding(8.dp).alpha(rightTextAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
 
                         AnimatedVisibility(
-                            visibleState = visibleState,
+                            visibleState = shouldShowRightArrow,
                             enter = expandHorizontally(
                                 animationSpec = tween(
-                                    delayMillis = 4000,
                                     durationMillis = 500,
                                     easing = LinearEasing
                                 )
@@ -290,7 +247,7 @@ data class FindingWhatMattersScoreScreen(
                     val boxHeight = with(density) {
                         val layoutHeight =
                             usualTextLayout.size.height.coerceAtLeast(sharedTextLayout.size.height)
-                        MaterialTheme.typography.body2.fontSize.times(3f).toDp()
+                        MaterialTheme.typography.body2.fontSize.times(5f).toDp()
                             .coerceAtLeast(layoutHeight.toDp())
                     }
 

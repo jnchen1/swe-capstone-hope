@@ -36,8 +36,7 @@ val AppTypography = Typography(
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        color = Color(93, 83, 94)
+        fontSize = 16.sp
     ),
     body2 = TextStyle(
         fontFamily = FontFamily.Default,

@@ -1,31 +1,18 @@
 package ui.finding_whatmatters
 
 import HomeScreen
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
@@ -37,15 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -66,29 +47,6 @@ data class SurveyScreen(
 
     @Composable
     override fun Content() {
-        var visible by remember {
-            mutableStateOf(false)
-        }
-
-        var play by remember {
-            mutableStateOf(false)
-        }
-
-        val animatedAlpha by animateFloatAsState(
-            targetValue = if (visible) 1.0f else 0f,
-            label = "alpha"
-        )
-
-        val animatedAlpha1 by animateFloatAsState(
-            targetValue = if (visible) 1.0f else 0f,
-            label = "alpha",
-            animationSpec = tween(
-                delayMillis = 3500,
-                durationMillis = 1000,
-                easing = LinearEasing
-            )
-        )
-
         LifecycleEffect(
             onStarted = { println("Navigator: Start screen $screenTitle") },
             onDisposed = { println("Navigator: Dispose screen $screenTitle") }
@@ -98,7 +56,6 @@ data class SurveyScreen(
 
         val totalPoints = remember { mutableStateOf(0) }
 
-        val visibleState = remember { MutableTransitionState(false) }
 
         Scaffold(
             topBar = { ThemeTopAppBar(screenTitle, option.color) },
@@ -345,8 +302,6 @@ data class SurveyScreen(
                     Button(
                         enabled = shouldEnableSubmitButton,
                         onClick = {
-                            visible = true
-
                             totalPoints.value = 0
                             totalPoints.value = (
                                 totalPoints.value +
@@ -361,131 +316,13 @@ data class SurveyScreen(
                                     q9points[q9option.indexOf(q9choice)]
                                 ) * 100 / 18
 
-                            play = true
-                            visibleState.targetState = true
+                            navigator.push(SurveyResultScreen(totalPoints.value))
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
                         modifier = Modifier.padding(vertical = 16.dp).fillMaxWidth()
                             .align(Alignment.CenterHorizontally)
                     ) {
                         Text(text = "SUBMIT")
-                    }
-                }
-
-                AnimatedVisibility(visible) {
-                    Box(Modifier.fillMaxSize().background(Color.White).graphicsLayer { alpha = animatedAlpha }) {
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-
-                            Spacer(modifier = Modifier.weight(2.5f))
-
-                            Column(
-                                modifier = Modifier.padding(it).weight(2.25f),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-
-                                AnimatedVisibility(
-                                    visibleState = visibleState,
-                                    enter = scaleIn(
-                                        animationSpec = tween(
-                                            delayMillis = 2000,
-                                            durationMillis = 1000,
-                                            easing = EaseIn
-                                        )
-                                    ),
-                                ) {
-                                    Text(
-                                        text = "${totalPoints.value} %",
-                                        color = Color.White,
-                                        style = MaterialTheme.typography.h3,
-                                        modifier = Modifier.drawBehind {
-                                            drawCircle(Color(0xFF9DC3E6), 80f)
-                                        }
-                                    )
-                                }
-                                Text(
-                                    text = (if (totalPoints.value == 50) "This indicates you are neutral towards both options."
-                                    else if (totalPoints.value > 50) "Score of more than 50% indicates increasing preference for shared care"
-                                    else "Score of less than 50% indicates increasing preference for usual care"),
-                                    modifier = Modifier.padding(horizontal = 8.dp).padding(top = 24.dp)
-                                        .graphicsLayer { alpha = animatedAlpha1 },
-                                    style = MaterialTheme.typography.body1,
-                                    textAlign = TextAlign.Center
-                                )
-
-                            }
-
-                            AnimatedVisibility(
-                                visibleState = visibleState,
-                                modifier = Modifier.weight(0.25f),
-                                enter = expandHorizontally(
-                                    animationSpec = tween(
-                                        delayMillis = 1000,
-                                        durationMillis = 1000,
-                                        easing = LinearEasing
-                                    )
-                                ),
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(
-                                            boxScope.maxWidth.value * totalPoints.value * 0.01.dp,
-                                            (boxScope.maxHeight.value * 0.1).dp
-                                        )
-                                        .align(Alignment.Start).background(Color(230, 117, 194))
-                                    //boxScope.maxWidth.value*totalPoints.value*0.01.dp,boxScope.maxHeight.value*0.1.dp
-                                )
-                            }
-
-                            Card(
-                                modifier = Modifier.fillMaxWidth()
-                                    .weight(1f),
-                                shape = RectangleShape,
-                                elevation = 0.dp
-                            ) {
-                                Box(
-                                    Modifier.background(
-                                        brush = Brush.horizontalGradient(
-                                            listOf(
-                                                Color(164, 149, 146),
-                                                Color(233, 151, 135)
-                                            )
-                                        )
-                                    )
-                                ) {
-                                    Text(
-                                        text = "USUAL CARE",
-                                        color = Color.White,
-                                        modifier = Modifier.padding(12.dp)
-                                            .align(Alignment.CenterStart),
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                    Text(
-                                        text = "SHARED CARE",
-                                        color = Color.White,
-                                        modifier = Modifier.padding(12.dp)
-                                            .align(Alignment.CenterEnd),
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.weight(2f))
-
-                            Button(
-                                onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                                modifier = Modifier.fillMaxWidth(0.6f)
-                                    .align(Alignment.CenterHorizontally).weight(1f)
-                            ) {
-                                Text(text = "Understanding my score")
-                            }
-
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
                     }
                 }
             }

@@ -2,11 +2,11 @@ package ui.finding_whatmatters
 
 import HomeScreen
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -72,67 +72,63 @@ data class FindingWhatMattersScreen(
                 )
             }
         ) {
-            BoxWithConstraints {
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Text(
-                        text = "Two possible decisions that may apply to you",
-                        style = MaterialTheme.typography.h2,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-                    )
+            Column(
+                Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = "Two possible decisions that may apply to you",
+                    style = MaterialTheme.typography.h2,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                )
 
-                    Text(
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 4.dp),
-                        text = buildAnnotatedString {
-                            append("After learning about both cancer follow-up care options, this section aims to help you find out")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append(" what matters to you")
-                            }
-                            append(" when deciding on the type of care to take up.")
+                Text(
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp).padding(top = 4.dp),
+                    text = buildAnnotatedString {
+                        append("After learning about both cancer follow-up care options, this section aims to help you find out")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append(" what matters to you")
                         }
-                    )
-
-                    Image(
-                        painter = painterResource("finding_whatmatters/checklist_phone.png"),
-                        contentDescription = "What-Matters",
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.padding(top = 8.dp, start = 10.dp).fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                    )
-
-                    Text(
-                        text = "Click on the following button to complete a short survey.",
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-                    )
-
-                    Button(
-                        onClick = { navigator.push(SurveyScreen()) },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                        modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Preference survey")
+                        append(" when deciding on the type of care to take up.")
                     }
+                )
 
-                    Text(
-                        text = "The survey will give you a score. Click on the following button to find out what the score means.",
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.padding(top = 8.dp, start = 8.dp)
-                    )
+                Image(
+                    painter = painterResource("finding_whatmatters/checklist_phone.png"),
+                    contentDescription = "What-Matters",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.padding(top = 8.dp, start = 10.dp).width(200.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-                    Button(
-                        onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
-                        modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Understanding my score")
-                    }
+                Text(
+                    text = "Click on the following button to complete a short survey.",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                )
+
+                Button(
+                    onClick = { navigator.push(SurveyScreen()) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
+                    modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Preference survey")
+                }
+
+                Text(
+                    text = "The survey will give you a score. Click on the following button to find out what the score means.",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                )
+
+                Button(
+                    onClick = { navigator.push(FindingWhatMattersScoreScreen()) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF9DC3E6)),
+                    modifier = Modifier.padding(8.dp, 4.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Understanding my score")
                 }
             }
         }

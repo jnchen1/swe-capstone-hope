@@ -5,7 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
@@ -79,157 +82,334 @@ data class ComparingOptionsCareScheduleScreen(
                 )
             }
         ) {
-            Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Card(
-                    elevation = 2.dp,
-                    modifier = Modifier.padding(10.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    backgroundColor = Color.White
-                ) {
+
+            BoxWithConstraints{
+                val boxScope = this
+                val isPortrait = boxScope.maxHeight > boxScope.maxWidth
+
+                if (isPortrait) {
+
                     Column(
-                        modifier = Modifier.padding(4.dp),
+                        modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                            .verticalScroll(rememberScrollState()).fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
-                                .background(Color(0xFFA49592))
+                        Card(
+                            elevation = 2.dp,
+                            modifier = Modifier.padding(10.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            backgroundColor = Color.White
                         ) {
-                            Text(
-                                text = "Usual Care",
-                                style = MaterialTheme.typography.h2,
-                                color = Color.White,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            Column(
+                                modifier = Modifier.padding(4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0xFFA49592))
+                                ) {
+                                    Text(
+                                        text = "Usual Care",
+                                        style = MaterialTheme.typography.h2,
+                                        color = Color.White,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("In a year, you will usually see an oncologist once to twice a year")
+                                    }
+                                )
+
+                                Image(
+                                    painter = painterResource("comparing_options/comparing_usual_care_schedule.png"),
+                                    contentDescription = "Health Care Professionals not knowing each other",
+                                    modifier = Modifier.fillMaxWidth(0.95f).padding(top = 8.dp),
+                                    contentScale = ContentScale.FillWidth
+                                )
+
+                            }
                         }
 
-                        Text(
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
-                            text = buildAnnotatedString {
-                                append("In a year, you will usually see an oncologist once to twice a year")
-                            }
-                        )
+                        Button(
+                            enabled = true,
+                            onClick = {
+                                if (navigator.items.contains(ComparingOptionsIntroScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(ComparingOptionsIntroScreen())
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                        ) {
+                            Text("Who is caring for you?")
+                        }
+                        Button(
+                            enabled = true,
+                            onClick = {
+                                if (navigator.items.contains(ComparingOptionsInformationSharedScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(ComparingOptionsInformationSharedScreen())
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                        ) {
+                            Text("How is information about you shared?")
+                        }
+                        Button(
+                            enabled = false,
+                            onClick = {},
+                            colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                        ) {
+                            Text("What is your follow-up schedule?")
+                        }
+                        Button(
+                            enabled = true,
+                            onClick = {
+                                if (navigator.items.contains(ComparingOptionsCareCostScreen())) {
+                                    navigator.pop()
+                                } else {
+                                    navigator.replace(ComparingOptionsCareCostScreen())
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                        ) {
+                            Text("Cost?")
+                        }
 
-                        Image(
-                            painter = painterResource("comparing_options/comparing_usual_care_schedule.png"),
-                            contentDescription = "Health Care Professionals not knowing each other",
-                            modifier = Modifier.width(308.dp).height(118.dp).padding(top = 8.dp),
-                            contentScale = ContentScale.FillHeight
-                        )
+                        Card(
+                            elevation = 2.dp,
+                            modifier = Modifier.padding(10.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            backgroundColor = Color.White
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0xFFE99787))
+                                ) {
+                                    Text(
+                                        text = "Shared Care",
+                                        style = MaterialTheme.typography.h2,
+                                        color = Color.White,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("One of the visits to oncologist will be ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("merged")
+                                        }
+                                        append(" and ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("replaced")
+                                        }
+                                        append(" by a consult with the polyclinic family physician.")
+                                    }
+                                )
+                                Image(
+                                    painter = painterResource("comparing_options/comparing_shared_care_schedule.png"),
+                                    contentDescription = "Health Care Professionals being a team",
+                                    modifier = Modifier.fillMaxWidth(0.95f).padding(top = 8.dp),
+                                    contentScale = ContentScale.FillWidth
+                                )
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("A community pharmacist will check-in ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("regularly")
+                                        }
+                                    }
+                                )
+
+                            }
+                        }
 
                     }
-                }
 
-                Button(
-                    enabled = true,
-                    onClick = {
-                        if (navigator.items.contains(ComparingOptionsIntroScreen())) {
-                            navigator.pop()
-                        } else {
-                            navigator.replace(ComparingOptionsIntroScreen())
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ) {
-                    Text("Who is caring for you?")
-                }
-                Button(
-                    enabled = true,
-                    onClick = {
-                        if (navigator.items.contains(ComparingOptionsInformationSharedScreen())) {
-                            navigator.pop()
-                        } else {
-                            navigator.replace(ComparingOptionsInformationSharedScreen())
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ) {
-                    Text("How is information about you shared?")
-                }
-                Button(
-                    enabled = false,
-                    onClick = {},
-                    colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ) {
-                    Text("What is your follow-up schedule?")
-                }
-                Button(
-                    enabled = true,
-                    onClick = {
-                        if (navigator.items.contains(ComparingOptionsCareCostScreen())) {
-                            navigator.pop()
-                        } else {
-                            navigator.replace(ComparingOptionsCareCostScreen())
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
-                ) {
-                    Text("Cost?")
-                }
+                } else{
 
-                Card(
-                    elevation = 2.dp,
-                    modifier = Modifier.padding(10.dp),
-                    shape = RoundedCornerShape(20.dp),
-                    backgroundColor = Color.White
-                ) {
-                    Column(
-                        modifier = Modifier.padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Box(
-                            modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
-                                .background(Color(0xFFE99787))
+                    Row(
+                        modifier = Modifier.padding(it).padding(horizontal = 8.dp)
+                            .verticalScroll(rememberScrollState()),
+                        verticalAlignment = Alignment.Top,
+                        horizontalArrangement = Arrangement.Center
+                    )  {
+                        Card(
+                            elevation = 2.dp,
+                            modifier = Modifier.padding(10.dp).weight(0.33f),
+                            shape = RoundedCornerShape(20.dp),
+                            backgroundColor = Color.White
                         ) {
-                            Text(
-                                text = "Shared Care",
-                                style = MaterialTheme.typography.h2,
-                                color = Color.White,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
+                            Column(
+                                modifier = Modifier.padding(4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(0.6f).clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0xFFA49592)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "Usual Care",
+                                        style = MaterialTheme.typography.h2,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("In a year, you will usually see an oncologist once to twice a year")
+                                    }
+                                )
+
+                                Image(
+                                    painter = painterResource("comparing_options/comparing_usual_care_schedule.png"),
+                                    contentDescription = "Health Care Professionals not knowing each other",
+                                    modifier = Modifier.fillMaxWidth(0.95f).padding(top = 8.dp),
+                                    contentScale = ContentScale.FillWidth
+                                )
+
+                            }
+                        }
+                        Column(modifier = Modifier.padding(5.dp).weight(0.33f),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceEvenly){
+                            Button(
+                                enabled = true,
+                                onClick = {
+                                    if (navigator.items.contains(ComparingOptionsIntroScreen())) {
+                                        navigator.pop()
+                                    } else {
+                                        navigator.replace(ComparingOptionsIntroScreen())
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+
+                                ) {
+                                Text("Who is caring for you?")
+                            }
+
+                            Button(
+                                enabled = true,
+                                onClick = {
+                                    if (navigator.items.contains(ComparingOptionsInformationSharedScreen())) {
+                                        navigator.pop()
+                                    } else {
+                                        navigator.replace(ComparingOptionsInformationSharedScreen())
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                                modifier = Modifier.padding(5.dp)
+                            ) {
+                                Text("How is information about you shared?")
+                            }
+
+                            Button(
+                                enabled = false,
+                                onClick = {},
+                                colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                                modifier = Modifier.padding(4.dp)
+                            ) {
+                                Text("What is your follow-up schedule?")
+                            }
+
+                            Button(
+                                enabled = true,
+                                onClick = {
+                                    if (navigator.items.contains(ComparingOptionsCareCostScreen())) {
+                                        navigator.pop()
+                                    } else {
+                                        navigator.replace(ComparingOptionsCareCostScreen())
+                                    }
+                                          },
+                                colors = ButtonDefaults.buttonColors(Color(0xFF727077)),
+                                modifier = Modifier.padding(4.dp)
+                            ) {
+                                Text("Cost?")
+                            }
+
                         }
 
-                        Text(
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
-                            text = buildAnnotatedString {
-                                append("One of the visits to oncologist will be ")
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("merged")
+                        Card(
+                            elevation = 2.dp,
+                            modifier = Modifier.padding(10.dp).weight(0.33f),
+                            shape = RoundedCornerShape(20.dp),
+                            backgroundColor = Color.White
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(0.5f).clip(RoundedCornerShape(20.dp))
+                                        .background(Color(0xFFE99787))
+                                ) {
+                                    Text(
+                                        text = "Shared Care",
+                                        style = MaterialTheme.typography.h2,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
                                 }
-                                append(" and ")
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("replaced")
-                                }
-                                append(" by a consult with the polyclinic family physician.")
+
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("One of the visits to oncologist will be ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("merged")
+                                        }
+                                        append(" and ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("replaced")
+                                        }
+                                        append(" by a consult with the polyclinic family physician.")
+                                    }
+                                )
+                                Image(
+                                    painter = painterResource("comparing_options/comparing_shared_care_schedule.png"),
+                                    contentDescription = "Health Care Professionals being a team",
+                                    modifier = Modifier.fillMaxWidth(0.95f).padding(top = 8.dp),
+                                    contentScale = ContentScale.FillWidth
+                                )
+                                Text(
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
+                                    text = buildAnnotatedString {
+                                        append("A community pharmacist will check-in ")
+                                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                            append("regularly")
+                                        }
+                                    }
+                                )
+
                             }
-                        )
-                        Image(
-                            painter = painterResource("comparing_options/comparing_shared_care_schedule.png"),
-                            contentDescription = "Health Care Professionals being a team",
-                            modifier = Modifier.width(308.dp).height(206.dp).padding(top = 8.dp),
-                            contentScale = ContentScale.FillHeight
-                        )
-                        Text(
-                            style = MaterialTheme.typography.body1,
-                            modifier = Modifier.padding(8.dp).align(Alignment.CenterHorizontally),
-                            text = buildAnnotatedString {
-                                append("A community pharmacist will check-in ")
-                                withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                    append("regularly")
-                                }
-                            }
-                        )
+                        }
 
                     }
-                }
 
+                }
             }
+
         }
     }
 }

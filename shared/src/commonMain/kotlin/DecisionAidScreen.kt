@@ -1,4 +1,3 @@
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -50,7 +49,7 @@ data class DecisionAidScreen(
     override val key: ScreenKey = uniqueScreenKey
     private val screenTitle = "DECISION AID"
 
-    @OptIn(ExperimentalResourceApi::class, ExperimentalAnimationApi::class)
+    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         var shouldShowGuide by remember { mutableStateOf(false) }
@@ -65,6 +64,7 @@ data class DecisionAidScreen(
 
         if (shouldShowGuide) {
             LaunchedEffect("") {
+                continueGuideAlpha.animateTo(0f)
                 barGuideAlpha.animateTo(1f, animationSpec = animationSpec)
                 delay(1500)
                 barGuideAlpha.animateTo(0f)
@@ -75,8 +75,6 @@ data class DecisionAidScreen(
                 delay(1500)
                 nextGuideAlpha.animateTo(0f)
                 continueGuideAlpha.animateTo(1f, animationSpec = animationSpec)
-                delay(1500)
-                continueGuideAlpha.animateTo(0f)
                 shouldShowGuide = false
             }
         }

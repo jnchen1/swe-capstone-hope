@@ -670,71 +670,46 @@ data class FollowupCareCommunicationScreen(
                             painter = painterResource("followup_care/care_oncologist_nurse.png"),
                             contentDescription = "Usual Care information sharing",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.37f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.37f).padding(8.dp,0.dp)
                         )
                         Image(
                             painter = painterResource("followup_care/care_doctor.png"),
                             contentDescription = "Usual Care information sharing",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,0.dp)
                         )
                         Image(
                             painter = painterResource("followup_care/care_pharmacist.png"),
                             contentDescription = "Usual Care information sharing",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.9f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.9f).padding(8.dp,0.dp)
                         )
 
                     }
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Bottom){
 
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_blue_document_no_arrow.png" else "followup_care/care_blue_document.png"),
-                                contentDescription = "Share Care Blue Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.20f else 0.20f).padding(8.dp,4.dp)
-                            )
+                    AnimatedContent(
+                        targetState = itemVisible,
+                        transitionSpec = {
+                            fadeIn().togetherWith(
+                                fadeOut( ))
                         }
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_red_document_three_arrows.png" else "followup_care/care_red_document.png"),
-                                contentDescription = "Share Care Red Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.51f else 0.25f).padding(8.dp,4.dp)
-                            )
-                        }
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
+                    ) {
+                            itemVisible ->
+                        Image(
+                            painter = painterResource(if (itemVisible) "followup_care/care_three_upward_arrows.png" else "followup_care/care_three_down_arrows.png"),
+                            contentDescription = "Share Care Blue Document information sharing",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.fillMaxWidth(if (itemVisible) 0.4f else 0.8f).padding(8.dp,0.dp)
+                        )
+                    }
 
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_black_document_no_arrow.png" else "followup_care/care_black_document.png"),
-                                contentDescription = "Share Care Black Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.5f else 0.3445f).padding(8.dp,4.dp)
-                            )
-                        }
-
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Top){
+                        Image(
+                            painter = painterResource("followup_care/care_three_documents.png"),
+                            contentDescription = "Three documents",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.fillMaxWidth(0.95f).padding(8.dp,4.dp)
+                        )
                     }
 
                 }
@@ -938,7 +913,7 @@ data class FollowupCareCommunicationScreen(
 
                 item{
                     var itemVisible by remember { mutableStateOf(false) }
-                    val visibleItems = listState.visibleItemsWithThreshold(percentThreshold = 0.5f)
+                    val visibleItems = listState.visibleItemsWithThreshold(percentThreshold = 0.75f)
                     if(visibleItems.contains(2)){
                         itemVisible = true
                     }
@@ -964,55 +939,29 @@ data class FollowupCareCommunicationScreen(
                         )
 
                     }
-                    Row(modifier = Modifier.fillMaxWidth(0.4f), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Bottom){
-
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_blue_document_no_arrow.png" else "followup_care/care_blue_document.png"),
-                                contentDescription = "Share Care Blue Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.20f else 0.20f).padding(8.dp,4.dp)
-                            )
+                    AnimatedContent(
+                        targetState = itemVisible,
+                        transitionSpec = {
+                            fadeIn().togetherWith(
+                                fadeOut( ))
                         }
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_red_document_three_arrows.png" else "followup_care/care_red_document.png"),
-                                contentDescription = "Share Care Red Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.51f else 0.25f).padding(8.dp,4.dp)
-                            )
-                        }
-                        AnimatedContent(
-                            targetState = itemVisible,
-                            transitionSpec = {
-                                scaleIn().togetherWith(
-                                    fadeOut( ))
+                    ) {
+                            itemVisible ->
+                        Image(
+                            painter = painterResource(if (itemVisible) "followup_care/care_three_upward_arrows.png" else "followup_care/care_three_down_arrows.png"),
+                            contentDescription = "Share Care Blue Document information sharing",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.fillMaxWidth(if (itemVisible) 0.2f else 0.4f).padding(8.dp,0.dp)
+                        )
+                    }
 
-                            }
-                        ) {
-                                itemVisible ->
-                            Image(
-                                painter = painterResource(if (itemVisible) "followup_care/care_black_document_no_arrow.png" else "followup_care/care_black_document.png"),
-                                contentDescription = "Share Care Black Document information sharing",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier.fillMaxWidth(if (itemVisible) 0.5f else 0.3445f).padding(8.dp,4.dp)
-                            )
-                        }
-
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.Top){
+                        Image(
+                            painter = painterResource("followup_care/care_three_documents.png"),
+                            contentDescription = "Three documents",
+                            contentScale = ContentScale.FillWidth,
+                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,4.dp)
+                        )
                     }
 
                 }

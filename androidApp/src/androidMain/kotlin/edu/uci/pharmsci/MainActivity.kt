@@ -1,4 +1,4 @@
-package com.myapplication
+package edu.uci.pharmsci
 
 import MainView
 import android.os.Bundle

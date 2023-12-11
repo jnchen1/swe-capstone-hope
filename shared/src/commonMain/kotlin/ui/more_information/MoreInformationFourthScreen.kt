@@ -114,10 +114,10 @@ data class MoreInformationFourthScreen(
                     "Cancer rehabilitation\n" +
                     "Financial aid",
                 hyperLinks = mapOf(
-                    "Support groups" to "https://www.nccs.com.sg/patient-care/specialties-services/pages/support-groups.aspx",
+                    "Support groups" to "https://www.nccs.com.sg/patient-care/specialties-services/support-programmes",
                     "Psychosocial services" to "https://www.nccs.com.sg/patient-care/specialties-services/psychosocial-oncology-2",
                     "Cancer rehabilitation" to "https://www.nccs.com.sg/patient-care/Pages/Cancer-rehabilitation.aspx",
-                    "Financial aid" to "https://www.nccs.com.sg/patient-care/seeing-a-specialist/payment-financial-aid"
+                    "Financial aid" to "https://www.nccs.com.sg/patient-care/specialties-services/financial-aid-practical-assistance"
                 )
             )
 

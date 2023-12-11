@@ -137,7 +137,7 @@ data class MoreInformationThirdScreen(
                     HyperlinkText(
                         fullText = "Cervical cancer screening",
                         hyperLinks = mutableMapOf(
-                            "Cervical cancer screening" to "https://www.healthhub.sg/programmes/157/cervical-cancer-screening"
+                            "Cervical cancer screening" to "https://www.healthhub.sg/a-z/costs-and-financing/cervical-cancer-screening-subsidies-in-singapore"
                         )
                     )
                 }

@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -29,6 +30,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ClickableTextWithUri
 import ui.ThemeTopAppBar
 
 data class DisclaimerScreen(
@@ -53,31 +55,38 @@ data class DisclaimerScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)) {
                 Column(modifier = Modifier.weight(1f, true).verticalScroll(rememberScrollState())) {
-                    Text(
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.padding(8.dp).padding(top = 8.dp),
-                        text = buildAnnotatedString {
-                            append("This decision aid is created for research purposes by a team of health care professionals comprising oncologists and pharmacists from the National Cancer Centre Singapore. The decision aid is ")
-                            withStyle(
-                                style = SpanStyle(
-                                    fontWeight = FontWeight.Bold,
-                                    textDecoration = TextDecoration.Underline
-                                )
-                            ) {
-                                append("not official yet.")
-                            }
-                            append("\n\n")
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("PLEASE NOTE")
-                            }
-                            append(": This decision aid does not replace the medical advice, diagnosis or treatment provided by your doctors. If you have any questions, you may contact the Principal Investigator, Dr Fok Wai Yee Rose, at 64368000.")
+                    val phoneNumber = "64368000"
+                    val noteText = buildAnnotatedString {
+                        append("This decision aid is created for research purposes by a team of health care professionals comprising oncologists and pharmacists from the National Cancer Centre Singapore. The decision aid is ")
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                textDecoration = TextDecoration.Underline
+                            )
+                        ) {
+                            append("not official yet.")
                         }
+                        append("\n\n")
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("PLEASE NOTE")
+                        }
+                        append(": This decision aid does not replace the medical advice, diagnosis or treatment provided by your doctors. If you have any questions, you may contact the Principal Investigator, Dr Fok Wai Yee Rose, at ")
+                        withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                            pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
+                            append(phoneNumber)
+                        }
+                        append(".")
+                    }
+                    ClickableTextWithUri(
+                        noteText, "tel:$phoneNumber",
+                        MaterialTheme.typography.body1,
+                        Modifier.padding(8.dp).padding(top = 8.dp)
                     )
 
                     Image(
                         painter = painterResource("app_logo.png"), contentDescription = "app logo",
                         modifier = Modifier.align(Alignment.CenterHorizontally).width(240.dp)
-                            .padding(top = 4.dp),
+                            .padding(top = 16.dp),
                         contentScale = ContentScale.FillWidth
                     )
                 }

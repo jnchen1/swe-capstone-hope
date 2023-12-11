@@ -1,13 +1,15 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
@@ -52,31 +54,37 @@ data class WhoIsThisForScreen(
                 )
             }
         ) {
-            Column(
-                modifier = Modifier.padding(it).padding(horizontal = 8.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Text(
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.padding(8.dp),
-                    text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("Breast cancer survivors")
-                        }
-                        append(" who are ")
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append("at least 3 years")
-                        }
-                        append(" out of initial treatment phase.")
-                    }
-                )
+            BoxWithConstraints {
+                val isPortrait = maxHeight > maxWidth
+                val image = if (isPortrait) "whoIsThisFor_portrait.png" else "whoIsThisFor_landscape.png"
 
-                Image(
-                    painter = painterResource("whoIsThisFor.png"),
-                    contentDescription = "Image of Who This is for",
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)
-                )
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(it).padding(horizontal = 8.dp)
+                ) {
+                    Text(
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.padding(8.dp),
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Breast cancer survivors")
+                            }
+                            append(" who are ")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("at least 3 years")
+                            }
+                            append(" out of initial treatment phase.")
+                        }
+                    )
+
+                    val imageModifier =
+                        Modifier.then(if (isPortrait) Modifier.fillMaxHeight() else Modifier.fillMaxWidth())
+                    Image(
+                        painter = painterResource(image),
+                        contentDescription = "Image of Who This is for",
+                        contentScale = ContentScale.FillHeight,
+                        modifier = imageModifier.padding(bottom = 12.dp).align(Alignment.CenterHorizontally)
+                    )
+                }
             }
         }
     }

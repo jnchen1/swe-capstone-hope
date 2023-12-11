@@ -134,15 +134,21 @@ data class DecisionAidScreen(
                     )
 
                     Text(
-                        text = "How to Navigate?",
+                        text = "How to Use and Navigate?",
                         style = MaterialTheme.typography.h2,
                         modifier = Modifier.padding(top = 16.dp)
                     )
 
                     Text(
                         style = MaterialTheme.typography.body1,
+                        text = "This app works in both portrait and landscape modes. Simply rotate your device and observe the change.",
+                        modifier = Modifier.padding(8.dp, 4.dp)
+                    )
+
+                    Text(
+                        style = MaterialTheme.typography.body1,
                         text = "Clickable parts indicated by",
-                        modifier = Modifier.padding(horizontal = 8.dp).padding(vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 4.dp)
                     )
 
                     Button(
@@ -153,7 +159,7 @@ data class DecisionAidScreen(
                         ),
                         modifier = Modifier.padding(horizontal = 8.dp)
                     ) {
-                        Text("Click here for navigation guide")
+                        Text("Tap here for navigation guide")
                     }
                 }
 

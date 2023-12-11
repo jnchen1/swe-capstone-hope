@@ -104,7 +104,7 @@ data class FindingWhatMattersScreen(
                 )
 
                 Text(
-                    text = "Click on the following button to complete a short survey.",
+                    text = "Tap on the following button to complete a short survey.",
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                 )

@@ -106,10 +106,9 @@ data class EmotionalEffectFirstScreen(
                 )
 
                 Row(
-                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    modifier = Modifier.padding(8.dp).padding(top = 16.dp).fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
-                )
-                {
+                ) {
                     Image(
                         painter = painterResource("emotional_effect/emotional_effects_2.png"),
                         contentDescription = "Emotional Effects"

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
@@ -28,6 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -106,7 +110,7 @@ fun ThemeBottomNavigation(
 
                         Text(
                             text = "Previous section",
-                            fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .8 else textSize,
+                            fontSize = if (boxScope.maxWidth - 4.dp < sizeInDp) textSize * .7 else textSize,
                             overflow = TextOverflow.Clip,
                             modifier = Modifier.padding(start = 4.dp)
                         )
@@ -150,7 +154,7 @@ fun ThemeBottomNavigation(
                         val sizeInDp = with(density) { textLayout.size.width.toDp() }
                         val textAndSize =
                             if (boxScope.maxWidth < sizeInDp * 1.3f) Pair(
-                                "Next\nsection", textSize * .8
+                                "Next\nsection", textSize * .7
                             )
                             else Pair("Next section", textSize)
 
@@ -171,6 +175,21 @@ fun ThemeBottomNavigation(
             }
         }
     }
+}
+
+@Composable
+fun ClickableTextWithUri(
+    annotatedString: AnnotatedString,
+    uri: String,
+    textStyle: TextStyle,
+    modifier: Modifier = Modifier
+) {
+    val uriHandler = LocalUriHandler.current
+    ClickableText(text = annotatedString, modifier = modifier, style = textStyle,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(offset, offset)
+                .firstOrNull()?.let { uriHandler.openUri(uri) }
+        })
 }
 
 private enum class Navigation(val icon: ImageVector, val text: String, val padding: PaddingValues) {

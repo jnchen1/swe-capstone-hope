@@ -344,19 +344,15 @@ data class SurveyScreen(
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             mItems.forEach { item ->
-                Row(
-                    Modifier.clickable { setSelected(item) },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
+                Row(Modifier.clickable { setSelected(item) }) {
                     RadioButton(
                         selected = selected == item,
                         onClick = { setSelected(item) },
-                        enabled = true
+                        enabled = true,
+                        modifier = Modifier.align(Alignment.Top)
                     )
 
                     Text(text = item, style = MaterialTheme.typography.body1)

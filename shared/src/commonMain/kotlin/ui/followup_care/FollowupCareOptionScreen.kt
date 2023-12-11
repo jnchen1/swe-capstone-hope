@@ -48,6 +48,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
@@ -115,7 +116,7 @@ data class FollowupCareOptionScreen(
                     )
 
                     Text(
-                        text = "Click into each button to read more about each option.",
+                        text = "Tap on each button to read more about each option.",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
@@ -162,7 +163,7 @@ data class FollowupCareOptionScreen(
                         shape = RoundedCornerShape(8.dp),
                         elevation = 4.dp,
                         backgroundColor = Color(0xFFE99787),
-                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 16.dp),
                         onClick = {
                             shouldShowUsual = false
                             shouldShowShared = true
@@ -195,7 +196,7 @@ data class FollowupCareOptionScreen(
                         modifier = Modifier.padding(start = 16.dp).alpha(sharedTextAlpha)
                     )
 
-                    val animationModifier = Modifier.padding(16.dp)
+                    val animationModifier = Modifier.padding(16.dp).padding(top = 20.dp)
                         .align(androidx.compose.ui.Alignment.CenterHorizontally).then(
                             if (boxScope.maxWidth > boxScope.maxHeight) Modifier.fillMaxWidth(.7f)
                             else Modifier.fillMaxWidth()
@@ -215,7 +216,7 @@ data class FollowupCareOptionScreen(
     @Composable
     private fun Animation(shouldShowUsual: Boolean, shouldShowShared: Boolean, modifier: Modifier) {
         val textMeasurer = rememberTextMeasurer()
-        val ts = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center)
+        val ts = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center, fontSize = 14.sp)
         val oncologistImage = painterResource("followup_care/care_oncologist.png")
         val doctorImage = painterResource("followup_care/care_doctor.png")
         val pharmacistImage = painterResource("followup_care/care_pharmacist.png")

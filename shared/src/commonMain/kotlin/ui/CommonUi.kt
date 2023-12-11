@@ -14,13 +14,15 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.FirstPage
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.LastPage
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,22 +33,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemeTopAppBar(
     title: String,
-    color: Color = Color.Unspecified,
-    navigationIcon: @Composable (() -> Unit)? = null,
+    color: Color = Color(0xFFD09683),
+    navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {}
-) = TopAppBar(
+) = CenterAlignedTopAppBar(
     title = {
         Text(
             text = title,
-            color = color,
             style = MaterialTheme.typography.h1,
-            modifier = Modifier.fillMaxWidth(),
+            color = color,
             textAlign = TextAlign.Center
         )
     },
+    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colors.primary,
+        scrolledContainerColor = MaterialTheme.colors.primary,
+        navigationIconContentColor = color,
+        actionIconContentColor = color,
+        titleContentColor = color
+    ),
     navigationIcon = navigationIcon,
     actions = actions
 )

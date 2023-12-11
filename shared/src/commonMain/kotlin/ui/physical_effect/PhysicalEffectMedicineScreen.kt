@@ -3,10 +3,9 @@ package ui.physical_effect
 import HomeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -67,11 +67,9 @@ data class PhysicalEffectMedicineScreen(
                         Image(
                             painterResource(treatmentMedicine.icon),
                             null,
-                            Modifier.padding(4.dp, 8.dp)
+                            Modifier.size(56.dp).padding(4.dp, 8.dp),
+                            contentScale = ContentScale.FillHeight
                         )
-                    },
-                    actions = {
-                        Spacer(Modifier.width(56.dp))
                     }
                 )
             },

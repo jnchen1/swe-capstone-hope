@@ -172,15 +172,12 @@ data class ComparingOptionsIntroScreen(
                                         style = MaterialTheme.typography.body1,
                                         modifier = Modifier.padding(8.dp).align(Alignment.CenterVertically).weight(0.65f),
                                         text = buildAnnotatedString {
-                                            append("You ")
+                                            append("You will need to ")
                                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                                append("may or may not")
+                                                append("walk-in")
                                             }
-                                            append(" see the ")
-                                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                                append("same")
-                                            }
-                                            append(" GP or polyclinic doctor")
+                                            append(" to retail stores to consult a community pharmacist")
+
                                         }
                                     )
                                     Image(
@@ -396,15 +393,11 @@ data class ComparingOptionsIntroScreen(
                                         style = MaterialTheme.typography.body1,
                                         modifier = Modifier.padding(8.dp).align(Alignment.CenterVertically).weight(0.55f),
                                         text = buildAnnotatedString {
-                                            append("You ")
+                                            append("You will need to ")
                                             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                                append("may or may not")
+                                                append("walk-in")
                                             }
-                                            append(" see the ")
-                                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                                append("same")
-                                            }
-                                            append(" GP or polyclinic doctor")
+                                            append(" to retail stores to consult a community pharmacist")
                                         }
                                     )
                                     Image(

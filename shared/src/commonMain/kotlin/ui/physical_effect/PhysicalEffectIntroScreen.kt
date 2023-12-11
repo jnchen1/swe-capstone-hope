@@ -45,6 +45,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.center
@@ -320,7 +321,15 @@ data class PhysicalEffectIntroScreen(
                 center = Offset(endOffSet.x + ovalSize.center.x, horizontalLineY)
             )
             textLayoutSize = textMeasurer.measure(
-                "6 - 12 months",
+                buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontWeight = FontWeight.Bold,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    ) { append("Typically") }
+                    append(" 6 - 12 months")
+                },
                 softWrap = true,
                 style = ts.copy(fontSize = ts.fontSize * size.width * .0009f),
             )

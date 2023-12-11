@@ -145,12 +145,6 @@ data class DecisionAidScreen(
                         modifier = Modifier.padding(8.dp, 4.dp)
                     )
 
-                    Text(
-                        style = MaterialTheme.typography.body1,
-                        text = "Clickable parts indicated by",
-                        modifier = Modifier.padding(horizontal = 8.dp).padding(bottom = 4.dp)
-                    )
-
                     Button(
                         onClick = { shouldShowGuide = true },
                         colors = ButtonDefaults.buttonColors(

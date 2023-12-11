@@ -265,7 +265,7 @@ data class FollowupCareCommunicationScreen(
                         painter = painterResource("followup_care/care_laptop_doctors.png"),
                         contentDescription = "National Electronic Health Records",
                         contentScale = ContentScale.FillWidth,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp,4.dp)
+                        modifier = Modifier.fillMaxWidth(0.85f).padding(8.dp,4.dp)
                     )
 
                 }
@@ -380,7 +380,7 @@ data class FollowupCareCommunicationScreen(
                             Image(
                                 painter = painterResource("followup_care/care_pharmacist_calling.png"),
                                 contentDescription = "Pharmacist calling polyclinic doctor and oncologist",
-                                modifier = Modifier.fillMaxWidth(0.75f),
+                                modifier = Modifier.fillMaxWidth(0.65f),
                                 contentScale = ContentScale.FillWidth
                             )
 
@@ -453,7 +453,7 @@ data class FollowupCareCommunicationScreen(
                             painter = painterResource("followup_care/care_laptop_doctors.png"),
                             contentDescription = "National Electronic Health Records",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.6f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,4.dp)
                         )
 
                 }
@@ -489,8 +489,8 @@ data class FollowupCareCommunicationScreen(
 
                     BoxWithConstraints{
                         val maxWidth = this.maxWidth
-                        val clockwiseArrowWidth = maxWidth.value*0.15f
-                        val counterArrowWidth = maxWidth.value*0.08f
+                        val clockwiseArrowWidth = maxWidth.value*0.12f
+                        val counterArrowWidth = maxWidth.value*0.05f
                         println(clockwiseArrowWidth.dp)
                         println(counterArrowWidth.dp)
                         var imageHeight by remember{ mutableStateOf(0f)}
@@ -498,7 +498,7 @@ data class FollowupCareCommunicationScreen(
                             painter = painterResource("followup_care/care_information_sharing.png"),
                             contentDescription = "Usual Care information sharing",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.6f).padding(8.dp,4.dp).onGloballyPositioned {
+                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,4.dp).onGloballyPositioned {
                                     coordinates ->  imageHeight = coordinates.size.height.toFloat()
                             }
                         )
@@ -512,13 +512,13 @@ data class FollowupCareCommunicationScreen(
                             Image(
                                 painter = painterResource("followup_care/care_clockwise_arrow.png"),
                                 contentDescription = "Clockwise Arrow",
-                                modifier = Modifier.padding(start = clockwiseArrowWidth.dp,top = arrowHeight.dp).fillMaxWidth(0.25f),
+                                modifier = Modifier.padding(start = clockwiseArrowWidth.dp,top = arrowHeight.dp).fillMaxWidth(0.15f),
                                 contentScale = ContentScale.FillWidth
                             )
                             Image(
                                 painter = painterResource("followup_care/care_counter_clock_arrow.png"),
                                 contentDescription = "Counter Clockwise Arrow",
-                                modifier = Modifier.padding(start = counterArrowWidth.dp,top = arrowHeight.dp).fillMaxWidth(0.22f),
+                                modifier = Modifier.padding(start = counterArrowWidth.dp,top = arrowHeight.dp).fillMaxWidth(0.12f),
                                 contentScale = ContentScale.FillWidth
                             )
                         }
@@ -552,13 +552,13 @@ data class FollowupCareCommunicationScreen(
                         itemVisible = true
                     }
 
-                    Column(horizontalAlignment = Alignment.CenterHorizontally){
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth(0.4f)){
 
                         Image(
                             painter = painterResource("followup_care/care_referral.png"),
                             contentDescription = "Usual Care information sharing",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.6f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth().padding(8.dp,4.dp)
                         )
 
                         AnimatedVisibility(
@@ -568,7 +568,7 @@ data class FollowupCareCommunicationScreen(
                             Image(
                                 painter = painterResource("followup_care/care_pharmacist_calling.png"),
                                 contentDescription = "Pharmacist calling polyclinic doctor and oncologist",
-                                modifier = Modifier.fillMaxWidth(0.45f),
+                                modifier = Modifier.fillMaxWidth(0.70f),
                                 contentScale = ContentScale.FillWidth
                             )
 
@@ -632,7 +632,7 @@ data class FollowupCareCommunicationScreen(
                             painter = painterResource("followup_care/care_laptop_doctors.png"),
                             contentDescription = "National Electronic Health Records",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth().padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.85f).padding(8.dp,4.dp)
                         )
 
                 }
@@ -667,20 +667,8 @@ data class FollowupCareCommunicationScreen(
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Top){
                         Image(
-                            painter = painterResource("followup_care/care_oncologist_nurse.png"),
-                            contentDescription = "Usual Care information sharing",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.37f).padding(8.dp,0.dp)
-                        )
-                        Image(
-                            painter = painterResource("followup_care/care_doctor.png"),
-                            contentDescription = "Usual Care information sharing",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,0.dp)
-                        )
-                        Image(
-                            painter = painterResource("followup_care/care_pharmacist.png"),
-                            contentDescription = "Usual Care information sharing",
+                            painter = painterResource("followup_care/care_doctor_pharmacist_nurse.png"),
+                            contentDescription = "Three medical professionals",
                             contentScale = ContentScale.FillWidth,
                             modifier = Modifier.fillMaxWidth(0.9f).padding(8.dp,0.dp)
                         )
@@ -708,7 +696,7 @@ data class FollowupCareCommunicationScreen(
                             painter = painterResource("followup_care/care_three_documents.png"),
                             contentDescription = "Three documents",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.95f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.85f).padding(8.dp,4.dp)
                         )
                     }
 
@@ -918,24 +906,12 @@ data class FollowupCareCommunicationScreen(
                         itemVisible = true
                     }
 
-                    Row(modifier = Modifier.fillMaxWidth(0.4f), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Top){
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.Top){
                         Image(
-                            painter = painterResource("followup_care/care_oncologist_nurse.png"),
-                            contentDescription = "Usual Care information sharing",
+                            painter = painterResource("followup_care/care_doctor_pharmacist_nurse.png"),
+                            contentDescription = "Three medical professionals",
                             contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.37f).padding(8.dp,4.dp)
-                        )
-                        Image(
-                            painter = painterResource("followup_care/care_doctor.png"),
-                            contentDescription = "Usual Care information sharing",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.4f).padding(8.dp,4.dp)
-                        )
-                        Image(
-                            painter = painterResource("followup_care/care_pharmacist.png"),
-                            contentDescription = "Usual Care information sharing",
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth(0.9f).padding(8.dp,4.dp)
+                            modifier = Modifier.fillMaxWidth(0.45f).padding(8.dp,0.dp)
                         )
 
                     }
@@ -1054,7 +1030,7 @@ data class FollowupCareCommunicationScreen(
                             Image(
                                 painter = painterResource("followup_care/care_pharmacist_calling.png"),
                                 contentDescription = "Pharmacist calling polyclinic doctor and oncologist",
-                                modifier = Modifier.fillMaxWidth(0.75f),
+                                modifier = Modifier.fillMaxWidth(0.70f),
                                 contentScale = ContentScale.FillWidth
                             )
 

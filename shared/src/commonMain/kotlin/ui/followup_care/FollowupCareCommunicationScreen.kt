@@ -163,7 +163,7 @@ data class FollowupCareCommunicationScreen(
                     )
 
                     Text(
-                        text = "Click on each button to see the difference of each option.",
+                        text = "Tap on each button to see the difference of each option.",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )

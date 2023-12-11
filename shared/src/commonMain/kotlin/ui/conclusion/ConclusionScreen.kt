@@ -126,7 +126,7 @@ data class ConclusionScreen(
                 )
 
                 Text(
-                    text = "Click the button below to access a list of online websites you may be interested in",
+                    text = "Tap the button below to access a list of online websites you may be interested in",
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -17,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +30,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import model.HomeOptions
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import ui.ClickableTextWithUri
 import ui.ThemeBottomNavigation
 import ui.ThemeTopAppBar
 import ui.followup_care.FollowupCareIntroScreen
@@ -109,7 +108,7 @@ data class EmotionalEffectSecondScreen(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(horizontal = 8.dp),
                     text = buildAnnotatedString {
-                        append("You may contact the  ")
+                        append("You may contact the ")
                         withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(" National Cancer Centre Singapore") }
                         append(" for their services through the following: ")
                     }
@@ -125,84 +124,76 @@ data class EmotionalEffectSecondScreen(
             }
         }
     }
-}
 
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun PhoneLinkText(modifier: Modifier = Modifier) {
-    val phoneNumber = "+65 6558 0384"
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    fun PhoneLinkText(modifier: Modifier = Modifier) {
+        val phoneNumber = "+65 6558 0384"
 
-    val uriHandler = LocalUriHandler.current
+        Row(verticalAlignment = Alignment.Top, modifier = modifier) {
+            // Add the image here
+            Image(
+                painter = painterResource("emotional_effect/emotional_effects_5.png"), // Replace 'your_image' with the actual image resource
+                contentDescription = null, // Provide a content description as needed
+                modifier = Modifier.padding(end = 4.dp).size(24.dp)
+                    .fillMaxWidth(.1f) // Adjust the size as needed
+            )
 
-    Row(verticalAlignment = Alignment.Top, modifier = modifier) {
-        // Add the image here
-        Image(
-            painter = painterResource("emotional_effect/emotional_effects_5.png"), // Replace 'your_image' with the actual image resource
-            contentDescription = null, // Provide a content description as needed
-            modifier = Modifier.padding(end = 4.dp).size(24.dp)
-                .fillMaxWidth(.1f) // Adjust the size as needed
-        )
+            // Add the text
+            Column {
+                ClickableTextWithUri(
+                    buildAnnotatedString {
+                        append("Psychological Services, Medical Social Services, Counselling and Financial Assistance: ")
+                        withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                            pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
+                            append(phoneNumber)
+                        }
+                    },
+                    "tel:$phoneNumber", MaterialTheme.typography.body2,
+                )
 
-        // Add the text
-        Column {
-            val serviceText = buildAnnotatedString {
-                append("Psychological Services, Medical Social Services, Counselling and Financial Assistance: ")
-                withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
-                    pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
-                    append(phoneNumber)
-                }
+                ClickableTextWithUri(
+                    buildAnnotatedString {
+                        append("Patient Support Programmes: ")
+                        withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                            pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
+                            append(phoneNumber)
+                        }
+                    },
+                    "tel:$phoneNumber", MaterialTheme.typography.body2, Modifier.padding(top = 4.dp)
+                )
             }
-            ClickableText(text = serviceText, onClick = { offset ->
-                serviceText.getStringAnnotations(offset, offset)
-                    .firstOrNull()?.let { uriHandler.openUri("tel:$phoneNumber") }
-            })
-
-            val programText = buildAnnotatedString {
-                append("Patient Support Programmes: ")
-                withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
-                    pushStringAnnotation(tag = phoneNumber, annotation = phoneNumber)
-                    append(phoneNumber)
-                }
-            }
-            ClickableText(text = programText, Modifier.padding(top = 4.dp), onClick = { offset ->
-                programText.getStringAnnotations(offset, offset)
-                    .firstOrNull()?.let { uriHandler.openUri("tel:$phoneNumber") }
-            })
         }
     }
-}
 
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun EmailLinkText(modifier: Modifier = Modifier) {
-    val emailAddress = "psychosocial@nccs.com.sg"
+    @OptIn(ExperimentalResourceApi::class)
+    @Composable
+    fun EmailLinkText(modifier: Modifier = Modifier) {
+        val emailAddress = "psychosocial@nccs.com.sg"
 
-    val uriHandler = LocalUriHandler.current
+        Row(
+            verticalAlignment = Alignment.Top,
+            modifier = modifier
+        ) {
+            // Add the image here
+            Image(
+                painter = painterResource("emotional_effect/emotional_effects_6.png"), // Replace 'your_image' with the actual image resource
+                contentDescription = null, // Provide a content description as needed
+                modifier = Modifier.padding(end = 4.dp).size(24.dp) // Adjust the size as needed
+            )
 
-    Row(
-        verticalAlignment = Alignment.Top,
-        modifier = modifier
-    ) {
-        // Add the image here
-        Image(
-            painter = painterResource("emotional_effect/emotional_effects_6.png"), // Replace 'your_image' with the actual image resource
-            contentDescription = null, // Provide a content description as needed
-            modifier = Modifier.padding(end = 4.dp).size(24.dp) // Adjust the size as needed
-        )
-
-        // Add the text
-        val emailText = buildAnnotatedString {
-            append("Email at ")
-            withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
-                pushStringAnnotation(tag = emailAddress, annotation = emailAddress)
-                append(emailAddress)
-            }
-            append(" for more details")
+            ClickableTextWithUri(
+                buildAnnotatedString {
+                    append("Email at ")
+                    withStyle(SpanStyle(Color.Blue, fontWeight = FontWeight.Bold)) {
+                        pushStringAnnotation(tag = emailAddress, annotation = emailAddress)
+                        append(emailAddress)
+                    }
+                    append(" for more details")
+                },
+                "mailto:$emailAddress", MaterialTheme.typography.body2
+            )
         }
-        ClickableText(text = emailText, Modifier.padding(top = 4.dp), onClick = { offset ->
-            emailText.getStringAnnotations(offset, offset)
-                .firstOrNull()?.let { uriHandler.openUri("mailto:$emailAddress") }
-        })
     }
 }
 

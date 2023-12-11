@@ -90,7 +90,7 @@ data class FollowupCareProfessionalScreen(
 
                     Text(
                         text = buildAnnotatedString {
-                            append("Click into each image below to find out how each of the health care professionals care for you under ")
+                            append("Tap on each image below to find out how each of the health care professionals care for you under ")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                                 append("usual care")
                             }

@@ -118,7 +118,7 @@ data class FollowupCareScheduleScreen(
                         } else {
                             navigator.replace(FollowupCareCommunicationScreen())
                         }
-                                                      },
+                    },
                     showHome = true, homeAction = { navigator.popUntil { it == HomeScreen() } },
                     showNextSection = true, nextAction = { navigator.push(ComparingOptionsIntroScreen()) }
                 )
@@ -146,7 +146,7 @@ data class FollowupCareScheduleScreen(
                     )
 
                     Text(
-                        text = "Click into each button to see the difference of each option.",
+                        text = "Tap on each button to see the difference of each option.",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
@@ -356,7 +356,7 @@ data class FollowupCareScheduleScreen(
                     if (shouldShowMammogramText) {
                         AnimationText(
                             Color(0xFFC61C71), mammogramText, boxTextStyle,
-                            Modifier.align(Alignment.TopCenter).fillMaxWidth(.3f)
+                            Modifier.align(Alignment.TopCenter).fillMaxWidth(.5f)
                         ) {
                             shouldShowMammogramText = false
                             shouldShowOncologist = true
@@ -378,7 +378,7 @@ data class FollowupCareScheduleScreen(
                     if (shouldShowOncologistText) {
                         AnimationText(
                             Color(0xFF336B87), oncologistText, boxTextStyle,
-                            Modifier.align(Alignment.BottomCenter).fillMaxWidth(.35f)
+                            Modifier.align(Alignment.BottomCenter).fillMaxWidth(.5f)
                         ) {
                             shouldShowOncologistText = false
                             shouldShowDoctor = true
@@ -388,7 +388,7 @@ data class FollowupCareScheduleScreen(
                     if (shouldShowDoctor1Text) {
                         AnimationText(
                             Color(0xFFFF5B61), doctorText, boxTextStyle,
-                            Modifier.padding(start = width * .425f)
+                            Modifier.padding(start = width * .45f)
                                 .fillMaxWidth(.5f).align(Alignment.BottomStart)
                         ) {
                             shouldShowDoctor1Text = false
@@ -399,12 +399,11 @@ data class FollowupCareScheduleScreen(
                     if (shouldShowDoctor2Text) {
                         AnimationText(
                             Color(0xFFFF5B61), doctorText2, boxTextStyle,
-                            Modifier.padding(start = width * .425f)
+                            Modifier.padding(start = width * .45f)
                                 .fillMaxWidth(.5f).align(Alignment.BottomStart)
                         ) { changeToSharedCare.invoke() }
                     }
                 }
-
             }
         }
     }
@@ -612,7 +611,7 @@ data class FollowupCareScheduleScreen(
                     if (shouldShowStartText) {
                         AnimationText(
                             Color(0xFFE99787), startText, boxTextStyle,
-                            Modifier.align(Alignment.TopStart).fillMaxWidth(.3f)
+                            Modifier.align(Alignment.TopStart).fillMaxWidth(.5f)
                         ) {
                             shouldShowStartText = false
                             shouldShowMammogramText = true
@@ -623,7 +622,7 @@ data class FollowupCareScheduleScreen(
                         shouldWiggleMammogram = true
                         AnimationText(
                             Color(0xFFC61C71), mammogramText, boxTextStyle,
-                            Modifier.align(Alignment.TopCenter).fillMaxWidth(.3f)
+                            Modifier.align(Alignment.TopCenter).fillMaxWidth(.5f)
                         ) {
                             shouldShowMammogramText = false
                             shouldShowPhysicianText = true
@@ -634,7 +633,7 @@ data class FollowupCareScheduleScreen(
                         shouldReplaceOncologist = true
                         AnimationText(
                             Color(0xFFFF5B61), replaceOncologistText, boxTextStyle,
-                            Modifier.align(Alignment.TopStart).fillMaxWidth(.5f)
+                            Modifier.align(Alignment.TopStart).fillMaxWidth(.8f)
                                 .alpha(replaceTextAlpha.value)
                         ) {
                             shouldShowReplaceText = false
@@ -658,7 +657,7 @@ data class FollowupCareScheduleScreen(
                         shouldHidePhysician = true
                         AnimationText(
                             Color(0xFFFF5B61), physicianText, boxTextStyle,
-                            Modifier.padding(start = width * .425f).align(Alignment.BottomStart)
+                            Modifier.padding(start = width * .45f).align(Alignment.BottomStart)
                                 .fillMaxWidth(.5f)
                         ) {
                             shouldShowPhysicianText = false

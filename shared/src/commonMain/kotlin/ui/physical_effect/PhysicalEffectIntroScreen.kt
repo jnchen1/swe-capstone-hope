@@ -49,6 +49,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.center
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toOffset
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
@@ -182,7 +183,7 @@ data class PhysicalEffectIntroScreen(
                         shape = RoundedCornerShape(8.dp),
                         elevation = 4.dp,
                         backgroundColor = Color(0xFF5B7065),
-                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 8.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp).padding(top = 16.dp),
                         onClick = {
                             shouldShowLateText = true
                             shouldShowLongTermAnimation = false
@@ -211,7 +212,8 @@ data class PhysicalEffectIntroScreen(
                     )
 
                     val animationModifier = Modifier
-                        .padding(16.dp).align(Alignment.CenterHorizontally).then(
+                        .padding(16.dp).padding(top = 20.dp)
+                        .align(Alignment.CenterHorizontally).then(
                             if (boxScope.maxWidth > boxScope.maxHeight) Modifier.fillMaxWidth(.7f)
                             else Modifier.fillMaxWidth()
                         )
@@ -234,7 +236,7 @@ data class PhysicalEffectIntroScreen(
         modifier: Modifier = Modifier
     ) {
         val textMeasurer = rememberTextMeasurer()
-        val ts = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center)
+        val ts = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center, fontSize = 14.sp)
         val lineColor = Color(0xFF7F7F7F)
         val iconPainter = painterResource("effect.png")
 

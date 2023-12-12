@@ -7,11 +7,13 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -151,15 +153,20 @@ data class FindingWhatMattersScoreScreen(
                 ) {
                     Column(modifier = Modifier.padding(end = 8.dp).width(maxWidth * .3f).align(Alignment.CenterStart)) {
                         Text(
-                            text = "Score of less than 50% indicates increasing preference for usual care",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(color = Color.Red)) {
+                                    append("The lower the score")
+                                }
+                                append(" below 50% will indicate an increasing preference for usual care")
+                            },
                             modifier = Modifier.padding(8.dp).alpha(leftTextAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
 
                         AnimatedVisibility(
                             visibleState = shouldShowLeftArrow,
-                            enter = expandHorizontally(
-                                expandFrom = Alignment.End,
+                            enter = slideInHorizontally(
+                                initialOffsetX = { offset -> (offset * 1.145f).toInt() },
                                 animationSpec = tween(
                                     delayMillis = 600,
                                     durationMillis = 500,
@@ -198,13 +205,20 @@ data class FindingWhatMattersScoreScreen(
                             modifier = Modifier.padding(top = 24.dp).alpha(scoreAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
+
+                        Spacer(Modifier.fillMaxWidth().height(100.dp).background(MaterialTheme.colors.background))
                     }
 
                     Column(
                         modifier = Modifier.padding(start = 8.dp).width(maxWidth * .3f).align(Alignment.CenterEnd)
                     ) {
                         Text(
-                            text = "Score of more than 50% indicates increasing preference for shared care",
+                            text = buildAnnotatedString {
+                                withStyle(SpanStyle(color = Color.Red)) {
+                                    append("The higher the score")
+                                }
+                                append(" above 50% will indicate an increasing preference for shared care")
+                            },
                             modifier = Modifier.padding(8.dp).alpha(rightTextAlpha.value),
                             style = MaterialTheme.typography.subtitle2
                         )
